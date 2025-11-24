@@ -19,7 +19,9 @@ import {
   Settings,
   CreditCard,
   LogOut,
+  Shield,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const navigation = [
   { name: "Übersicht", href: "/dashboard", icon: LayoutDashboard },
@@ -31,6 +33,20 @@ const navigation = [
 export function DashboardNav() {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    // Check if user is admin
+    const checkAdmin = async () => {
+      try {
+        const response = await fetch("/api/admin/users");
+        setIsAdmin(response.ok);
+      } catch {
+        setIsAdmin(false);
+      }
+    };
+    checkAdmin();
+  }, []);
 
   const handleSignOut = async () => {
     await signOut();
@@ -67,6 +83,21 @@ export function DashboardNav() {
             </Link>
           );
         })}
+
+        {/* Admin Link - only visible to admins */}
+        {isAdmin && (
+          <Link
+            href="/dashboard/admin"
+            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              pathname === "/dashboard/admin"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            }`}
+          >
+            <Shield className="h-4 w-4" />
+            Admin
+          </Link>
+        )}
       </div>
 
       <div className="mt-auto px-2">

@@ -9,8 +9,9 @@ import { randomUUID } from "crypto";
 // GET - Fetch agent config for current user
 export async function GET() {
   try {
+    const reqHeaders = await headers();
     const session = await auth.api.getSession({
-      headers: await headers(),
+      headers: reqHeaders,
     });
 
     if (!session?.user) {
@@ -52,8 +53,9 @@ export async function GET() {
 // PATCH - Update agent config
 export async function PATCH(request: NextRequest) {
   try {
+    const reqHeaders = await headers();
     const session = await auth.api.getSession({
-      headers: await headers(),
+      headers: reqHeaders,
     });
 
     if (!session?.user) {
@@ -67,6 +69,8 @@ export async function PATCH(request: NextRequest) {
       voiceName,
       enabledLanguages,
       ragDocuments,
+      systemPrompt,
+      language,
     } = body;
 
     // Validate greeting message length
@@ -95,14 +99,35 @@ export async function PATCH(request: NextRequest) {
     if (enabledLanguages !== undefined)
       updateData.enabledLanguages = enabledLanguages;
     if (ragDocuments !== undefined) updateData.ragDocuments = ragDocuments;
+    if (systemPrompt !== undefined) updateData.systemPrompt = systemPrompt;
+    if (language !== undefined) updateData.language = language;
 
     if (existingConfig) {
-      // Update existing config
+      // Update existing config in DB
       const [updated] = await db
         .update(agentConfig)
         .set(updateData)
         .where(eq(agentConfig.userId, session.user.id))
         .returning();
+
+      // Sync to ElevenLabs if agent ID exists
+      if (updated.elevenLabsAgentId) {
+        const { updateAgent } = await import("@/lib/elevenlabs");
+
+        const syncResult = await updateAgent(updated.elevenLabsAgentId, {
+          systemPrompt: updated.systemPrompt || undefined,
+          firstMessage: updated.greetingMessage || undefined,
+          voiceId: updated.voiceId || undefined,
+          language: updated.language || undefined,
+        });
+
+        if (!syncResult.success) {
+          console.warn("Failed to sync to ElevenLabs:", syncResult.error);
+          // Don't fail the request, just log the warning
+        } else {
+          console.log("Successfully synced config to ElevenLabs");
+        }
+      }
 
       return NextResponse.json({ config: updated });
     } else {
@@ -116,6 +141,10 @@ export async function PATCH(request: NextRequest) {
             greetingMessage || "Guten Tag, wie kann ich Ihnen helfen?",
           voiceId: voiceId || null,
           voiceName: voiceName || null,
+          systemPrompt:
+            systemPrompt ||
+            "Du bist ein freundlicher Telefonassistent für eine Schweizer Arztpraxis. Du sprichst Schweizerdeutsch und hilfst Patienten bei Terminvereinbarungen und allgemeinen Anfragen.",
+          language: language || "de",
           enabledLanguages: enabledLanguages || ["de"],
           ragDocuments: ragDocuments || null,
           isActive: false,

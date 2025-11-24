@@ -21,6 +21,7 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull().default(false),
   image: text("image"),
+  isAdmin: boolean("is_admin").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -140,17 +141,25 @@ export const agentConfig = pgTable(
       .unique()
       .references(() => user.id, { onDelete: "cascade" }),
 
-    // ElevenLabs Agent ID (created by admin, not user)
+    // ElevenLabs Agent ID (created manually in ElevenLabs dashboard)
     elevenLabsAgentId: text("elevenlabs_agent_id").unique(),
 
-    // User-Configurable Settings
-    greetingMessage: text("greeting_message")
-      .notNull()
-      .default("Guten Tag, wie kann ich Ihnen helfen?"),
+    // Voice Configuration
     voiceId: text("voice_id"),
     voiceName: text("voice_name"),
 
-    // Languages (based on subscription tier)
+    // Agent Behavior
+    systemPrompt: text("system_prompt")
+      .notNull()
+      .default(
+        "Du bist ein freundlicher Telefonassistent für eine Schweizer Arztpraxis. Du sprichst Schweizerdeutsch und hilfst Patienten bei Terminvereinbarungen und allgemeinen Anfragen."
+      ),
+    greetingMessage: text("greeting_message")
+      .notNull()
+      .default("Grüezi! Wie kann ich Ihnen helfen?"),
+    language: text("language").notNull().default("de"), // de, fr, it
+
+    // Features (based on subscription tier)
     enabledLanguages: text("enabled_languages")
       .array()
       .notNull()
@@ -158,6 +167,9 @@ export const agentConfig = pgTable(
 
     // RAG Documents (Pro & Enterprise only)
     ragDocuments: jsonb("rag_documents"), // Array of {name, url, uploadedAt}
+
+    // Calendar Integration
+    calendarIntegration: jsonb("calendar_integration"), // {provider: 'google', credentials: {...}}
 
     // Phone Number (if provided by ElevenLabs)
     phoneNumber: text("phone_number"),
