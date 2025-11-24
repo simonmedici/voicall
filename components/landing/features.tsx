@@ -55,7 +55,7 @@ export function Features() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
             Wie Voicall Ihre Praxis{" "}
-            <span className="bg-gradient-to-r from-blue-900 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-blue-900 to-purple-600 bg-clip-text text-transparent">
               unterstützt
             </span>
           </h2>
@@ -74,7 +74,7 @@ export function Features() {
                 key={index}
                 className="p-8 hover:shadow-xl transition-all duration-300 border-2 hover:border-blue-900/20"
               >
-                <div className="h-14 w-14 bg-gradient-to-br from-blue-950/10 to-purple-100 rounded-2xl flex items-center justify-center mb-6">
+                <div className="h-14 w-14 bg-linear-to-br from-blue-950/10 to-purple-100 rounded-2xl flex items-center justify-center mb-6">
                   <Icon className="h-7 w-7 text-blue-900" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">
