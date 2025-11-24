@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   try {
     const { headers } = await import("next/headers");
     const reqHeaders = await headers();
-    
+
     const session = await auth.api.getSession({
       headers: reqHeaders,
     });
