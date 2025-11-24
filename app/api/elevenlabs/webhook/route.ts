@@ -2,8 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyElevenLabsSignature, extractCallData } from "@/lib/elevenlabs";
 import { secondsToMinutes } from "@/lib/stripe";
 import { db } from "@/lib/db/index";
-import { call, subscription, agentConfig } from "@/lib/db/schema";
+import { call, subscription, agentConfig, user } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import {
+  sendEmail,
+  createNewCallAlertEmail,
+  createUsageWarningEmail,
+} from "@/lib/sendgrid";
 
 export async function POST(req: NextRequest) {
   try {
@@ -99,6 +104,25 @@ export async function POST(req: NextRequest) {
 
     console.log("Call saved:", callId, "for user:", userId);
 
+    // Send new call alert email
+    const [userRecord] = await db
+      .select()
+      .from(user)
+      .where(eq(user.id, userId))
+      .limit(1);
+
+    if (userRecord?.email) {
+      await sendEmail(
+        createNewCallAlertEmail(userRecord.email, {
+          conversationId: conversation_id,
+          duration: durationSecs,
+          status,
+          transcript: transcript || undefined,
+          createdAt: new Date(),
+        })
+      );
+    }
+
     // Update subscription minutes usage (only for successful calls)
     if (callSuccessful && minutesCharged > 0) {
       const [userSubscription] = await db
@@ -129,14 +153,24 @@ export async function POST(req: NextRequest) {
           newMinutesUsed >= minutesIncluded * 0.8 &&
           userSubscription.minutesUsed < minutesIncluded * 0.8
         ) {
-          // TODO: Send warning email via SendGrid
           console.log(`User ${userId} approaching minute limit (80%)`);
+
+          // Send 80% usage warning email
+          if (userRecord?.email) {
+            await sendEmail(
+              createUsageWarningEmail(userRecord.email, {
+                minutesUsed: newMinutesUsed,
+                minutesIncluded,
+                percentageUsed: (newMinutesUsed / minutesIncluded) * 100,
+              })
+            );
+          }
         }
 
         // Check if limit exceeded
         if (minutesIncluded > 0 && newMinutesUsed > minutesIncluded) {
-          // TODO: Send limit exceeded email
           console.log(`User ${userId} exceeded minute limit`);
+          // Agent should be deactivated - handled by agent config system
         }
       }
     }

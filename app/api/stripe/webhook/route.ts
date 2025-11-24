@@ -3,8 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { stripe, getPlanByPriceId } from "@/lib/stripe";
 import { db } from "@/lib/db/index";
-import { subscription } from "@/lib/db/schema";
+import { subscription, user } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { sendEmail, createSubscriptionConfirmationEmail } from "@/lib/sendgrid";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -77,6 +78,26 @@ export async function POST(req: NextRequest) {
         });
 
         console.log("Subscription created for user:", userId);
+
+        // Send confirmation email
+        const [userRecord] = await db
+          .select()
+          .from(user)
+          .where(eq(user.id, userId))
+          .limit(1);
+
+        if (userRecord?.email) {
+          const amount =
+            (stripeSubscription.items.data[0].price.unit_amount ?? 0) / 100;
+          await sendEmail(
+            createSubscriptionConfirmationEmail(userRecord.email, {
+              plan: tier,
+              amount,
+              minutesIncluded,
+            })
+          );
+        }
+
         break;
       }
 

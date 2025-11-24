@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { StripePortalButton } from "@/components/dashboard/stripe-portal-button";
 
 export default async function SubscriptionPage() {
   // TODO: Fetch real subscription data
@@ -91,15 +92,19 @@ export default async function SubscriptionPage() {
             Verwalten Sie Ihr Abonnement über das Stripe Portal
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            Hier können Sie Ihren Plan upgraden, downgraden oder Ihr Abonnement
-            kündigen. Sie werden zum Stripe Kundenportal weitergeleitet.
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Im Stripe Kundenportal können Sie:
           </p>
-          {/* TODO: Add Stripe Portal button */}
-          <p className="text-sm text-muted-foreground italic">
-            Stripe Portal Integration wird nach Setup verfügbar sein.
-          </p>
+          <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
+            <li>Ihren Plan upgraden oder downgraden</li>
+            <li>Zahlungsmethoden verwalten</li>
+            <li>Rechnungen herunterladen</li>
+            <li>Ihr Abonnement kündigen</li>
+          </ul>
+          <div className="pt-4">
+            <StripePortalButton />
+          </div>
         </CardContent>
       </Card>
     </div>

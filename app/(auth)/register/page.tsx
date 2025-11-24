@@ -57,6 +57,11 @@ export default function RegisterPage() {
         return;
       }
 
+      // Send welcome email (non-blocking)
+      fetch("/api/welcome-email", { method: "POST" }).catch((err) =>
+        console.error("Welcome email failed:", err)
+      );
+
       // Redirect to dashboard after successful registration
       router.push("/dashboard");
     } catch {
