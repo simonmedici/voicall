@@ -271,6 +271,43 @@ export async function listVoices(): Promise<
 }
 
 /**
+ * Conversation interface from ElevenLabs API
+ */
+export interface Conversation {
+  conversation_id: string;
+  agent_id: string;
+  status: string;
+  start_time_unix_secs: number;
+  call_duration_secs: number;
+  message_count: number;
+  call_successful: string;
+  metadata?: Record<string, unknown>;
+}
+
+/**
+ * Conversation detail interface from ElevenLabs API
+ */
+export interface ConversationDetail {
+  conversation_id: string;
+  agent_id: string;
+  status: string;
+  start_time_unix_secs: number;
+  call_duration_secs: number;
+  transcript: Array<{
+    role: "user" | "agent";
+    message: string;
+    time_in_call_secs?: number;
+  }>;
+  metadata?: Record<string, unknown>;
+  analysis?: {
+    call_successful?: string;
+    transcript_summary?: string;
+    data_collection_results?: Record<string, unknown>;
+    evaluation_criteria_results?: Record<string, unknown>;
+  };
+}
+
+/**
  * List conversations for an agent
  * Documentation: https://elevenlabs.io/docs/api-reference/get-conversations
  */
@@ -282,7 +319,11 @@ export async function listConversations(
     callSuccessful?: "success" | "failure" | "unknown";
     search?: string;
   }
-) {
+): Promise<{
+  conversations: Conversation[];
+  hasMore: boolean;
+  nextCursor?: string;
+}> {
   const params = new URLSearchParams();
   if (agentId) params.append("agent_id", agentId);
   if (options?.cursor) params.append("cursor", options.cursor);
@@ -310,10 +351,36 @@ export async function listConversations(
 
   const data = await response.json();
   return {
-    conversations: data.conversations,
-    hasMore: data.has_more,
+    conversations: data.conversations || [],
+    hasMore: data.has_more || false,
     nextCursor: data.next_cursor,
   };
+}
+
+/**
+ * Get conversation details
+ * Documentation: https://elevenlabs.io/docs/api-reference/get-conversation
+ */
+export async function getConversation(
+  conversationId: string
+): Promise<ConversationDetail> {
+  const response = await fetch(
+    `${BASE_URL}/convai/conversations/${conversationId}`,
+    {
+      headers: {
+        "xi-api-key": ELEVENLABS_API_KEY || "",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(
+      `Failed to get conversation: ${error.detail || response.statusText}`
+    );
+  }
+
+  return await response.json();
 }
 
 /**
