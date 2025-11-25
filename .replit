@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web"]
+modules = ["nodejs-20", "web", "postgresql-16"]
 [agent]
 expertMode = true
 
@@ -41,3 +41,8 @@ externalPort = 3000
 deploymentTarget = "autoscale"
 run = ["sh", "-c", "npm run start"]
 build = ["npm", "run", "build"]
+
+[userenv]
+
+[userenv.shared]
+NEXT_PUBLIC_APP_URL = "https://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev"

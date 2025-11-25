@@ -37,15 +37,16 @@ export default function LoginPage() {
       });
 
       if (result.error) {
+        console.error("Login error:", result.error);
         setError(result.error.message || "Login fehlgeschlagen");
         setLoading(false);
         return;
       }
 
-      // Redirect to dashboard on success
       router.push("/dashboard");
-    } catch {
-      setError("Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
+    } catch (err) {
+      console.error("Login exception:", err);
+      setError(err instanceof Error ? err.message : "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
       setLoading(false);
     }
   };

@@ -15,12 +15,17 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, // Set to true in production with SendGrid
+    requireEmailVerification: false,
   },
   session: {
-    expiresIn: 60 * 60 * 24 * 7, // 7 days
-    updateAge: 60 * 60 * 24, // 1 day
+    expiresIn: 60 * 60 * 24 * 7,
+    updateAge: 60 * 60 * 24,
   },
+  trustedOrigins: [
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:5000",
+    "https://*.replit.dev",
+    "https://*.riker.replit.dev",
+  ],
 });
 
 export type Session = typeof auth.$Infer.Session.session;
