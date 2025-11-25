@@ -5,29 +5,52 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Phone, Clock, Calendar } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import {
+  ArrowLeft,
+  Phone,
+  Clock,
+  Calendar,
+  MessageSquare,
+  User,
+  FileText,
+  Loader2,
+  AlertCircle,
+  Bot,
+} from "lucide-react";
 
-interface CallDetail {
-  id: string;
-  conversationId: string;
-  agentId: string;
+interface TranscriptMessage {
+  role: "user" | "agent";
+  message: string;
+  time_in_call_secs?: number;
+}
+
+interface ExtractedData {
+  callerName?: string;
+  callerPhone?: string;
+  appointmentDate?: string;
+  appointmentTime?: string;
+  appointmentReason?: string;
+  notes?: string;
+  summary?: string;
+}
+
+interface ConversationDetail {
+  conversation_id: string;
+  agent_id: string;
+  agentName: string;
   status: string;
-  durationSecs: number | null;
-  startTime: string | null;
-  endTime: string | null;
-  transcript: Array<{
-    role: string;
-    message: string;
-    time_in_call_secs?: number;
-  }> | null;
-  metadata: Record<string, unknown> | null;
-  analysis: Record<string, unknown> | null;
-  extractedData: Record<string, unknown> | null;
-  hasAudio: boolean;
-  audioUrl: string | null;
-  minutesCharged: number | null;
-  callSuccessful: boolean;
-  createdAt: string;
+  start_time_unix_secs: number;
+  call_duration_secs: number;
+  transcript: TranscriptMessage[];
+  metadata?: Record<string, unknown>;
+  analysis?: {
+    call_successful?: string;
+    transcript_summary?: string;
+    data_collection_results?: Record<string, unknown>;
+    evaluation_criteria_results?: Record<string, unknown>;
+  };
+  extractedData?: ExtractedData;
 }
 
 export default function CallDetailPage({
@@ -37,40 +60,47 @@ export default function CallDetailPage({
 }) {
   const { id } = use(params);
   const router = useRouter();
-  const [call, setCall] = useState<CallDetail | null>(null);
+  const [conversation, setConversation] = useState<ConversationDetail | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchCallDetail = async () => {
+    const fetchConversation = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/calls/${id}`);
+        setError(null);
+
+        const response = await fetch(`/api/conversations/${id}`);
         const data = await response.json();
 
-        if (response.ok) {
-          setCall(data.call);
-        } else {
-          console.error("Error fetching call:", data.error);
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to fetch conversation");
         }
-      } catch (error) {
-        console.error("Error fetching call:", error);
+
+        setConversation(data);
+      } catch (err) {
+        console.error("Error fetching conversation:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch conversation"
+        );
       } finally {
         setLoading(false);
       }
     };
-    fetchCallDetail();
+    fetchConversation();
   }, [id]);
 
-  const formatDuration = (seconds: number | null) => {
+  const formatDuration = (seconds: number | null | undefined) => {
     if (!seconds) return "0s";
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
   };
 
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return "-";
-    const date = new Date(dateString);
+  const formatDate = (unixSecs: number) => {
+    const date = new Date(unixSecs * 1000);
     return date.toLocaleString("de-CH", {
       day: "2-digit",
       month: "2-digit",
@@ -81,60 +111,107 @@ export default function CallDetailPage({
     });
   };
 
+  const getStatusBadge = (
+    status: string,
+    callSuccessful: string | undefined
+  ) => {
+    if (status === "done" && callSuccessful === "success") {
+      return (
+        <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
+          Erfolgreich
+        </Badge>
+      );
+    }
+    if (status === "done" && callSuccessful === "failure") {
+      return (
+        <Badge className="bg-red-100 text-red-800 hover:bg-red-100">
+          Fehlgeschlagen
+        </Badge>
+      );
+    }
+    if (status === "done") {
+      return (
+        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
+          Abgeschlossen
+        </Badge>
+      );
+    }
+    return <Badge variant="secondary">{status}</Badge>;
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <p className="text-muted-foreground">Lädt Anrufdetails...</p>
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <span className="ml-2 text-muted-foreground">
+          Lade Unterhaltung...
+        </span>
       </div>
     );
   }
 
-  if (!call) {
+  if (error || !conversation) {
     return (
       <div className="space-y-4">
-        <Button variant="ghost" onClick={() => router.push("/dashboard/calls")}>
+        <Button
+          variant="ghost"
+          onClick={() => router.push("/dashboard/calls")}
+        >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Zurück
         </Button>
         <Card>
-          <CardContent className="flex items-center justify-center py-8">
-            <p className="text-muted-foreground">Anruf nicht gefunden</p>
+          <CardContent className="flex flex-col items-center justify-center py-8">
+            <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
+            <p className="text-red-600">{error || "Unterhaltung nicht gefunden"}</p>
+            <Button
+              variant="outline"
+              className="mt-4"
+              onClick={() => router.push("/dashboard/calls")}
+            >
+              Zurück zur Übersicht
+            </Button>
           </CardContent>
         </Card>
       </div>
     );
   }
 
+  const messageCount = conversation.transcript?.length || 0;
+
   return (
     <div className="space-y-6">
-      {/* Back Button */}
-      <Button variant="ghost" onClick={() => router.push("/dashboard/calls")}>
+      <Button
+        variant="ghost"
+        onClick={() => router.push("/dashboard/calls")}
+      >
         <ArrowLeft className="mr-2 h-4 w-4" />
-        Zurück zu Anrufen
+        Zurück zu Unterhaltungen
       </Button>
 
-      {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Anruf Details</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Unterhaltung Details
+          </h1>
           <p className="text-muted-foreground">
-            Conversation ID: {call.conversationId}
+            Agent: {conversation.agentName}
           </p>
         </div>
-        <Badge variant={call.callSuccessful ? "default" : "destructive"}>
-          {call.callSuccessful ? "Erfolgreich" : "Fehlgeschlagen"}
-        </Badge>
+        {getStatusBadge(
+          conversation.status,
+          conversation.analysis?.call_successful
+        )}
       </div>
 
-      {/* Call Overview */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Status</CardTitle>
-            <Phone className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Agent</CardTitle>
+            <Bot className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold capitalize">{call.status}</div>
+            <div className="text-lg font-bold">{conversation.agentName}</div>
           </CardContent>
         </Card>
 
@@ -145,20 +222,18 @@ export default function CallDetailPage({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {formatDuration(call.durationSecs)}
+              {formatDuration(conversation.call_duration_secs)}
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Minuten</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Nachrichten</CardTitle>
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {call.minutesCharged || 0} Min
-            </div>
+            <div className="text-2xl font-bold">{messageCount}</div>
           </CardContent>
         </Card>
 
@@ -169,85 +244,154 @@ export default function CallDetailPage({
           </CardHeader>
           <CardContent>
             <div className="text-sm font-medium">
-              {formatDate(call.startTime)}
+              {formatDate(conversation.start_time_unix_secs)}
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Extracted Data */}
-      {call.extractedData && Object.keys(call.extractedData).length > 0 && (
+      {conversation.analysis?.transcript_summary && (
         <Card>
           <CardHeader>
-            <CardTitle>Extrahierte Daten</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              Zusammenfassung
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              {"callerName" in call.extractedData &&
-                call.extractedData.callerName ? (
-                  <div>
-                    <span className="font-medium">Name: </span>
-                    {String(call.extractedData.callerName)}
-                  </div>
-                ) : null}
-              {"appointmentReason" in call.extractedData &&
-                call.extractedData.appointmentReason ? (
-                  <div>
-                    <span className="font-medium">Grund: </span>
-                    {String(call.extractedData.appointmentReason)}
-                  </div>
-                ) : null}
-              {"appointmentDate" in call.extractedData &&
-                call.extractedData.appointmentDate ? (
-                  <div>
-                    <span className="font-medium">Termin: </span>
-                    {String(call.extractedData.appointmentDate)}
-                  </div>
-                ) : null}
-              {"appointmentTime" in call.extractedData &&
-                call.extractedData.appointmentTime ? (
-                  <div>
-                    <span className="font-medium">Uhrzeit: </span>
-                    {String(call.extractedData.appointmentTime)}
-                  </div>
-                ) : null}
-              {"callerPhone" in call.extractedData &&
-                call.extractedData.callerPhone ? (
-                  <div>
-                    <span className="font-medium">Telefon: </span>
-                    {String(call.extractedData.callerPhone)}
-                  </div>
-                ) : null}
-            </div>
+            <p className="text-sm leading-relaxed">
+              {conversation.analysis.transcript_summary}
+            </p>
           </CardContent>
         </Card>
       )}
 
-      {/* Transcript */}
+      {conversation.extractedData &&
+        Object.keys(conversation.extractedData).length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User className="h-5 w-5" />
+                Kundendaten
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 md:grid-cols-2">
+                {conversation.extractedData.callerName && (
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Name
+                    </p>
+                    <p className="text-sm">
+                      {conversation.extractedData.callerName}
+                    </p>
+                  </div>
+                )}
+                {conversation.extractedData.callerPhone && (
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Telefon
+                    </p>
+                    <p className="text-sm">
+                      {conversation.extractedData.callerPhone}
+                    </p>
+                  </div>
+                )}
+                {conversation.extractedData.appointmentDate && (
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Termin Datum
+                    </p>
+                    <p className="text-sm">
+                      {conversation.extractedData.appointmentDate}
+                    </p>
+                  </div>
+                )}
+                {conversation.extractedData.appointmentTime && (
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Termin Uhrzeit
+                    </p>
+                    <p className="text-sm">
+                      {conversation.extractedData.appointmentTime}
+                    </p>
+                  </div>
+                )}
+                {conversation.extractedData.appointmentReason && (
+                  <div className="space-y-1 md:col-span-2">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Grund
+                    </p>
+                    <p className="text-sm">
+                      {conversation.extractedData.appointmentReason}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+      {conversation.analysis?.data_collection_results &&
+        Object.keys(conversation.analysis.data_collection_results).length >
+          0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Gesammelte Daten (ElevenLabs)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 md:grid-cols-2">
+                {Object.entries(
+                  conversation.analysis.data_collection_results
+                ).map(([key, value]) => (
+                  <div key={key} className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      {key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+                    </p>
+                    <p className="text-sm">
+                      {typeof value === "object"
+                        ? JSON.stringify(value)
+                        : String(value)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
       <Card>
         <CardHeader>
-          <CardTitle>Transkript</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <MessageSquare className="h-5 w-5" />
+            Transkript
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          {call.transcript &&
-          Array.isArray(call.transcript) &&
-          call.transcript.length > 0 ? (
+          {conversation.transcript &&
+          Array.isArray(conversation.transcript) &&
+          conversation.transcript.length > 0 ? (
             <div className="space-y-4">
-              {call.transcript.map((message, index) => (
+              {conversation.transcript.map((message, index) => (
                 <div
                   key={index}
-                  className={`flex ${message.role === "agent" ? "justify-start" : "justify-end"}`}
+                  className={`flex ${
+                    message.role === "agent" ? "justify-start" : "justify-end"
+                  }`}
                 >
                   <div
-                    className={`rounded-lg px-4 py-2 max-w-[80%] ${
+                    className={`rounded-lg px-4 py-3 max-w-[80%] ${
                       message.role === "agent"
                         ? "bg-secondary text-secondary-foreground"
                         : "bg-primary text-primary-foreground"
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-medium">
-                        {message.role === "agent" ? "Agent" : "Anrufer"}
+                      <span className="text-xs font-semibold">
+                        {message.role === "agent" ? "🤖 Agent" : "👤 Nutzer"}
                       </span>
                       {message.time_in_call_secs !== undefined && (
                         <span className="text-xs opacity-70">
@@ -255,20 +399,22 @@ export default function CallDetailPage({
                         </span>
                       )}
                     </div>
-                    <p className="text-sm">{message.message}</p>
+                    <p className="text-sm leading-relaxed">{message.message}</p>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-muted-foreground text-center py-4">
-              Kein Transkript verfügbar
-            </p>
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <MessageSquare className="h-12 w-12 text-muted-foreground mb-4" />
+              <p className="text-muted-foreground">
+                Kein Transkript verfügbar
+              </p>
+            </div>
           )}
         </CardContent>
       </Card>
 
-      {/* Technical Details */}
       <Card>
         <CardHeader>
           <CardTitle>Technische Details</CardTitle>
@@ -277,30 +423,27 @@ export default function CallDetailPage({
           <div className="space-y-2 text-sm">
             <div className="grid grid-cols-2 gap-2">
               <span className="font-medium">Agent ID:</span>
-              <span className="text-muted-foreground">{call.agentId}</span>
+              <span className="text-muted-foreground break-all">
+                {conversation.agent_id}
+              </span>
             </div>
+            <Separator />
             <div className="grid grid-cols-2 gap-2">
               <span className="font-medium">Conversation ID:</span>
               <span className="text-muted-foreground break-all">
-                {call.conversationId}
+                {conversation.conversation_id}
               </span>
             </div>
+            <Separator />
             <div className="grid grid-cols-2 gap-2">
-              <span className="font-medium">Start:</span>
-              <span className="text-muted-foreground">
-                {formatDate(call.startTime)}
-              </span>
+              <span className="font-medium">Status:</span>
+              <span className="text-muted-foreground">{conversation.status}</span>
             </div>
+            <Separator />
             <div className="grid grid-cols-2 gap-2">
-              <span className="font-medium">Ende:</span>
+              <span className="font-medium">Erfolg:</span>
               <span className="text-muted-foreground">
-                {formatDate(call.endTime)}
-              </span>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <span className="font-medium">Audio verfügbar:</span>
-              <span className="text-muted-foreground">
-                {call.hasAudio ? "Ja" : "Nein"}
+                {conversation.analysis?.call_successful || "Unbekannt"}
               </span>
             </div>
           </div>

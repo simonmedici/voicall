@@ -27,49 +27,62 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Phone, Clock, CheckCircle, XCircle, Search } from "lucide-react";
+import {
+  Phone,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Search,
+  MessageSquare,
+  Loader2,
+  AlertCircle,
+} from "lucide-react";
 
-interface Call {
-  id: string;
-  conversationId: string;
+interface Conversation {
+  conversation_id: string;
+  agent_id: string;
   status: string;
-  durationSecs: number | null;
-  startTime: string | null;
-  callSuccessful: boolean;
-  minutesCharged: number | null;
-  createdAt: string;
+  start_time_unix_secs: number;
+  call_duration_secs: number;
+  message_count: number;
+  call_successful: string;
 }
 
 export default function CallsPage() {
   const router = useRouter();
-  const [calls, setCalls] = useState<Call[]>([]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [agentMap, setAgentMap] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
   useEffect(() => {
-    const fetchCalls = async () => {
+    const fetchConversations = async () => {
       try {
         setLoading(true);
-        const params = new URLSearchParams();
-        if (statusFilter !== "all") {
-          params.append("status", statusFilter);
-        }
+        setError(null);
 
-        const response = await fetch(`/api/calls?${params.toString()}`);
+        const response = await fetch("/api/conversations");
         const data = await response.json();
 
-        if (response.ok) {
-          setCalls(data.calls || []);
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to fetch conversations");
         }
-      } catch (error) {
-        console.error("Error fetching calls:", error);
+
+        setConversations(data.conversations || []);
+        setAgentMap(data.agentMap || {});
+      } catch (err) {
+        console.error("Error fetching conversations:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch conversations"
+        );
       } finally {
         setLoading(false);
       }
     };
-    fetchCalls();
-  }, [statusFilter]);
+    fetchConversations();
+  }, []);
 
   const formatDuration = (seconds: number | null) => {
     if (!seconds) return "0s";
@@ -78,9 +91,8 @@ export default function CallsPage() {
     return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
   };
 
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return "-";
-    const date = new Date(dateString);
+  const formatDate = (unixSecs: number) => {
+    const date = new Date(unixSecs * 1000);
     return date.toLocaleDateString("de-CH", {
       day: "2-digit",
       month: "2-digit",
@@ -90,49 +102,84 @@ export default function CallsPage() {
     });
   };
 
-  const getStatusBadge = (status: string) => {
-    const variants: Record<string, "default" | "secondary" | "destructive"> = {
-      done: "default",
-      failed: "destructive",
-      "in-progress": "secondary",
-    };
-    return (
-      <Badge variant={variants[status] || "secondary"}>
-        {status === "done"
-          ? "Abgeschlossen"
-          : status === "failed"
-            ? "Fehlgeschlagen"
-            : status}
-      </Badge>
-    );
+  const getStatusBadge = (status: string, callSuccessful: string) => {
+    if (status === "done" && callSuccessful === "success") {
+      return (
+        <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
+          Erfolgreich
+        </Badge>
+      );
+    }
+    if (status === "done" && callSuccessful === "failure") {
+      return (
+        <Badge className="bg-red-100 text-red-800 hover:bg-red-100">
+          Fehlgeschlagen
+        </Badge>
+      );
+    }
+    if (status === "done") {
+      return (
+        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
+          Abgeschlossen
+        </Badge>
+      );
+    }
+    if (status === "in-progress") {
+      return (
+        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">
+          Läuft
+        </Badge>
+      );
+    }
+    return <Badge variant="secondary">{status}</Badge>;
   };
 
-  const filteredCalls = calls.filter((call) => {
+  const filteredConversations = conversations.filter((conv) => {
     const matchesSearch =
       searchQuery === "" ||
-      call.conversationId.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSearch;
+      conv.conversation_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (agentMap[conv.agent_id] || "")
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "all" ||
+      (statusFilter === "success" && conv.call_successful === "success") ||
+      (statusFilter === "failure" && conv.call_successful === "failure") ||
+      (statusFilter === "unknown" && conv.call_successful === "unknown");
+
+    return matchesSearch && matchesStatus;
   });
+
+  const stats = {
+    total: conversations.length,
+    successful: conversations.filter((c) => c.call_successful === "success")
+      .length,
+    totalMinutes: Math.round(
+      conversations.reduce((acc, c) => acc + (c.call_duration_secs || 0), 0) /
+        60
+    ),
+  };
 
   return (
     <div className="space-y-8">
-      {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Anrufe</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Unterhaltungen</h1>
         <p className="text-muted-foreground">
-          Übersicht aller Anrufe mit Details und Transkripten
+          Alle Unterhaltungen Ihrer Agents (inkl. Tests)
         </p>
       </div>
 
-      {/* Stats */}
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Anrufe gesamt</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Unterhaltungen gesamt
+            </CardTitle>
             <Phone className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{calls.length}</div>
+            <div className="text-2xl font-bold">{stats.total}</div>
           </CardContent>
         </Card>
 
@@ -142,9 +189,7 @@ export default function CallsPage() {
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {calls.filter((c) => c.callSuccessful).length}
-            </div>
+            <div className="text-2xl font-bold">{stats.successful}</div>
           </CardContent>
         </Card>
 
@@ -154,21 +199,17 @@ export default function CallsPage() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {Math.round(
-                calls.reduce((acc, c) => acc + (c.minutesCharged || 0), 0)
-              )}{" "}
-              Min
-            </div>
+            <div className="text-2xl font-bold">{stats.totalMinutes} Min</div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filters */}
       <Card>
         <CardHeader>
           <CardTitle>Filter & Suche</CardTitle>
-          <CardDescription>Filtern Sie Ihre Anrufe nach Status</CardDescription>
+          <CardDescription>
+            Filtern Sie Ihre Unterhaltungen nach Agent oder Status
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4 md:flex-row">
@@ -176,7 +217,7 @@ export default function CallsPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Suche nach Conversation ID..."
+                  placeholder="Suche nach Agent oder Conversation ID..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
@@ -189,29 +230,49 @@ export default function CallsPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Alle Status</SelectItem>
-                <SelectItem value="done">Abgeschlossen</SelectItem>
-                <SelectItem value="failed">Fehlgeschlagen</SelectItem>
-                <SelectItem value="in-progress">In Progress</SelectItem>
+                <SelectItem value="success">Erfolgreich</SelectItem>
+                <SelectItem value="failure">Fehlgeschlagen</SelectItem>
+                <SelectItem value="unknown">Unbekannt</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </CardContent>
       </Card>
 
-      {/* Calls Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Anrufhistorie</CardTitle>
+          <CardTitle>Unterhaltungen</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
             <div className="flex items-center justify-center py-8">
-              <p className="text-muted-foreground">Lädt...</p>
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              <span className="ml-2 text-muted-foreground">
+                Lade Unterhaltungen...
+              </span>
             </div>
-          ) : filteredCalls.length === 0 ? (
+          ) : error ? (
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
+              <p className="text-red-600">{error}</p>
+              <Button
+                variant="outline"
+                className="mt-4"
+                onClick={() => window.location.reload()}
+              >
+                Erneut versuchen
+              </Button>
+            </div>
+          ) : filteredConversations.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <Phone className="h-12 w-12 text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">Keine Anrufe gefunden.</p>
+              <p className="text-muted-foreground">
+                Keine Unterhaltungen gefunden.
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Starten Sie einen Test mit einem Ihrer Agents, um hier
+                Unterhaltungen zu sehen.
+              </p>
             </div>
           ) : (
             <div className="rounded-md border">
@@ -219,36 +280,52 @@ export default function CallsPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Datum</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>Agent</TableHead>
                     <TableHead>Dauer</TableHead>
-                    <TableHead>Minuten</TableHead>
-                    <TableHead>Erfolg</TableHead>
+                    <TableHead>Nachrichten</TableHead>
+                    <TableHead>Status</TableHead>
                     <TableHead className="text-right">Aktion</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredCalls.map((call) => (
-                    <TableRow key={call.id}>
+                  {filteredConversations.map((conv) => (
+                    <TableRow
+                      key={conv.conversation_id}
+                      className="cursor-pointer hover:bg-muted/50"
+                      onClick={() =>
+                        router.push(
+                          `/dashboard/calls/${conv.conversation_id}`
+                        )
+                      }
+                    >
                       <TableCell className="font-medium">
-                        {formatDate(call.startTime || call.createdAt)}
+                        {formatDate(conv.start_time_unix_secs)}
                       </TableCell>
-                      <TableCell>{getStatusBadge(call.status)}</TableCell>
-                      <TableCell>{formatDuration(call.durationSecs)}</TableCell>
-                      <TableCell>{call.minutesCharged || 0} Min</TableCell>
                       <TableCell>
-                        {call.callSuccessful ? (
-                          <CheckCircle className="h-4 w-4 text-green-600" />
-                        ) : (
-                          <XCircle className="h-4 w-4 text-red-600" />
-                        )}
+                        {agentMap[conv.agent_id] || "Unbekannter Agent"}
+                      </TableCell>
+                      <TableCell>
+                        {formatDuration(conv.call_duration_secs)}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                          {conv.message_count || 0}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {getStatusBadge(conv.status, conv.call_successful)}
                       </TableCell>
                       <TableCell className="text-right">
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() =>
-                            router.push(`/dashboard/calls/${call.id}`)
-                          }
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(
+                              `/dashboard/calls/${conv.conversation_id}`
+                            );
+                          }}
                         >
                           Details
                         </Button>
