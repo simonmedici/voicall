@@ -68,6 +68,8 @@ npm run db:studio    # Open Drizzle Studio
 ```
 
 ## Recent Changes
+- Added Dashboard Statistics: Shows personalized stats (total calls, calls today, minutes used, success rate) for each user's agents
+- Fixed ElevenLabs Widget: Configured CSP headers and using @elevenlabs/convai-widget-embed package for agent testing
 - Fixed ElevenLabs integration: renamed `verifyWebhookSignature` to `verifyElevenLabsSignature`
 - Implemented `extractCallData` function for parsing conversation transcripts
 - Configured Next.js for Replit environment (port 5000, allowed origins)
