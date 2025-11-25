@@ -18,7 +18,17 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://elevenlabs.io https://*.elevenlabs.io; connect-src 'self' https://*.elevenlabs.io wss://*.elevenlabs.io;",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://elevenlabs.io https://*.elevenlabs.io https://cdn.elevenlabs.io https://unpkg.com blob:",
+              "worker-src 'self' https://elevenlabs.io https://*.elevenlabs.io https://cdn.elevenlabs.io blob:",
+              "connect-src 'self' https://*.elevenlabs.io https://api.elevenlabs.io wss://*.elevenlabs.io wss://api.elevenlabs.io",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https:",
+              "font-src 'self' data:",
+              "media-src 'self' blob:",
+              "frame-src 'self'",
+            ].join("; "),
           },
         ],
       },
