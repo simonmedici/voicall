@@ -320,7 +320,7 @@ export async function listConversations(
  * Verify ElevenLabs webhook signature
  * Documentation: https://elevenlabs.io/docs/conversational-ai/webhooks
  */
-export function verifyWebhookSignature(
+export function verifyElevenLabsSignature(
   signature: string,
   body: string,
   secret: string
@@ -338,4 +338,135 @@ export function verifyWebhookSignature(
     console.error("Signature verification error:", error);
     return false;
   }
+}
+
+/**
+ * Transcript message interface from ElevenLabs webhook
+ */
+interface TranscriptMessage {
+  role: "user" | "agent";
+  message: string;
+  time_in_call_secs?: number;
+}
+
+/**
+ * Extracted call data interface
+ */
+export interface ExtractedCallData {
+  callerName?: string;
+  callerPhone?: string;
+  appointmentDate?: string;
+  appointmentTime?: string;
+  appointmentReason?: string;
+  notes?: string;
+  summary?: string;
+}
+
+/**
+ * Extract structured data from conversation transcript
+ * Parses the transcript to find relevant information like names, dates, etc.
+ */
+export function extractCallData(
+  transcript: TranscriptMessage[] | null | undefined
+): ExtractedCallData | null {
+  if (!transcript || !Array.isArray(transcript) || transcript.length === 0) {
+    return null;
+  }
+
+  const extractedData: ExtractedCallData = {};
+
+  // Combine all messages for analysis
+  const fullText = transcript
+    .map((msg) => `${msg.role}: ${msg.message}`)
+    .join("\n");
+
+  // Extract caller name patterns (common patterns in German/English)
+  const namePatterns = [
+    /(?:mein name ist|ich bin|ich heiße|my name is|i am|this is)\s+([A-ZÄÖÜa-zäöüß]+(?:\s+[A-ZÄÖÜa-zäöüß]+)?)/i,
+    /(?:name[:\s]+)([A-ZÄÖÜa-zäöüß]+(?:\s+[A-ZÄÖÜa-zäöüß]+)?)/i,
+  ];
+
+  for (const pattern of namePatterns) {
+    const match = fullText.match(pattern);
+    if (match && match[1]) {
+      extractedData.callerName = match[1].trim();
+      break;
+    }
+  }
+
+  // Extract phone number patterns
+  const phonePatterns = [
+    /(?:telefon|nummer|phone|number|erreichen)[:\s]*([+\d\s\-()]{8,})/i,
+    /(\+\d{1,3}[\s\-]?\d{2,4}[\s\-]?\d{3,4}[\s\-]?\d{2,4})/,
+    /(0\d{2,3}[\s\-]?\d{3,4}[\s\-]?\d{2,4})/,
+  ];
+
+  for (const pattern of phonePatterns) {
+    const match = fullText.match(pattern);
+    if (match && match[1]) {
+      extractedData.callerPhone = match[1].replace(/\s+/g, " ").trim();
+      break;
+    }
+  }
+
+  // Extract date patterns (German and English formats)
+  const datePatterns = [
+    /(?:am|on|für|for)\s+(\d{1,2}[.\-/]\d{1,2}[.\-/]?\d{0,4})/i,
+    /(\d{1,2}\.\s*(?:januar|februar|märz|april|mai|juni|juli|august|september|oktober|november|dezember))/i,
+    /(\d{1,2}\s*(?:january|february|march|april|may|june|july|august|september|october|november|december))/i,
+    /(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag|monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i,
+  ];
+
+  for (const pattern of datePatterns) {
+    const match = fullText.match(pattern);
+    if (match && match[1]) {
+      extractedData.appointmentDate = match[1].trim();
+      break;
+    }
+  }
+
+  // Extract time patterns
+  const timePatterns = [
+    /(?:um|at)\s+(\d{1,2}[:\.]?\d{0,2}\s*(?:uhr|h)?)/i,
+    /(\d{1,2}:\d{2})\s*(?:uhr|h)?/i,
+  ];
+
+  for (const pattern of timePatterns) {
+    const match = fullText.match(pattern);
+    if (match && match[1]) {
+      extractedData.appointmentTime = match[1].trim();
+      break;
+    }
+  }
+
+  // Extract reason/subject patterns
+  const reasonPatterns = [
+    /(?:grund|reason|wegen|because of|für|for)[:\s]+([^.!?\n]+)/i,
+    /(?:termin für|appointment for)[:\s]+([^.!?\n]+)/i,
+    /(?:es geht um|it's about)[:\s]+([^.!?\n]+)/i,
+  ];
+
+  for (const pattern of reasonPatterns) {
+    const match = fullText.match(pattern);
+    if (match && match[1]) {
+      extractedData.appointmentReason = match[1].trim();
+      break;
+    }
+  }
+
+  // Create a brief summary from the last few agent messages
+  const agentMessages = transcript
+    .filter((msg) => msg.role === "agent")
+    .slice(-2)
+    .map((msg) => msg.message)
+    .join(" ");
+
+  if (agentMessages) {
+    extractedData.summary =
+      agentMessages.length > 200
+        ? agentMessages.substring(0, 200) + "..."
+        : agentMessages;
+  }
+
+  return Object.keys(extractedData).length > 0 ? extractedData : null;
 }
