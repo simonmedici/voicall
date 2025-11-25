@@ -100,19 +100,13 @@ export async function POST(request: NextRequest) {
           id: randomUUID(),
           userId,
           elevenLabsAgentId,
-          greetingMessage: "Grüezi! Wie kann ich Ihnen helfen?",
-          language: "de",
+          name: "Praxis-Assistent",
+          voiceId: "default",
           systemPrompt:
             "Du bist ein freundlicher Telefonassistent für eine Schweizer Arztpraxis. Du sprichst Schweizerdeutsch und hilfst Patienten bei Terminvereinbarungen und allgemeinen Anfragen.",
-          enabledLanguages: ["de"],
-          voiceId: null,
-          voiceName: null,
-          ragDocuments: null,
-          calendarIntegration: null,
-          phoneNumber: null,
+          firstMessage: "Grüezi! Wie kann ich Ihnen helfen?",
+          language: "de",
           isActive: isActive !== undefined ? isActive : false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         })
         .returning();
 

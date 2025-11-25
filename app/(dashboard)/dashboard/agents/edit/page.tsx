@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Card,
@@ -42,7 +42,7 @@ interface Agent {
   elevenLabsAgentId: string;
 }
 
-export default function EditAgentPage() {
+function EditAgentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const agentId = searchParams.get("id");
@@ -53,7 +53,6 @@ export default function EditAgentPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Form state
   const [formData, setFormData] = useState({
     name: "",
     voiceId: "",
@@ -75,13 +74,11 @@ export default function EditAgentPage() {
       try {
         setLoading(true);
 
-        // Load agent
         const agentRes = await fetch(`/api/agent?agentId=${agentId}`);
         if (!agentRes.ok) throw new Error("Failed to load agent");
         const agentData = await agentRes.json();
         setAgent(agentData);
 
-        // Set form data
         setFormData({
           name: agentData.name || "",
           voiceId: agentData.voiceId || "",
@@ -93,7 +90,6 @@ export default function EditAgentPage() {
           maxTokens: agentData.maxTokens ?? -1,
         });
 
-        // Load voices
         const voicesRes = await fetch("/api/voices/list");
         if (!voicesRes.ok) throw new Error("Failed to load voices");
         const voicesData = await voicesRes.json();
@@ -130,8 +126,6 @@ export default function EditAgentPage() {
       }
 
       console.log("✅ Agent updated");
-
-      // Redirect to agents list
       router.push("/dashboard/agents");
     } catch (err) {
       console.error("Failed to update agent:", err);
@@ -345,5 +339,19 @@ export default function EditAgentPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function EditAgentPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      }
+    >
+      <EditAgentContent />
+    </Suspense>
   );
 }

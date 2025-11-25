@@ -7,6 +7,13 @@ import { eq } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
   try {
+    if (!stripe) {
+      return NextResponse.json(
+        { error: "Stripe ist nicht konfiguriert" },
+        { status: 503 }
+      );
+    }
+
     // Get session from Better Auth
     const session = await auth.api.getSession({
       headers: req.headers,

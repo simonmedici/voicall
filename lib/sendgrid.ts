@@ -1,10 +1,12 @@
 import sgMail from "@sendgrid/mail";
 
-if (!process.env.SENDGRID_API_KEY) {
-  throw new Error("SENDGRID_API_KEY environment variable is not set");
-}
+const sendgridApiKey = process.env.SENDGRID_API_KEY;
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+if (!sendgridApiKey) {
+  console.warn("⚠️ SENDGRID_API_KEY is not set - Email features will be disabled");
+} else {
+  sgMail.setApiKey(sendgridApiKey);
+}
 
 const FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL || "noreply@voicall.ch";
 
@@ -287,6 +289,11 @@ export function createUsageWarningEmail(
 // ============================================
 
 export async function sendEmail(template: EmailTemplate): Promise<boolean> {
+  if (!sendgridApiKey) {
+    console.warn(`⚠️ Skipping email to ${template.to} - SENDGRID_API_KEY not set`);
+    return false;
+  }
+
   try {
     await sgMail.send({
       from: FROM_EMAIL,

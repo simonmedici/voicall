@@ -183,27 +183,41 @@ export default function CallDetailPage({
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {"patientName" in call.extractedData &&
-                call.extractedData.patientName && (
+              {"callerName" in call.extractedData &&
+                call.extractedData.callerName ? (
                   <div>
                     <span className="font-medium">Name: </span>
-                    {String(call.extractedData.patientName)}
+                    {String(call.extractedData.callerName)}
                   </div>
-                )}
+                ) : null}
               {"appointmentReason" in call.extractedData &&
-                call.extractedData.appointmentReason && (
+                call.extractedData.appointmentReason ? (
                   <div>
                     <span className="font-medium">Grund: </span>
                     {String(call.extractedData.appointmentReason)}
                   </div>
-                )}
+                ) : null}
               {"appointmentDate" in call.extractedData &&
-                call.extractedData.appointmentDate && (
+                call.extractedData.appointmentDate ? (
                   <div>
                     <span className="font-medium">Termin: </span>
                     {String(call.extractedData.appointmentDate)}
                   </div>
-                )}
+                ) : null}
+              {"appointmentTime" in call.extractedData &&
+                call.extractedData.appointmentTime ? (
+                  <div>
+                    <span className="font-medium">Uhrzeit: </span>
+                    {String(call.extractedData.appointmentTime)}
+                  </div>
+                ) : null}
+              {"callerPhone" in call.extractedData &&
+                call.extractedData.callerPhone ? (
+                  <div>
+                    <span className="font-medium">Telefon: </span>
+                    {String(call.extractedData.callerPhone)}
+                  </div>
+                ) : null}
             </div>
           </CardContent>
         </Card>

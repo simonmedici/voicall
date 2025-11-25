@@ -29,12 +29,11 @@ export async function GET() {
       // Return default config if none exists
       return NextResponse.json({
         config: {
-          greetingMessage: "Guten Tag, wie kann ich Ihnen helfen?",
+          name: "Praxis-Assistent",
+          firstMessage: "Guten Tag, wie kann ich Ihnen helfen?",
           voiceId: null,
-          voiceName: null,
-          enabledLanguages: ["de"],
-          ragDocuments: null,
-          phoneNumber: null,
+          language: "de",
+          systemPrompt: "",
           isActive: false,
         },
       });
@@ -64,19 +63,20 @@ export async function PATCH(request: NextRequest) {
 
     const body = await request.json();
     const {
-      greetingMessage,
+      name,
+      firstMessage,
       voiceId,
-      voiceName,
-      enabledLanguages,
-      ragDocuments,
       systemPrompt,
       language,
+      llmModel,
+      temperature,
+      maxTokens,
     } = body;
 
-    // Validate greeting message length
-    if (greetingMessage && greetingMessage.length > 200) {
+    // Validate first message length
+    if (firstMessage && firstMessage.length > 500) {
       return NextResponse.json(
-        { error: "Greeting message must be 200 characters or less" },
+        { error: "First message must be 500 characters or less" },
         { status: 400 }
       );
     }
@@ -92,15 +92,14 @@ export async function PATCH(request: NextRequest) {
       updatedAt: new Date(),
     };
 
-    if (greetingMessage !== undefined)
-      updateData.greetingMessage = greetingMessage;
+    if (name !== undefined) updateData.name = name;
+    if (firstMessage !== undefined) updateData.firstMessage = firstMessage;
     if (voiceId !== undefined) updateData.voiceId = voiceId;
-    if (voiceName !== undefined) updateData.voiceName = voiceName;
-    if (enabledLanguages !== undefined)
-      updateData.enabledLanguages = enabledLanguages;
-    if (ragDocuments !== undefined) updateData.ragDocuments = ragDocuments;
     if (systemPrompt !== undefined) updateData.systemPrompt = systemPrompt;
     if (language !== undefined) updateData.language = language;
+    if (llmModel !== undefined) updateData.llmModel = llmModel;
+    if (temperature !== undefined) updateData.temperature = temperature;
+    if (maxTokens !== undefined) updateData.maxTokens = maxTokens;
 
     if (existingConfig) {
       // Update existing config in DB
@@ -114,39 +113,42 @@ export async function PATCH(request: NextRequest) {
       if (updated.elevenLabsAgentId) {
         const { updateAgent } = await import("@/lib/elevenlabs");
 
-        const syncResult = await updateAgent(updated.elevenLabsAgentId, {
-          systemPrompt: updated.systemPrompt || undefined,
-          firstMessage: updated.greetingMessage || undefined,
-          voiceId: updated.voiceId || undefined,
-          language: updated.language || undefined,
-        });
-
-        if (!syncResult.success) {
-          console.warn("Failed to sync to ElevenLabs:", syncResult.error);
-          // Don't fail the request, just log the warning
-        } else {
+        try {
+          await updateAgent(updated.elevenLabsAgentId, {
+            name: updated.name || undefined,
+            systemPrompt: updated.systemPrompt || undefined,
+            firstMessage: updated.firstMessage || undefined,
+            voiceId: updated.voiceId || undefined,
+            language: updated.language || undefined,
+            llmModel: updated.llmModel || undefined,
+            temperature: updated.temperature ?? undefined,
+            maxTokens: updated.maxTokens ?? undefined,
+          });
           console.log("Successfully synced config to ElevenLabs");
+        } catch (syncError) {
+          console.warn("Failed to sync to ElevenLabs:", syncError);
         }
       }
 
       return NextResponse.json({ config: updated });
     } else {
-      // Create new config
+      // Create new config (without ElevenLabs agent - use /api/agents/create for that)
       const [created] = await db
         .insert(agentConfig)
         .values({
           id: randomUUID(),
           userId: session.user.id,
-          greetingMessage:
-            greetingMessage || "Guten Tag, wie kann ich Ihnen helfen?",
-          voiceId: voiceId || null,
-          voiceName: voiceName || null,
+          elevenLabsAgentId: "",
+          name: name || "Praxis-Assistent",
+          voiceId: voiceId || "default",
           systemPrompt:
             systemPrompt ||
-            "Du bist ein freundlicher Telefonassistent für eine Schweizer Arztpraxis. Du sprichst Schweizerdeutsch und hilfst Patienten bei Terminvereinbarungen und allgemeinen Anfragen.",
+            "Du bist ein freundlicher Telefonassistent für eine Schweizer Arztpraxis.",
+          firstMessage: firstMessage || "Guten Tag, wie kann ich Ihnen helfen?",
           language: language || "de",
-          enabledLanguages: enabledLanguages || ["de"],
-          ragDocuments: ragDocuments || null,
+          llmModel: llmModel || "gpt-4o",
+          temperature: temperature ?? 1.0,
+          maxTokens: maxTokens ?? -1,
           isActive: false,
         })
         .returning();

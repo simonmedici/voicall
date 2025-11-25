@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Card,
@@ -13,16 +13,12 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, ArrowLeft, Info } from "lucide-react";
 
-/**
- * Test Agent Page with ElevenLabs Widget
- * Based on: https://elevenlabs.io/docs/conversational-ai/guides/conversational-ai-widget
- */
-export default function TestAgentPage() {
+function TestAgentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
-  const elevenLabsAgentId = searchParams.get("id"); // ElevenLabs Agent ID
-  const dbId = searchParams.get("dbId"); // Database ID
+
+  const elevenLabsAgentId = searchParams.get("id");
+  const dbId = searchParams.get("dbId");
   const agentName = searchParams.get("name");
 
   const [widgetLoaded, setWidgetLoaded] = useState(false);
@@ -35,12 +31,9 @@ export default function TestAgentPage() {
     }
   }, [elevenLabsAgentId, dbId, router]);
 
-  // Load ElevenLabs widget script
-  // Documentation: https://elevenlabs.io/docs/conversational-ai/guides/conversational-ai-widget
   useEffect(() => {
     if (!elevenLabsAgentId) return;
 
-    // Check if script already loaded
     const existingScript = document.querySelector('script[src*="convai-widget"]');
     if (existingScript) {
       console.log("✅ Widget script already loaded");
@@ -68,7 +61,6 @@ export default function TestAgentPage() {
     document.body.appendChild(script);
 
     return () => {
-      // Cleanup on unmount
       const scriptToRemove = document.querySelector(
         'script[src*="convai-widget"]'
       );
@@ -147,7 +139,6 @@ export default function TestAgentPage() {
         </CardContent>
       </Card>
 
-      {/* ElevenLabs Conversational AI Widget */}
       {widgetLoaded && elevenLabsAgentId && (
         <div
           dangerouslySetInnerHTML={{
@@ -156,5 +147,19 @@ export default function TestAgentPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function TestAgentPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      }
+    >
+      <TestAgentContent />
+    </Suspense>
   );
 }
