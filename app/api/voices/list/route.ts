@@ -28,7 +28,15 @@ export async function GET() {
       );
     }
 
-    return NextResponse.json({ voices: result.voices });
+    const mappedVoices = result.voices.map((voice) => ({
+      voiceId: voice.voice_id,
+      name: voice.name,
+      category: voice.category || "unknown",
+      description: voice.description,
+      previewUrl: voice.preview_url,
+    }));
+
+    return NextResponse.json({ voices: mappedVoices });
   } catch (error) {
     console.error("Failed to fetch voices:", error);
     return NextResponse.json(
