@@ -13,6 +13,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@elevenlabs/convai-widget-embed": "^0.5.2",
     "@elevenlabs/elevenlabs-js": "^2.25.0",
     "@hookform/resolvers": "^5.2.2",
     "@neondatabase/serverless": "^1.0.2",

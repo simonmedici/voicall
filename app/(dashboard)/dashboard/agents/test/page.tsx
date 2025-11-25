@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
 import {
   Card,
   CardContent,
@@ -11,7 +12,12 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, ArrowLeft, Info } from "lucide-react";
+import { Loader2, ArrowLeft, Info, CheckCircle } from "lucide-react";
+
+const ElevenLabsWidget = dynamic(
+  () => import("@/components/ElevenLabsWidget"),
+  { ssr: false }
+);
 
 function TestAgentContent() {
   const router = useRouter();
@@ -21,54 +27,15 @@ function TestAgentContent() {
   const dbId = searchParams.get("dbId");
   const agentName = searchParams.get("name");
 
-  const [widgetLoaded, setWidgetLoaded] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [widgetReady, setWidgetReady] = useState(false);
 
   useEffect(() => {
     if (!elevenLabsAgentId || !dbId) {
       router.push("/dashboard/agents");
       return;
     }
+    setWidgetReady(true);
   }, [elevenLabsAgentId, dbId, router]);
-
-  useEffect(() => {
-    if (!elevenLabsAgentId) return;
-
-    const existingScript = document.querySelector('script[src*="convai-widget"]');
-    if (existingScript) {
-      console.log("✅ Widget script already loaded");
-      setTimeout(() => setWidgetLoaded(true), 0);
-      return;
-    }
-
-    console.log("📦 Loading ElevenLabs widget script...");
-
-    const script = document.createElement("script");
-    script.src = "https://elevenlabs.io/convai-widget/index.js";
-    script.async = true;
-    script.type = "module";
-
-    script.onload = () => {
-      console.log("✅ Widget script loaded successfully");
-      setWidgetLoaded(true);
-    };
-
-    script.onerror = () => {
-      console.error("❌ Failed to load widget script");
-      setError("Widget-Script konnte nicht geladen werden");
-    };
-
-    document.body.appendChild(script);
-
-    return () => {
-      const scriptToRemove = document.querySelector(
-        'script[src*="convai-widget"]'
-      );
-      if (scriptToRemove && scriptToRemove.parentNode) {
-        scriptToRemove.parentNode.removeChild(scriptToRemove);
-      }
-    };
-  }, [elevenLabsAgentId]);
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
@@ -88,23 +55,19 @@ function TestAgentContent() {
           <Alert className="mb-6">
             <Info className="h-4 w-4" />
             <AlertDescription>
-              <strong>Hinweis:</strong> Der Agent muss als öffentlich (Public)
-              konfiguriert sein, damit das Widget funktioniert. Klicken Sie auf
-              das Widget-Symbol unten rechts, um die Konversation zu starten.
+              <strong>Hinweis:</strong> Klicken Sie auf das Widget-Symbol unten
+              rechts, um die Konversation zu starten. Erlauben Sie den
+              Mikrofonzugriff wenn angefragt.
             </AlertDescription>
           </Alert>
 
-          {error && (
-            <Alert variant="destructive" className="mb-6">
-              <AlertDescription>{error}</AlertDescription>
+          {widgetReady && (
+            <Alert className="mb-6 border-green-500 bg-green-50">
+              <CheckCircle className="h-4 w-4 text-green-600" />
+              <AlertDescription className="text-green-800">
+                Widget ist bereit! Klicken Sie auf das Symbol unten rechts.
+              </AlertDescription>
             </Alert>
-          )}
-
-          {!widgetLoaded && (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin" />
-              <span className="ml-3">Widget wird geladen...</span>
-            </div>
           )}
 
           <div className="space-y-4">
@@ -139,12 +102,8 @@ function TestAgentContent() {
         </CardContent>
       </Card>
 
-      {widgetLoaded && elevenLabsAgentId && (
-        <div
-          dangerouslySetInnerHTML={{
-            __html: `<elevenlabs-convai agent-id="${elevenLabsAgentId}"></elevenlabs-convai>`,
-          }}
-        />
+      {widgetReady && elevenLabsAgentId && (
+        <ElevenLabsWidget agentId={elevenLabsAgentId} />
       )}
     </div>
   );
