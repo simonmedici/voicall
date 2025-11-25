@@ -20,11 +20,13 @@ import {
   CreditCard,
   LogOut,
   Shield,
+  Bot,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const navigation = [
   { name: "Übersicht", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Meine Agents", href: "/dashboard/agents", icon: Bot },
   { name: "Anrufe", href: "/dashboard/calls", icon: Phone },
   { name: "Einstellungen", href: "/dashboard/settings", icon: Settings },
   { name: "Abo", href: "/dashboard/subscription", icon: CreditCard },

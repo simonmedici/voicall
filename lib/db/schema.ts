@@ -138,11 +138,13 @@ export const agentConfig = pgTable(
     id: text("id").primaryKey(),
     userId: text("user_id")
       .notNull()
-      .unique()
       .references(() => user.id, { onDelete: "cascade" }),
 
-    // ElevenLabs Agent ID (created manually in ElevenLabs dashboard)
-    elevenLabsAgentId: text("elevenlabs_agent_id").unique(),
+    // Agent Metadata
+    name: text("name").notNull().default("My Agent"),
+
+    // ElevenLabs Agent ID (now supports multiple agents per user)
+    elevenLabsAgentId: text("elevenlabs_agent_id"),
 
     // Voice Configuration
     voiceId: text("voice_id"),
@@ -159,14 +161,29 @@ export const agentConfig = pgTable(
       .default("Grüezi! Wie kann ich Ihnen helfen?"),
     language: text("language").notNull().default("de"), // de, fr, it
 
-    // Features (based on subscription tier)
-    enabledLanguages: text("enabled_languages")
-      .array()
-      .notNull()
-      .default(["de"]),
+    // Multi-language Support
+    additionalLanguages: text("additional_languages").array().default([]), // Additional languages beyond primary
 
-    // RAG Documents (Pro & Enterprise only)
-    ragDocuments: jsonb("rag_documents"), // Array of {name, url, uploadedAt}
+    // LLM Configuration
+    llmModel: text("llm_model").default("gpt-4o-mini"), // gpt-4o, gpt-4o-mini, claude-sonnet-4, gemini-2.5-flash
+    llmTemperature: real("llm_temperature").default(0.7), // 0.0 - 1.0
+    maxTokens: integer("max_tokens").default(-1), // -1 for unlimited
+
+    // Conversation Flow Settings
+    turnTimeout: integer("turn_timeout").default(7), // 1-30 seconds
+    turnEagerness: text("turn_eagerness").default("normal"), // eager, normal, patient
+    enableInterruptions: boolean("enable_interruptions").default(true),
+    disableFirstMessageInterruptions: boolean(
+      "disable_first_message_interruptions"
+    ).default(false),
+    maxDuration: integer("max_duration").default(600), // seconds (10 minutes default)
+
+    // Dynamic Variables
+    dynamicVariables: jsonb("dynamic_variables"), // {"user_name": "placeholder", "account_type": ""}
+
+    // Knowledge Base (RAG) - Pro & Enterprise only
+    enableRag: boolean("enable_rag").default(false),
+    ragDocuments: jsonb("rag_documents"), // Array of {id, name, url, type, uploadedAt}
 
     // Calendar Integration
     calendarIntegration: jsonb("calendar_integration"), // {provider: 'google', credentials: {...}}
