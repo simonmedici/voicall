@@ -129,71 +129,35 @@ export const subscription = pgTable(
 );
 
 // ============================================
-// AGENT CONFIGURATION
+// AGENT CONFIGURATION (Simplified - ElevenLabs Docs)
 // ============================================
 
 export const agentConfig = pgTable(
   "agent_config",
   {
+    // Core Identifiers
     id: text("id").primaryKey(),
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
+    elevenLabsAgentId: text("elevenlabs_agent_id").notNull(),
 
-    // Agent Metadata
-    name: text("name").notNull().default("My Agent"),
+    // Required by ElevenLabs API
+    name: text("name").notNull(),
+    voiceId: text("voice_id").notNull(),
+    systemPrompt: text("system_prompt").notNull(),
+    firstMessage: text("first_message").notNull(), // REQUIRED!
+    language: text("language").notNull().default("en"),
 
-    // ElevenLabs Agent ID (now supports multiple agents per user)
-    elevenLabsAgentId: text("elevenlabs_agent_id"),
-
-    // Voice Configuration
-    voiceId: text("voice_id"),
-    voiceName: text("voice_name"),
-
-    // Agent Behavior
-    systemPrompt: text("system_prompt")
-      .notNull()
-      .default(
-        "Du bist ein freundlicher Telefonassistent für eine Schweizer Arztpraxis. Du sprichst Schweizerdeutsch und hilfst Patienten bei Terminvereinbarungen und allgemeinen Anfragen."
-      ),
-    greetingMessage: text("greeting_message")
-      .notNull()
-      .default("Grüezi! Wie kann ich Ihnen helfen?"),
-    language: text("language").notNull().default("de"), // de, fr, it
-
-    // Multi-language Support
-    additionalLanguages: text("additional_languages").array().default([]), // Additional languages beyond primary
-
-    // LLM Configuration
-    llmModel: text("llm_model").default("gpt-4o-mini"), // gpt-4o, gpt-4o-mini, claude-sonnet-4, gemini-2.5-flash
-    llmTemperature: real("llm_temperature").default(0.7), // 0.0 - 1.0
-    maxTokens: integer("max_tokens").default(-1), // -1 for unlimited
-
-    // Conversation Flow Settings
-    turnTimeout: integer("turn_timeout").default(7), // 1-30 seconds
-    turnEagerness: text("turn_eagerness").default("normal"), // eager, normal, patient
-    enableInterruptions: boolean("enable_interruptions").default(true),
-    disableFirstMessageInterruptions: boolean(
-      "disable_first_message_interruptions"
-    ).default(false),
-    maxDuration: integer("max_duration").default(600), // seconds (10 minutes default)
-
-    // Dynamic Variables
-    dynamicVariables: jsonb("dynamic_variables"), // {"user_name": "placeholder", "account_type": ""}
-
-    // Knowledge Base (RAG) - Pro & Enterprise only
-    enableRag: boolean("enable_rag").default(false),
-    ragDocuments: jsonb("rag_documents"), // Array of {id, name, url, type, uploadedAt}
-
-    // Calendar Integration
-    calendarIntegration: jsonb("calendar_integration"), // {provider: 'google', credentials: {...}}
-
-    // Phone Number (if provided by ElevenLabs)
-    phoneNumber: text("phone_number"),
+    // Optional LLM Settings
+    llmModel: text("llm_model").default("gpt-4o"),
+    temperature: real("temperature").default(1.0),
+    maxTokens: integer("max_tokens").default(-1),
 
     // Status
-    isActive: boolean("is_active").notNull().default(false),
+    isActive: boolean("is_active").notNull().default(true),
 
+    // Timestamps
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
@@ -265,10 +229,7 @@ export const userRelations = relations(user, ({ one, many }) => ({
     fields: [user.id],
     references: [subscription.userId],
   }),
-  agentConfig: one(agentConfig, {
-    fields: [user.id],
-    references: [agentConfig.userId],
-  }),
+  agentConfigs: many(agentConfig), // Changed to many for multi-agent support
   calls: many(call),
 }));
 

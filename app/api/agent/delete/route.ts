@@ -52,16 +52,16 @@ export async function DELETE(request: NextRequest) {
 
     // Delete from ElevenLabs first
     if (config.elevenLabsAgentId) {
-      console.log(
-        "🗑️ Deleting agent from ElevenLabs:",
-        config.elevenLabsAgentId
-      );
-      const result = await deleteAgent(config.elevenLabsAgentId);
-
-      if (!result.success) {
+      try {
+        console.log(
+          "🗑️ Deleting agent from ElevenLabs:",
+          config.elevenLabsAgentId
+        );
+        await deleteAgent(config.elevenLabsAgentId);
+      } catch (err) {
         console.warn(
           "⚠️ Failed to delete from ElevenLabs, but continuing:",
-          result.error
+          err
         );
         // Continue anyway to clean up database
       }

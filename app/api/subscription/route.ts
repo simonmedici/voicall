@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { listVoices } from "@/lib/elevenlabs";
+import { db } from "@/lib/db";
+import { subscription } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 /**
- * GET /api/voices/list - Get all available ElevenLabs voices
- * Requires authentication
+ * GET /api/subscription - Get user's subscription info
  */
 export async function GET() {
   try {
@@ -19,18 +20,23 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const result = await listVoices();
+    // Get subscription
+    const [userSub] = await db
+      .select()
+      .from(subscription)
+      .where(eq(subscription.userId, session.user.id))
+      .limit(1);
 
-    if (!result.success) {
+    if (!userSub) {
       return NextResponse.json(
-        { error: result.error || "Failed to fetch voices" },
-        { status: 500 }
+        { error: "No subscription found" },
+        { status: 404 }
       );
     }
 
-    return NextResponse.json({ voices: result.voices });
+    return NextResponse.json(userSub);
   } catch (error) {
-    console.error("Failed to fetch voices:", error);
+    console.error("Failed to fetch subscription:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

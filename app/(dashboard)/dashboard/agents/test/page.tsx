@@ -1,118 +1,160 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Loader2 } from "lucide-react";
-import Script from "next/script";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, ArrowLeft, Info } from "lucide-react";
 
+/**
+ * Test Agent Page with ElevenLabs Widget
+ * Based on: https://elevenlabs.io/docs/conversational-ai/guides/conversational-ai-widget
+ */
 export default function TestAgentPage() {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const agentId = searchParams.get("id");
+  const searchParams = useSearchParams();
+  
+  const elevenLabsAgentId = searchParams.get("id"); // ElevenLabs Agent ID
+  const dbId = searchParams.get("dbId"); // Database ID
   const agentName = searchParams.get("name");
+
   const [widgetLoaded, setWidgetLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!agentId) {
+    if (!elevenLabsAgentId || !dbId) {
       router.push("/dashboard/agents");
+      return;
     }
-  }, [agentId, router]);
+  }, [elevenLabsAgentId, dbId, router]);
 
-  if (!agentId) {
-    return null;
-  }
+  // Load ElevenLabs widget script
+  // Documentation: https://elevenlabs.io/docs/conversational-ai/guides/conversational-ai-widget
+  useEffect(() => {
+    if (!elevenLabsAgentId) return;
+
+    // Check if script already loaded
+    const existingScript = document.querySelector('script[src*="convai-widget"]');
+    if (existingScript) {
+      console.log("✅ Widget script already loaded");
+      setTimeout(() => setWidgetLoaded(true), 0);
+      return;
+    }
+
+    console.log("📦 Loading ElevenLabs widget script...");
+
+    const script = document.createElement("script");
+    script.src = "https://elevenlabs.io/convai-widget/index.js";
+    script.async = true;
+    script.type = "module";
+
+    script.onload = () => {
+      console.log("✅ Widget script loaded successfully");
+      setWidgetLoaded(true);
+    };
+
+    script.onerror = () => {
+      console.error("❌ Failed to load widget script");
+      setError("Widget-Script konnte nicht geladen werden");
+    };
+
+    document.body.appendChild(script);
+
+    return () => {
+      // Cleanup on unmount
+      const scriptToRemove = document.querySelector(
+        'script[src*="convai-widget"]'
+      );
+      if (scriptToRemove && scriptToRemove.parentNode) {
+        scriptToRemove.parentNode.removeChild(scriptToRemove);
+      }
+    };
+  }, [elevenLabsAgentId]);
 
   return (
-    <>
-      <Script
-        src="https://unpkg.com/@elevenlabs/convai-widget-embed"
-        strategy="afterInteractive"
-        onLoad={() => {
-          console.log("✅ ElevenLabs widget loaded");
-          setWidgetLoaded(true);
-        }}
-        onError={() => {
-          console.error("❌ Failed to load ElevenLabs widget");
-          setError("Widget konnte nicht geladen werden.");
-        }}
-      />
+    <div className="container mx-auto py-8 px-4 max-w-4xl">
+      <Button variant="ghost" onClick={() => router.back()} className="mb-6">
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Zurück
+      </Button>
 
-      <div className="container mx-auto py-8 px-4 max-w-4xl">
-        <Button
-          variant="ghost"
-          onClick={() => router.push("/dashboard/agents")}
-          className="mb-6"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Zurück zu Meine Agents
-        </Button>
-
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">
-            Agent testen: {agentName || "Unbekannt"}
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Sprechen Sie direkt mit Ihrem Agent im Browser
-          </p>
-        </div>
-
-        {!widgetLoaded && (
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Agent testen: {agentName}</CardTitle>
+          <CardDescription>
+            Testen Sie Ihren Agent mit dem ElevenLabs Conversational AI Widget
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
           <Alert className="mb-6">
-            <AlertDescription className="flex items-center gap-2">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Widget wird geladen...
+            <Info className="h-4 w-4" />
+            <AlertDescription>
+              <strong>Hinweis:</strong> Der Agent muss als öffentlich (Public)
+              konfiguriert sein, damit das Widget funktioniert. Klicken Sie auf
+              das Widget-Symbol unten rechts, um die Konversation zu starten.
             </AlertDescription>
           </Alert>
-        )}
 
-        {error && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
+          {error && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
 
-        <Alert className="mb-6">
-          <AlertDescription>
-            <strong>💡 Hinweis:</strong> Der Agent wird automatisch seine
-            Begrüßungsnachricht sprechen, sobald Sie das Widget öffnen (unten
-            rechts). Erlauben Sie Mikrofon-Zugriff wenn Ihr Browser danach
-            fragt.
-          </AlertDescription>
-        </Alert>
+          {!widgetLoaded && (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin" />
+              <span className="ml-3">Widget wird geladen...</span>
+            </div>
+          )}
 
-        <div className="bg-linear-to-br from-blue-50 to-indigo-50 rounded-lg p-12 border-2 border-dashed border-blue-300">
-          <div className="text-center">
-            <div className="text-6xl mb-4">🤖</div>
-            <p className="text-xl font-semibold text-gray-800 mb-2">
-              Widget ist bereit!
-            </p>
-            <p className="text-gray-600 mb-4">
-              Klicken Sie auf das Chat-Widget unten rechts, um die Konversation
-              zu starten.
-            </p>
-            <p className="text-sm text-gray-500 bg-white/50 rounded p-4 inline-block">
-              <strong>
-                Der Agent wird automatisch mit seiner Begrüßung starten!
-              </strong>
-              <br />
-              Falls nicht, prüfen Sie ob die &quot;First Message&quot; im Agent
-              konfiguriert ist.
-            </p>
+          <div className="space-y-4">
+            <div className="bg-muted/50 p-4 rounded-lg">
+              <h3 className="font-semibold mb-2">Agent Information</h3>
+              <div className="space-y-1 text-sm">
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground">Agent ID:</span>
+                  <code className="bg-muted px-2 py-1 rounded text-xs">
+                    {elevenLabsAgentId}
+                  </code>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground">Database ID:</span>
+                  <code className="bg-muted px-2 py-1 rounded text-xs">
+                    {dbId}
+                  </code>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-muted/50 p-4 rounded-lg">
+              <h3 className="font-semibold mb-2">Test-Anleitung</h3>
+              <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground">
+                <li>Klicken Sie auf das Widget-Symbol unten rechts</li>
+                <li>Erlauben Sie den Mikrofonzugriff</li>
+                <li>Der Agent sollte automatisch seine erste Nachricht sprechen</li>
+                <li>Sprechen Sie mit dem Agent, um seine Funktionen zu testen</li>
+              </ol>
+            </div>
           </div>
-        </div>
+        </CardContent>
+      </Card>
 
-        {/* ElevenLabs Widget - Agent-initiated mode */}
-        {widgetLoaded && (
-          <div
-            dangerouslySetInnerHTML={{
-              __html: `<elevenlabs-convai agent-id="${agentId}" client-initiated="false"></elevenlabs-convai>`,
-            }}
-          />
-        )}
-      </div>
-    </>
+      {/* ElevenLabs Conversational AI Widget */}
+      {widgetLoaded && elevenLabsAgentId && (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: `<elevenlabs-convai agent-id="${elevenLabsAgentId}"></elevenlabs-convai>`,
+          }}
+        />
+      )}
+    </div>
   );
 }

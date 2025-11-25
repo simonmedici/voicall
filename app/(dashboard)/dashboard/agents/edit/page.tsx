@@ -21,35 +21,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Check } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 
 interface Voice {
   voiceId: string;
   name: string;
   category: string;
-  previewUrl?: string;
 }
 
 interface Agent {
   id: string;
   name: string;
   voiceId: string;
-  voiceName: string;
   systemPrompt: string;
-  greetingMessage: string;
+  firstMessage: string;
   language: string;
-  additionalLanguages?: string[];
   llmModel: string;
-  llmTemperature: number;
+  temperature: number;
   maxTokens: number;
-  turnTimeout: number;
-  turnEagerness: string;
-  enableInterruptions: boolean;
-  disableFirstMessageInterruptions: boolean;
-  maxDuration: number;
-  enableRag: boolean;
   elevenLabsAgentId: string;
 }
 
@@ -58,31 +47,22 @@ export default function EditAgentPage() {
   const searchParams = useSearchParams();
   const agentId = searchParams.get("id");
 
-  const [loading, setLoading] = useState(false);
-  const [loadingAgent, setLoadingAgent] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
   const [voices, setVoices] = useState<Voice[]>([]);
-  const [loadingVoices, setLoadingVoices] = useState(true);
+  const [agent, setAgent] = useState<Agent | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Form state
   const [formData, setFormData] = useState({
     name: "",
-    language: "de",
-    additionalLanguages: [] as string[],
     voiceId: "",
-    voiceName: "",
     systemPrompt: "",
-    greetingMessage: "",
-    disableFirstMessageInterruptions: false,
-    llmModel: "gpt-4o-mini",
-    llmTemperature: 0.7,
+    firstMessage: "",
+    language: "de",
+    llmModel: "gpt-4o",
+    temperature: 1.0,
     maxTokens: -1,
-    turnTimeout: 7,
-    turnEagerness: "normal" as "eager" | "normal" | "patient",
-    enableInterruptions: true,
-    maxDuration: 600,
-    enableRag: false,
   });
 
   useEffect(() => {
@@ -90,435 +70,280 @@ export default function EditAgentPage() {
       router.push("/dashboard/agents");
       return;
     }
-    fetchAgent();
-    fetchVoices();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [agentId]);
 
-  const fetchAgent = async () => {
-    try {
-      setLoadingAgent(true);
-      const response = await fetch(`/api/agent?agentId=${agentId}`);
+    async function load() {
+      try {
+        setLoading(true);
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch agent");
+        // Load agent
+        const agentRes = await fetch(`/api/agent?agentId=${agentId}`);
+        if (!agentRes.ok) throw new Error("Failed to load agent");
+        const agentData = await agentRes.json();
+        setAgent(agentData);
+
+        // Set form data
+        setFormData({
+          name: agentData.name || "",
+          voiceId: agentData.voiceId || "",
+          systemPrompt: agentData.systemPrompt || "",
+          firstMessage: agentData.firstMessage || "",
+          language: agentData.language || "de",
+          llmModel: agentData.llmModel || "gpt-4o",
+          temperature: agentData.temperature ?? 1.0,
+          maxTokens: agentData.maxTokens ?? -1,
+        });
+
+        // Load voices
+        const voicesRes = await fetch("/api/voices/list");
+        if (!voicesRes.ok) throw new Error("Failed to load voices");
+        const voicesData = await voicesRes.json();
+        setVoices(voicesData.voices || []);
+      } catch (err) {
+        console.error("Failed to load data:", err);
+        setError("Fehler beim Laden der Daten");
+      } finally {
+        setLoading(false);
       }
-
-      const agent: Agent = await response.json();
-
-      setFormData({
-        name: agent.name,
-        language: agent.language,
-        additionalLanguages: agent.additionalLanguages || [],
-        voiceId: agent.voiceId,
-        voiceName: agent.voiceName,
-        systemPrompt: agent.systemPrompt,
-        greetingMessage: agent.greetingMessage,
-        disableFirstMessageInterruptions:
-          agent.disableFirstMessageInterruptions,
-        llmModel: agent.llmModel,
-        llmTemperature: agent.llmTemperature,
-        maxTokens: agent.maxTokens,
-        turnTimeout: agent.turnTimeout,
-        turnEagerness: agent.turnEagerness as "eager" | "normal" | "patient",
-        enableInterruptions: agent.enableInterruptions,
-        maxDuration: agent.maxDuration,
-        enableRag: agent.enableRag,
-      });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load agent");
-    } finally {
-      setLoadingAgent(false);
     }
-  };
 
-  const fetchVoices = async () => {
-    try {
-      setLoadingVoices(true);
-      const response = await fetch("/api/voices/list");
+    load();
+  }, [agentId, router]);
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch voices");
-      }
-
-      const data = await response.json();
-      setVoices(data.voices || []);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load voices");
-    } finally {
-      setLoadingVoices(false);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
     setError(null);
 
+    if (!agent) return;
+
     try {
-      // Update via save endpoint (we need to create this)
-      const response = await fetch("/api/agent/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          agentId,
-          ...formData,
-        }),
+      setSaving(true);
+
+      const response = await fetch(`/api/agents/${agent.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Failed to update agent");
+        const error = await response.json();
+        throw new Error(error.error || "Failed to update agent");
       }
 
-      setSuccess(true);
-      setTimeout(() => {
-        router.push("/dashboard/agents");
-      }, 1500);
+      console.log("✅ Agent updated");
+
+      // Redirect to agents list
+      router.push("/dashboard/agents");
     } catch (err) {
+      console.error("Failed to update agent:", err);
       setError(
         err instanceof Error
           ? err.message
           : "Fehler beim Aktualisieren des Agents"
       );
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
-  };
+  }
 
-  const updateFormData = (field: string, value: unknown) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const languages = [
-    { code: "de", name: "Deutsch" },
-    { code: "en", name: "English" },
-    { code: "fr", name: "Français" },
-    { code: "it", name: "Italiano" },
-    { code: "es", name: "Español" },
-  ];
-
-  const llmModels = [
-    { id: "gpt-4o-mini", name: "GPT-4o Mini (Empfohlen)" },
-    { id: "gpt-4o", name: "GPT-4o (Leistungsstark)" },
-    { id: "claude-sonnet-4", name: "Claude Sonnet 4" },
-    { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash" },
-  ];
-
-  if (loadingAgent) {
+  if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Lädt Agent...</p>
-        </div>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
   }
 
-  if (success) {
+  if (!agent) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Card className="w-full max-w-md">
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                <Check className="h-6 w-6 text-green-600" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">
-                Agent erfolgreich aktualisiert!
-              </h3>
-              <p className="text-gray-600">Sie werden weitergeleitet...</p>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="container mx-auto py-8 px-4 max-w-3xl">
+        <Alert variant="destructive">
+          <AlertDescription>Agent nicht gefunden</AlertDescription>
+        </Alert>
+        <Button onClick={() => router.push("/dashboard/agents")} className="mt-4">
+          Zurück zur Übersicht
+        </Button>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-4xl">
-      <Button
-        variant="ghost"
-        onClick={() => router.push("/dashboard/agents")}
-        className="mb-6"
-      >
-        <ArrowLeft className="h-4 w-4 mr-2" />
-        Zurück zu Meine Agents
+    <div className="container mx-auto py-8 px-4 max-w-3xl">
+      <Button variant="ghost" onClick={() => router.back()} className="mb-6">
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Zurück
       </Button>
 
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Agent bearbeiten</h1>
-        <p className="text-gray-600 mt-2">
-          Passen Sie die Konfiguration Ihres Agents an
-        </p>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Agent bearbeiten</CardTitle>
+          <CardDescription>
+            Aktualisieren Sie die Konfiguration Ihres Agents
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
 
-      {error && (
-        <Alert variant="destructive" className="mb-6">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Basic Info */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Grundinformationen</CardTitle>
-            <CardDescription>Name und Sprache Ihres Agents</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="name">Agent-Name *</Label>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="name">
+                Agent Name <span className="text-destructive">*</span>
+              </Label>
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => updateFormData("name", e.target.value)}
-                placeholder="z.B. Praxis-Assistent Nina"
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 required
               />
             </div>
 
-            <div>
-              <Label htmlFor="language">Hauptsprache *</Label>
+            <div className="space-y-2">
+              <Label htmlFor="voice">
+                Stimme <span className="text-destructive">*</span>
+              </Label>
               <Select
-                value={formData.language}
-                onValueChange={(value) => updateFormData("language", value)}
+                value={formData.voiceId}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, voiceId: value })
+                }
+                required
               >
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder="Wählen Sie eine Stimme" />
                 </SelectTrigger>
                 <SelectContent>
-                  {languages.map((lang) => (
-                    <SelectItem key={lang.code} value={lang.code}>
-                      {lang.name}
+                  {voices.map((voice) => (
+                    <SelectItem key={voice.voiceId} value={voice.voiceId}>
+                      {voice.name} ({voice.category})
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-          </CardContent>
-        </Card>
 
-        {/* Voice Selection */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Stimme</CardTitle>
-            <CardDescription>
-              Wählen Sie die Stimme für Ihren Agent
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {loadingVoices ? (
-              <p className="text-gray-500">Lädt Stimmen...</p>
-            ) : (
-              <div>
-                <Label htmlFor="voice">Stimme auswählen *</Label>
-                <Select
-                  value={formData.voiceId}
-                  onValueChange={(value) => {
-                    const voice = voices.find((v) => v.voiceId === value);
-                    updateFormData("voiceId", value);
-                    updateFormData("voiceName", voice?.name || "");
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Stimme auswählen..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {voices.slice(0, 50).map((voice) => (
-                      <SelectItem key={voice.voiceId} value={voice.voiceId}>
-                        {voice.name}
-                        {voice.category && (
-                          <Badge variant="outline" className="ml-2 text-xs">
-                            {voice.category}
-                          </Badge>
-                        )}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Behavior */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Verhalten & Persönlichkeit</CardTitle>
-            <CardDescription>
-              Definieren Sie wie Ihr Agent kommuniziert
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="greetingMessage">Erste Nachricht</Label>
-              <Textarea
-                id="greetingMessage"
-                value={formData.greetingMessage}
-                onChange={(e) =>
-                  updateFormData("greetingMessage", e.target.value)
+            <div className="space-y-2">
+              <Label htmlFor="language">
+                Sprache <span className="text-destructive">*</span>
+              </Label>
+              <Select
+                value={formData.language}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, language: value })
                 }
-                placeholder="Die erste Nachricht, die der Agent sagt..."
-                rows={2}
+                required
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="de">Deutsch</SelectItem>
+                  <SelectItem value="en">English</SelectItem>
+                  <SelectItem value="fr">Français</SelectItem>
+                  <SelectItem value="it">Italiano</SelectItem>
+                  <SelectItem value="es">Español</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="firstMessage">
+                Erste Nachricht <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                id="firstMessage"
+                value={formData.firstMessage}
+                onChange={(e) =>
+                  setFormData({ ...formData, firstMessage: e.target.value })
+                }
+                required
               />
             </div>
 
-            <div>
-              <Label htmlFor="systemPrompt">System-Prompt *</Label>
+            <div className="space-y-2">
+              <Label htmlFor="systemPrompt">
+                System Prompt <span className="text-destructive">*</span>
+              </Label>
               <Textarea
                 id="systemPrompt"
                 value={formData.systemPrompt}
-                onChange={(e) => updateFormData("systemPrompt", e.target.value)}
-                placeholder="Beschreiben Sie die Persönlichkeit und Aufgaben des Agents..."
-                rows={12}
+                onChange={(e) =>
+                  setFormData({ ...formData, systemPrompt: e.target.value })
+                }
+                rows={6}
                 required
-                className="font-mono text-sm"
               />
             </div>
-          </CardContent>
-        </Card>
 
-        {/* Advanced Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Erweiterte Einstellungen</CardTitle>
-            <CardDescription>
-              LLM-Modell und Konversations-Parameter
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="llmModel">LLM-Modell</Label>
+            <div className="space-y-2">
+              <Label htmlFor="llmModel">LLM Modell</Label>
               <Select
                 value={formData.llmModel}
-                onValueChange={(value) => updateFormData("llmModel", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {llmModels.map((model) => (
-                    <SelectItem key={model.id} value={model.id}>
-                      {model.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="llmTemperature">
-                Temperatur: {formData.llmTemperature}
-              </Label>
-              <input
-                type="range"
-                id="llmTemperature"
-                min="0"
-                max="1"
-                step="0.1"
-                value={formData.llmTemperature}
-                onChange={(e) =>
-                  updateFormData("llmTemperature", parseFloat(e.target.value))
-                }
-                className="w-full"
-              />
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
-                <span>Deterministisch</span>
-                <span>Kreativ</span>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="turnTimeout">Turn Timeout (Sek.)</Label>
-                <Input
-                  id="turnTimeout"
-                  type="number"
-                  min="1"
-                  max="30"
-                  value={formData.turnTimeout}
-                  onChange={(e) =>
-                    updateFormData("turnTimeout", parseInt(e.target.value))
-                  }
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="maxDuration">Max. Dauer (Sek.)</Label>
-                <Input
-                  id="maxDuration"
-                  type="number"
-                  min="60"
-                  max="3600"
-                  value={formData.maxDuration}
-                  onChange={(e) =>
-                    updateFormData("maxDuration", parseInt(e.target.value))
-                  }
-                />
-              </div>
-            </div>
-
-            <div>
-              <Label htmlFor="turnEagerness">Antwort-Verhalten</Label>
-              <Select
-                value={formData.turnEagerness}
                 onValueChange={(value) =>
-                  updateFormData("turnEagerness", value)
+                  setFormData({ ...formData, llmModel: value })
                 }
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="eager">
-                    Eager (Schnelle Antworten)
+                  <SelectItem value="gpt-4o">GPT-4o</SelectItem>
+                  <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
+                  <SelectItem value="claude-3-5-sonnet">
+                    Claude 3.5 Sonnet
                   </SelectItem>
-                  <SelectItem value="normal">Normal</SelectItem>
-                  <SelectItem value="patient">
-                    Patient (Wartet länger)
+                  <SelectItem value="gemini-2.0-flash-exp">
+                    Gemini 2.0 Flash
                   </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="enableInterruptions"
-                checked={formData.enableInterruptions}
+            <div className="space-y-2">
+              <Label htmlFor="temperature">Temperature (0-2)</Label>
+              <Input
+                id="temperature"
+                type="number"
+                step="0.1"
+                min="0"
+                max="2"
+                value={formData.temperature}
                 onChange={(e) =>
-                  updateFormData("enableInterruptions", e.target.checked)
+                  setFormData({
+                    ...formData,
+                    temperature: parseFloat(e.target.value),
+                  })
                 }
-                className="rounded"
               />
-              <Label htmlFor="enableInterruptions" className="cursor-pointer">
-                Unterbrechungen erlauben
-              </Label>
             </div>
-          </CardContent>
-        </Card>
 
-        {/* Submit */}
-        <div className="flex justify-end gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push("/dashboard/agents")}
-            disabled={loading}
-          >
-            Abbrechen
-          </Button>
-          <Button type="submit" disabled={loading}>
-            {loading ? "Wird gespeichert..." : "Änderungen speichern"}
-          </Button>
-        </div>
-      </form>
+            <div className="flex items-center gap-4 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.back()}
+                disabled={saving}
+              >
+                Abbrechen
+              </Button>
+              <Button type="submit" disabled={saving} className="flex-1">
+                {saving ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Wird gespeichert...
+                  </>
+                ) : (
+                  "Änderungen speichern"
+                )}
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
