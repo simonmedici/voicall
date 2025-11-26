@@ -76,13 +76,16 @@ npm run db:studio    # Open Drizzle Studio
 ```
 
 ## Recent Changes
+- Dashboard UI Restructure: Admin at top (admin-only), renamed Abo to Einstellungen with gear icon, user dropdown at bottom-left
+- Voice Selection Enhanced: Shows language, use case, and description labels from ElevenLabs API
+- Removed Settings Page: Consolidated under "Meine Agents"
+- Simplified Admin Panel: Removed manual Agent ID assignment (now automatic via API)
 - Added Compliance USPs: Hero trust badges (Zero PII-Retention + Schweizerdeutsch), dedicated Compliance section on landing page
 - Added Dashboard Compliance Badge: Green status card showing active privacy protection
 - Added Privacy Notice Template: One-click DSG/DSGVO-compliant greeting for agent creation
 - Added Conversation Management: List and detail view for all ElevenLabs conversations including tests
 - Added Dashboard Statistics: Shows personalized stats (total calls, calls today, minutes used, success rate) for each user's agents
 - Fixed ElevenLabs Widget: Configured CSP headers and using @elevenlabs/convai-widget-embed package for agent testing
-- Fixed ElevenLabs integration: renamed `verifyWebhookSignature` to `verifyElevenLabsSignature`
 - Configured Next.js for Replit environment (port 5000, allowed origins)
 - Set up PostgreSQL database with Drizzle ORM
 
