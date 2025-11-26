@@ -6,7 +6,7 @@ import { Check, Zap } from "lucide-react";
 const plans = [
   {
     name: "Starter",
-    price: "199",
+    price: "99",
     description: "Für kleine Praxen oder Einzelpersonen",
     popular: false,
     features: [
@@ -21,7 +21,7 @@ const plans = [
   },
   {
     name: "Pro",
-    price: "349",
+    price: "249",
     description: "Für größere Praxen mit höherem Volumen",
     popular: true,
     features: [
@@ -38,7 +38,7 @@ const plans = [
   },
   {
     name: "Enterprise",
-    price: "499",
+    price: null,
     description: "Für medizinische Einrichtungen jeder Größe",
     popular: false,
     features: [
@@ -100,10 +100,18 @@ export function Pricing() {
                 </h3>
                 <p className="text-gray-600 text-sm mb-4">{plan.description}</p>
                 <div className="flex items-baseline justify-center">
-                  <span className="text-5xl font-bold text-gray-900">
-                    {plan.price}
-                  </span>
-                  <span className="text-gray-600 ml-2">CHF/Monat</span>
+                  {plan.price ? (
+                    <>
+                      <span className="text-5xl font-bold text-gray-900">
+                        {plan.price}
+                      </span>
+                      <span className="text-gray-600 ml-2">CHF/Monat</span>
+                    </>
+                  ) : (
+                    <span className="text-3xl font-bold text-gray-900">
+                      Auf Anfrage
+                    </span>
+                  )}
                 </div>
               </div>
 
