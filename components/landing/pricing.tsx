@@ -75,11 +75,11 @@ export function Pricing() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 items-stretch">
           {plans.map((plan, index) => (
             <Card
               key={index}
-              className={`p-8 relative ${
+              className={`p-8 relative flex flex-col ${
                 plan.popular
                   ? "border-4 border-blue-900 shadow-2xl scale-105"
                   : "border-2"
@@ -107,7 +107,7 @@ export function Pricing() {
                 </div>
               </div>
 
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-4 mb-8 flex-1">
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start">
                     <Check className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
@@ -116,7 +116,7 @@ export function Pricing() {
                 ))}
               </ul>
 
-              <Link href="/register" className="block">
+              <Link href="/register" className="block mt-auto">
                 <Button
                   className={`w-full ${
                     plan.popular
