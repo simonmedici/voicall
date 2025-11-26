@@ -316,7 +316,7 @@ export default async function SubscriptionPage() {
                 )}
               </div>
               <p className="text-2xl font-bold">
-                CHF 99<span className="text-sm font-normal">/Monat</span>
+                CHF 199<span className="text-sm font-normal">/Monat</span>
               </p>
               <p className="text-sm text-muted-foreground mt-1">500 Minuten</p>
             </div>
@@ -336,7 +336,7 @@ export default async function SubscriptionPage() {
                 )}
               </div>
               <p className="text-2xl font-bold">
-                CHF 249<span className="text-sm font-normal">/Monat</span>
+                CHF 349<span className="text-sm font-normal">/Monat</span>
               </p>
               <p className="text-sm text-muted-foreground mt-1">1500 Minuten</p>
             </div>
@@ -357,7 +357,9 @@ export default async function SubscriptionPage() {
                   </Badge>
                 )}
               </div>
-              <p className="text-2xl font-bold">Auf Anfrage</p>
+              <p className="text-2xl font-bold">
+                CHF 499<span className="text-sm font-normal">/Monat</span>
+              </p>
               <p className="text-sm text-muted-foreground mt-1">
                 Unbegrenzte Minuten
               </p>
