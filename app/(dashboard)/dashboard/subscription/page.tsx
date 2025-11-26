@@ -14,6 +14,7 @@ import { eq, and, gte, sql, inArray } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Phone, Clock, TrendingUp } from "lucide-react";
+import { listConversations } from "@/lib/elevenlabs";
 
 const PLAN_CONFIG: Record<
   string,
@@ -24,6 +25,47 @@ const PLAN_CONFIG: Record<
   pro: { name: "Pro", minutes: 1500, color: "bg-purple-500" },
   enterprise: { name: "Enterprise", minutes: -1, color: "bg-amber-500" },
 };
+
+async function getElevenLabsUsage(agentIds: string[]) {
+  if (agentIds.length === 0) {
+    return { totalMinutesUsed: 0, totalCalls: 0 };
+  }
+
+  const today = new Date();
+  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const firstDayOfMonthUnix = Math.floor(firstDayOfMonth.getTime() / 1000);
+
+  let allConversations: Array<{
+    conversation_id: string;
+    agent_id: string;
+    status: string;
+    start_time_unix_secs: number;
+    call_duration_secs: number;
+    call_successful: string;
+  }> = [];
+
+  for (const agentId of agentIds) {
+    try {
+      const result = await listConversations(agentId, { pageSize: 100 });
+      allConversations = [...allConversations, ...result.conversations];
+    } catch (error) {
+      console.error(`Failed to fetch conversations for agent ${agentId}:`, error);
+    }
+  }
+
+  const callsThisMonth = allConversations.filter(
+    (c) => c.start_time_unix_secs >= firstDayOfMonthUnix
+  );
+
+  const totalMinutesUsed = Math.round(
+    callsThisMonth.reduce((acc, c) => acc + (c.call_duration_secs || 0), 0) / 60
+  );
+
+  return {
+    totalMinutesUsed,
+    totalCalls: allConversations.length,
+  };
+}
 
 export default async function SubscriptionPage() {
   const reqHeaders = await headers();
@@ -52,7 +94,7 @@ export default async function SubscriptionPage() {
   if (agentIds.length > 0) {
     const periodStart = userSubscription?.currentPeriodStart || new Date(0);
 
-    const usageResult = await db
+    const [dbUsageResult] = await db
       .select({
         totalMinutes: sql<number>`COALESCE(SUM(${call.minutesCharged}), 0)`,
         totalCalls: sql<number>`COUNT(*)`,
@@ -65,9 +107,15 @@ export default async function SubscriptionPage() {
         )
       );
 
-    if (usageResult[0]) {
-      totalMinutesUsed = Math.round(Number(usageResult[0].totalMinutes) || 0);
-      totalCalls = Number(usageResult[0].totalCalls) || 0;
+    const dbHasCalls = (dbUsageResult?.totalCalls || 0) > 0;
+
+    if (dbHasCalls) {
+      totalMinutesUsed = Math.round(Number(dbUsageResult?.totalMinutes) || 0);
+      totalCalls = Number(dbUsageResult?.totalCalls) || 0;
+    } else {
+      const elevenLabsUsage = await getElevenLabsUsage(agentIds);
+      totalMinutesUsed = elevenLabsUsage.totalMinutesUsed;
+      totalCalls = elevenLabsUsage.totalCalls;
     }
   }
 

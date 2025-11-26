@@ -4,10 +4,90 @@ import { Phone, Clock, CheckCircle, TrendingUp, Loader2, ShieldCheck, Languages 
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { call, agentConfig } from "@/lib/db/schema";
+import { call, agentConfig, subscription } from "@/lib/db/schema";
 import { eq, and, gte, sql, inArray } from "drizzle-orm";
 import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
+import { listConversations } from "@/lib/elevenlabs";
+import { Badge } from "@/components/ui/badge";
+
+const PLAN_CONFIG: Record<string, { name: string; minutes: number; color: string }> = {
+  free: { name: "Free", minutes: 0, color: "bg-gray-500" },
+  starter: { name: "Starter", minutes: 500, color: "bg-blue-500" },
+  pro: { name: "Pro", minutes: 1500, color: "bg-purple-500" },
+  enterprise: { name: "Enterprise", minutes: -1, color: "bg-amber-500" },
+};
+
+async function getElevenLabsUsage(agentIds: string[]) {
+  if (agentIds.length === 0) {
+    return { totalCalls: 0, callsToday: 0, minutesUsedThisMonth: 0, successRate: 0, recentCalls: [] };
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const firstDayOfMonthUnix = Math.floor(firstDayOfMonth.getTime() / 1000);
+  const todayUnix = Math.floor(today.getTime() / 1000);
+
+  let allConversations: Array<{
+    conversation_id: string;
+    agent_id: string;
+    status: string;
+    start_time_unix_secs: number;
+    call_duration_secs: number;
+    call_successful: string;
+  }> = [];
+
+  for (const agentId of agentIds) {
+    try {
+      const result = await listConversations(agentId, { pageSize: 100 });
+      allConversations = [...allConversations, ...result.conversations];
+    } catch (error) {
+      console.error(`Failed to fetch conversations for agent ${agentId}:`, error);
+    }
+  }
+
+  const totalCalls = allConversations.length;
+  
+  const callsToday = allConversations.filter(
+    (c) => c.start_time_unix_secs >= todayUnix
+  ).length;
+
+  const callsThisMonth = allConversations.filter(
+    (c) => c.start_time_unix_secs >= firstDayOfMonthUnix
+  );
+
+  const minutesUsedThisMonth = Math.round(
+    callsThisMonth.reduce((acc, c) => acc + (c.call_duration_secs || 0), 0) / 60 * 10
+  ) / 10;
+
+  const successfulCalls = allConversations.filter(
+    (c) => c.call_successful === "success"
+  ).length;
+
+  const successRate = totalCalls > 0 ? Math.round((successfulCalls / totalCalls) * 100) : 0;
+
+  const recentCalls = allConversations
+    .sort((a, b) => b.start_time_unix_secs - a.start_time_unix_secs)
+    .slice(0, 5)
+    .map((c) => ({
+      id: c.conversation_id,
+      conversationId: c.conversation_id,
+      agentId: c.agent_id,
+      status: c.status,
+      durationSecs: c.call_duration_secs,
+      callSuccessful: c.call_successful === "success",
+      createdAt: new Date(c.start_time_unix_secs * 1000),
+    }));
+
+  return {
+    totalCalls,
+    callsToday,
+    minutesUsedThisMonth,
+    successRate,
+    recentCalls,
+  };
+}
 
 async function getDashboardStats(userId: string) {
   const userAgents = await db
@@ -33,13 +113,22 @@ async function getDashboardStats(userId: string) {
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-
   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
   const [totalCallsResult] = await db
     .select({ count: sql<number>`count(*)::int` })
     .from(call)
     .where(inArray(call.agentId, agentIds));
+
+  const dbHasCalls = (totalCallsResult?.count || 0) > 0;
+
+  if (!dbHasCalls) {
+    const elevenLabsStats = await getElevenLabsUsage(agentIds);
+    return {
+      ...elevenLabsStats,
+      agentNameMap,
+    };
+  }
 
   const [callsTodayResult] = await db
     .select({ count: sql<number>`count(*)::int` })
@@ -104,6 +193,16 @@ async function getDashboardStats(userId: string) {
   };
 }
 
+async function getUserSubscription(userId: string) {
+  const [sub] = await db
+    .select()
+    .from(subscription)
+    .where(eq(subscription.userId, userId))
+    .limit(1);
+
+  return sub;
+}
+
 function formatDuration(seconds: number | null): string {
   if (!seconds) return "0:00";
   const mins = Math.floor(seconds / 60);
@@ -156,16 +255,32 @@ async function DashboardContent() {
     return null;
   }
 
-  const stats = await getDashboardStats(session.user.id);
+  const [stats, userSub] = await Promise.all([
+    getDashboardStats(session.user.id),
+    getUserSubscription(session.user.id),
+  ]);
+
+  const tier = userSub?.tier || "free";
+  const planConfig = PLAN_CONFIG[tier] || PLAN_CONFIG.free;
+  const minutesIncluded = userSub?.minutesIncluded || planConfig.minutes;
+  const isUnlimited = minutesIncluded === -1;
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Übersicht</h1>
-        <p className="text-muted-foreground">
-          Willkommen zurück! Hier ist eine Zusammenfassung Ihrer Voice AI
-          Aktivitäten.
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Übersicht</h1>
+          <p className="text-muted-foreground">
+            Willkommen zurück! Hier ist eine Zusammenfassung Ihrer Voice AI
+            Aktivitäten.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className={`w-3 h-3 rounded-full ${planConfig.color}`} />
+          <Badge variant="outline" className="text-sm">
+            {planConfig.name} Plan
+          </Badge>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -199,7 +314,14 @@ async function DashboardContent() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.minutesUsedThisMonth}</div>
+            <div className="text-2xl font-bold">
+              {stats.minutesUsedThisMonth}
+              {!isUnlimited && (
+                <span className="text-sm font-normal text-muted-foreground">
+                  {" "}/ {minutesIncluded}
+                </span>
+              )}
+            </div>
             <p className="text-xs text-muted-foreground">Diesen Monat</p>
           </CardContent>
         </Card>

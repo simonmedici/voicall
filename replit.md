@@ -88,12 +88,16 @@ npm run db:studio    # Open Drizzle Studio
 ```
 
 ## Recent Changes
+- **Real-time Usage from ElevenLabs**: Dashboard and Settings pages now fetch usage data directly from ElevenLabs API when database has no call records
+- **Improved Admin Panel**: Each agent displayed in a card with Name, Status Badge, Activate/Deactivate button, and Remove button on same row
+- **Agent Unassign Feature**: Admins can now remove agents from users via trash icon button
+- **ElevenLabs Data Sync**: Agent edit page syncs Voice, First Message, Name from ElevenLabs before displaying
+- **Plan Display**: Dashboard header shows current plan with color-coded badge (Starter=blue, Pro=purple, Enterprise=gold)
 - **Admin-Managed Agent Workflow**: Admins create agents in ElevenLabs, assign to users via Admin Panel
 - **Simplified User Experience**: Customers can only edit Voice and First Message (greeting)
 - **Backend Security**: Create/delete endpoints are admin-only, PATCH validates allowed fields
 - Dashboard UI Restructure: Admin at top (admin-only), renamed Abo to Einstellungen with gear icon, user dropdown at bottom-left
 - Voice Selection Enhanced: Shows language, use case, and description labels from ElevenLabs API
-- Removed Settings Page: Consolidated under "Meine Agents"
 - Simplified Admin Panel: Removed manual Agent ID assignment (now automatic via API)
 - Added Compliance USPs: Hero trust badges (Zero PII-Retention + Schweizerdeutsch), dedicated Compliance section on landing page
 - Added Dashboard Compliance Badge: Green status card showing active privacy protection
