@@ -150,20 +150,26 @@ export default function CallsPage() {
   };
 
   const filteredConversations = conversations.filter((conv) => {
+    const convDate = new Date(conv.start_time_unix_secs * 1000);
+    const formattedDate = convDate.toLocaleDateString("de-CH", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+
     const matchesSearch =
       searchQuery === "" ||
       conv.conversation_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (agentMap[conv.agent_id] || "")
         .toLowerCase()
-        .includes(searchQuery.toLowerCase());
+        .includes(searchQuery.toLowerCase()) ||
+      formattedDate.includes(searchQuery);
 
     const matchesStatus =
       statusFilter === "all" ||
       (statusFilter === "success" && conv.call_successful === "success") ||
       (statusFilter === "failure" && conv.call_successful === "failure") ||
       (statusFilter === "unknown" && conv.call_successful === "unknown");
-
-    const convDate = new Date(conv.start_time_unix_secs * 1000);
     
     let matchesDateFrom = true;
     if (dateFrom) {
@@ -254,7 +260,7 @@ export default function CallsPage() {
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Unterhaltungen durchsuchen..."
+                placeholder="Suche nach Agent, ID oder Datum (DD.MM.YYYY)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
