@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, ShieldCheck, Info } from "lucide-react";
 
 interface Voice {
   voiceId: string;
@@ -231,6 +231,38 @@ export default function CreateAgentPage() {
                 Diese Nachricht wird automatisch gesprochen, wenn ein Anruf
                 verbunden wird
               </p>
+
+              {/* Privacy Notice Template */}
+              <div className="mt-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <div className="flex items-start gap-3">
+                  <ShieldCheck className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-green-800 mb-2">
+                      Datenschutz-Hinweis empfohlen
+                    </p>
+                    <p className="text-xs text-green-700 mb-3">
+                      Informieren Sie Patienten zu Beginn über die KI-gestützte Verarbeitung. 
+                      Diese Vorlage ist DSG/DSGVO-konform.
+                    </p>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="border-green-300 text-green-700 hover:bg-green-100"
+                      onClick={() =>
+                        setFormData({
+                          ...formData,
+                          firstMessage:
+                            "Grüezi und willkommen bei der Praxis. Sie sprechen mit unserem KI-Assistenten. Dieses Gespräch wird nicht aufgezeichnet und Ihre Daten werden nicht gespeichert. Wie kann ich Ihnen helfen?",
+                        })
+                      }
+                    >
+                      <ShieldCheck className="mr-2 h-4 w-4" />
+                      Datenschutz-Vorlage verwenden
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* System Prompt - REQUIRED */}
