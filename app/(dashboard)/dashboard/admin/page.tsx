@@ -18,6 +18,7 @@ import {
   Activity,
   Bot,
   UserPlus,
+  Trash2,
 } from "lucide-react";
 import {
   Table,
@@ -188,6 +189,35 @@ export default function AdminPage() {
     } catch (error) {
       console.error("Error updating agent status:", error);
       setErrorMessage("Fehler beim Aktualisieren");
+      setTimeout(() => setErrorMessage(""), 3000);
+    }
+  };
+
+  const handleUnassignAgent = async (agentConfigId: string, agentName: string) => {
+    if (!confirm(`Möchten Sie den Agent "${agentName}" wirklich vom Benutzer entfernen?`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/admin/unassign-agent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ agentConfigId }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccessMessage(`Agent "${agentName}" wurde entfernt`);
+        setTimeout(() => setSuccessMessage(""), 3000);
+        fetchData();
+      } else {
+        setErrorMessage(data.error || "Fehler beim Entfernen");
+        setTimeout(() => setErrorMessage(""), 3000);
+      }
+    } catch (error) {
+      console.error("Error unassigning agent:", error);
+      setErrorMessage("Fehler beim Entfernen");
       setTimeout(() => setErrorMessage(""), 3000);
     }
   };
@@ -456,7 +486,7 @@ export default function AdminPage() {
                                   </code>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-3 flex-shrink-0">
+                              <div className="flex items-center gap-2 flex-shrink-0">
                                 <Badge
                                   variant={agent.isActive ? "default" : "secondary"}
                                   className={agent.isActive ? "bg-green-600" : ""}
@@ -465,12 +495,21 @@ export default function AdminPage() {
                                 </Badge>
                                 <Button
                                   size="sm"
-                                  variant={agent.isActive ? "destructive" : "default"}
+                                  variant={agent.isActive ? "outline" : "default"}
                                   onClick={() =>
                                     handleActivateAgent(agent.id, !agent.isActive)
                                   }
                                 >
                                   {agent.isActive ? "Deaktivieren" : "Aktivieren"}
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                                  onClick={() => handleUnassignAgent(agent.id, agent.name)}
+                                  title="Agent entfernen"
+                                >
+                                  <Trash2 className="h-4 w-4" />
                                 </Button>
                               </div>
                             </div>
