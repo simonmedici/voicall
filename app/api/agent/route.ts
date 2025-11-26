@@ -3,12 +3,14 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { agentConfig } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
+import { getAgent } from "@/lib/elevenlabs";
 
 /**
  * GET /api/agent - Get user's agent configuration(s)
  * Query params:
  *   - agentId: specific agent ID (optional)
  *   - all: if true, returns all agents for user
+ *   - sync: if true, syncs data from ElevenLabs (default true for single agent)
  */
 export async function GET(request: NextRequest) {
   try {
@@ -26,8 +28,9 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const agentId = searchParams.get("agentId");
     const getAll = searchParams.get("all") === "true";
+    const shouldSync = searchParams.get("sync") !== "false";
 
-    // Get specific agent by ID
+    // Get specific agent by ID - sync with ElevenLabs
     if (agentId) {
       const [config] = await db
         .select()
@@ -42,6 +45,41 @@ export async function GET(request: NextRequest) {
 
       if (!config) {
         return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+      }
+
+      // Sync with ElevenLabs to get current data
+      if (shouldSync && config.elevenLabsAgentId) {
+        try {
+          const elevenLabsAgent = await getAgent(config.elevenLabsAgentId);
+          if (elevenLabsAgent) {
+            const conversationConfig = elevenLabsAgent.conversation_config || {};
+            const agentConf = conversationConfig.agent || {};
+            const ttsConf = conversationConfig.tts || {};
+
+            const updatedData = {
+              name: elevenLabsAgent.name || config.name,
+              voiceId: ttsConf.voice_id || config.voiceId,
+              firstMessage: agentConf.first_message || config.firstMessage,
+              systemPrompt: agentConf.prompt?.prompt || config.systemPrompt,
+              language: agentConf.language || config.language,
+              updatedAt: new Date(),
+            };
+
+            // Update database with latest ElevenLabs data
+            await db
+              .update(agentConfig)
+              .set(updatedData)
+              .where(eq(agentConfig.id, agentId));
+
+            // Return synced data
+            return NextResponse.json({
+              ...config,
+              ...updatedData,
+            });
+          }
+        } catch (syncError) {
+          console.warn("Failed to sync with ElevenLabs, returning cached data:", syncError);
+        }
       }
 
       return NextResponse.json(config);
