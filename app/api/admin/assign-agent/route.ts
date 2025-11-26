@@ -56,11 +56,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log("📝 Assign agent request:", { userId, agentId, agentName: agentDetails.name });
+
     const existingConfig = await db
       .select()
       .from(agentConfig)
       .where(eq(agentConfig.elevenLabsAgentId, agentId))
       .limit(1);
+
+    console.log("📝 Existing config:", existingConfig.length > 0 ? { 
+      existingUserId: existingConfig[0].userId, 
+      requestedUserId: userId,
+      isSameUser: existingConfig[0].userId === userId 
+    } : "None");
 
     const conversationConfig = agentDetails.conversation_config || {};
     const agentConf = conversationConfig.agent || {};
@@ -68,6 +76,7 @@ export async function POST(request: NextRequest) {
 
     if (existingConfig.length > 0) {
       if (existingConfig[0].userId === userId) {
+        console.log("❌ Agent already assigned to same user");
         return NextResponse.json(
           { error: "Dieser Agent ist bereits diesem Benutzer zugewiesen" },
           { status: 400 }
