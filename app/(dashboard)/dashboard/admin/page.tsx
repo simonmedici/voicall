@@ -400,15 +400,13 @@ export default function AdminPage() {
                 <TableHead>Email</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Subscription</TableHead>
-                <TableHead>Zugewiesene Agents</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Aktionen</TableHead>
+                <TableHead colSpan={3}>Zugewiesene Agents</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {users.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center">
+                  <TableCell colSpan={4} className="text-center">
                     Keine Benutzer gefunden
                   </TableCell>
                 </TableRow>
@@ -439,54 +437,47 @@ export default function AdminPage() {
                         <Badge variant="secondary">Free</Badge>
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell colSpan={3}>
                       {u.agents && u.agents.length > 0 ? (
-                        <div className="space-y-1">
+                        <div className="space-y-2">
                           {u.agents.map((agent) => (
-                            <div key={agent.id} className="text-sm">
-                              <span className="font-medium">{agent.name}</span>
-                              <code className="ml-2 text-xs text-muted-foreground">
-                                {agent.elevenLabsAgentId.slice(0, 12)}...
-                              </code>
+                            <div
+                              key={agent.id}
+                              className="flex items-center justify-between gap-4 p-2 rounded-lg bg-muted/50"
+                            >
+                              <div className="flex items-center gap-3 min-w-0">
+                                <Bot className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                                <div className="min-w-0">
+                                  <span className="font-medium block truncate">
+                                    {agent.name}
+                                  </span>
+                                  <code className="text-xs text-muted-foreground">
+                                    {agent.elevenLabsAgentId.slice(0, 16)}...
+                                  </code>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3 flex-shrink-0">
+                                <Badge
+                                  variant={agent.isActive ? "default" : "secondary"}
+                                  className={agent.isActive ? "bg-green-600" : ""}
+                                >
+                                  {agent.isActive ? "Aktiv" : "Inaktiv"}
+                                </Badge>
+                                <Button
+                                  size="sm"
+                                  variant={agent.isActive ? "destructive" : "default"}
+                                  onClick={() =>
+                                    handleActivateAgent(agent.id, !agent.isActive)
+                                  }
+                                >
+                                  {agent.isActive ? "Deaktivieren" : "Aktivieren"}
+                                </Button>
+                              </div>
                             </div>
                           ))}
                         </div>
                       ) : (
-                        <span className="text-muted-foreground">-</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {u.agents && u.agents.length > 0 ? (
-                        <div className="space-y-1">
-                          {u.agents.map((agent) => (
-                            <Badge
-                              key={agent.id}
-                              variant={agent.isActive ? "default" : "secondary"}
-                            >
-                              {agent.isActive ? "Aktiv" : "Inaktiv"}
-                            </Badge>
-                          ))}
-                        </div>
-                      ) : (
-                        <span className="text-muted-foreground">-</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {u.agents && u.agents.length > 0 && (
-                        <div className="space-y-1">
-                          {u.agents.map((agent) => (
-                            <Button
-                              key={agent.id}
-                              size="sm"
-                              variant="outline"
-                              onClick={() =>
-                                handleActivateAgent(agent.id, !agent.isActive)
-                              }
-                            >
-                              {agent.isActive ? "Deaktivieren" : "Aktivieren"}
-                            </Button>
-                          ))}
-                        </div>
+                        <span className="text-muted-foreground">Keine Agents zugewiesen</span>
                       )}
                     </TableCell>
                   </TableRow>
