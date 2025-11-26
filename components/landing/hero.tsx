@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Phone, ArrowRight, Star, ShieldCheck, Languages } from "lucide-react";
 
@@ -89,20 +90,23 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Visual Element */}
+        {/* Dashboard Demo Image */}
         <div className="mt-16 max-w-5xl mx-auto">
-          <div className="relative rounded-2xl border-8 border-gray-200 shadow-2xl overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 aspect-video">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center space-y-4">
-                <div className="inline-flex items-center space-x-3 bg-white px-6 py-4 rounded-full shadow-lg">
-                  <div className="h-3 w-3 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-gray-700 font-medium">
-                    KI-Assistent aktiv
-                  </span>
-                </div>
-                <p className="text-gray-500 text-sm">
-                  Dashboard Preview (Demo)
-                </p>
+          <div className="relative rounded-2xl border-8 border-gray-200 shadow-2xl overflow-hidden">
+            <Image
+              src="/images/dashboard-demo.png"
+              alt="Voicall Dashboard - KI-Telefonassistent für Arztpraxen"
+              width={1920}
+              height={1080}
+              className="w-full h-auto"
+              priority
+            />
+            <div className="absolute top-4 left-4">
+              <div className="inline-flex items-center space-x-2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg">
+                <div className="h-2.5 w-2.5 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-gray-700 text-sm font-medium">
+                  Live Demo
+                </span>
               </div>
             </div>
           </div>
