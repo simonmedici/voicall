@@ -21,22 +21,25 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Phone,
   Clock,
   CheckCircle,
-  XCircle,
   Search,
   MessageSquare,
   Loader2,
   AlertCircle,
+  ChevronLeft,
+  ChevronRight,
+  X,
+  CalendarDays,
 } from "lucide-react";
+import { format } from "date-fns";
+import { de } from "date-fns/locale";
 
 interface Conversation {
   conversation_id: string;
@@ -48,6 +51,8 @@ interface Conversation {
   call_successful: string;
 }
 
+const ITEMS_PER_PAGE = 10;
+
 export default function CallsPage() {
   const router = useRouter();
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -56,6 +61,9 @@ export default function CallsPage() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [dateFrom, setDateFrom] = useState<string>("");
+  const [dateTo, setDateTo] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchConversations = async () => {
@@ -83,6 +91,10 @@ export default function CallsPage() {
     };
     fetchConversations();
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, statusFilter, dateFrom, dateTo]);
 
   const formatDuration = (seconds: number | null | undefined) => {
     if (seconds === null || seconds === undefined || seconds === 0) return "-";
@@ -151,8 +163,31 @@ export default function CallsPage() {
       (statusFilter === "failure" && conv.call_successful === "failure") ||
       (statusFilter === "unknown" && conv.call_successful === "unknown");
 
-    return matchesSearch && matchesStatus;
+    const convDate = new Date(conv.start_time_unix_secs * 1000);
+    
+    let matchesDateFrom = true;
+    if (dateFrom) {
+      const fromDate = new Date(dateFrom);
+      fromDate.setHours(0, 0, 0, 0);
+      matchesDateFrom = convDate >= fromDate;
+    }
+
+    let matchesDateTo = true;
+    if (dateTo) {
+      const toDate = new Date(dateTo);
+      toDate.setHours(23, 59, 59, 999);
+      matchesDateTo = convDate <= toDate;
+    }
+
+    return matchesSearch && matchesStatus && matchesDateFrom && matchesDateTo;
   });
+
+  const totalPages = Math.ceil(filteredConversations.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedConversations = filteredConversations.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
 
   const stats = {
     total: conversations.length,
@@ -164,10 +199,16 @@ export default function CallsPage() {
     ),
   };
 
+  const clearDateFrom = () => setDateFrom("");
+  const clearDateTo = () => setDateTo("");
+  const clearStatus = () => setStatusFilter("all");
+
+  const hasActiveFilters = dateFrom || dateTo || statusFilter !== "all";
+
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Unterhaltungen</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Verlauf der Unterhaltung</h1>
         <p className="text-muted-foreground">
           Alle Unterhaltungen Ihrer Agents (inkl. Tests)
         </p>
@@ -208,43 +249,180 @@ export default function CallsPage() {
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Filter & Suche</CardTitle>
-          <CardDescription>
-            Filtern Sie Ihre Unterhaltungen nach Agent oder Status
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-4 md:flex-row">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Suche nach Agent oder Conversation ID..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
+        <CardContent className="pt-6">
+          <div className="space-y-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Unterhaltungen durchsuchen..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
             </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full md:w-[200px]">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Alle Status</SelectItem>
-                <SelectItem value="success">Erfolgreich</SelectItem>
-                <SelectItem value="failure">Fehlgeschlagen</SelectItem>
-                <SelectItem value="unknown">Unbekannt</SelectItem>
-              </SelectContent>
-            </Select>
+
+            <div className="flex flex-wrap gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={dateFrom ? "default" : "outline"}
+                    size="sm"
+                    className="h-9"
+                  >
+                    <CalendarDays className="mr-2 h-4 w-4" />
+                    {dateFrom ? (
+                      <>
+                        Ab {format(new Date(dateFrom), "dd.MM.yyyy", { locale: de })}
+                        <X
+                          className="ml-2 h-3 w-3 hover:text-destructive"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            clearDateFrom();
+                          }}
+                        />
+                      </>
+                    ) : (
+                      "+ Datum nach"
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-4" align="start">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Datum nach</label>
+                    <Input
+                      type="date"
+                      value={dateFrom}
+                      onChange={(e) => setDateFrom(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                </PopoverContent>
+              </Popover>
+
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={dateTo ? "default" : "outline"}
+                    size="sm"
+                    className="h-9"
+                  >
+                    <CalendarDays className="mr-2 h-4 w-4" />
+                    {dateTo ? (
+                      <>
+                        Bis {format(new Date(dateTo), "dd.MM.yyyy", { locale: de })}
+                        <X
+                          className="ml-2 h-3 w-3 hover:text-destructive"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            clearDateTo();
+                          }}
+                        />
+                      </>
+                    ) : (
+                      "+ Datum vor"
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-4" align="start">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Datum vor</label>
+                    <Input
+                      type="date"
+                      value={dateTo}
+                      onChange={(e) => setDateTo(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                </PopoverContent>
+              </Popover>
+
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={statusFilter !== "all" ? "default" : "outline"}
+                    size="sm"
+                    className="h-9"
+                  >
+                    {statusFilter !== "all" ? (
+                      <>
+                        {statusFilter === "success" && "Erfolgreich"}
+                        {statusFilter === "failure" && "Fehlgeschlagen"}
+                        {statusFilter === "unknown" && "Unbekannt"}
+                        <X
+                          className="ml-2 h-3 w-3 hover:text-destructive"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            clearStatus();
+                          }}
+                        />
+                      </>
+                    ) : (
+                      "+ Anrufstatus"
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-48 p-2" align="start">
+                  <div className="space-y-1">
+                    <Button
+                      variant={statusFilter === "success" ? "secondary" : "ghost"}
+                      size="sm"
+                      className="w-full justify-start"
+                      onClick={() => setStatusFilter("success")}
+                    >
+                      <CheckCircle className="mr-2 h-4 w-4 text-green-600" />
+                      Erfolgreich
+                    </Button>
+                    <Button
+                      variant={statusFilter === "failure" ? "secondary" : "ghost"}
+                      size="sm"
+                      className="w-full justify-start"
+                      onClick={() => setStatusFilter("failure")}
+                    >
+                      <AlertCircle className="mr-2 h-4 w-4 text-red-600" />
+                      Fehlgeschlagen
+                    </Button>
+                    <Button
+                      variant={statusFilter === "unknown" ? "secondary" : "ghost"}
+                      size="sm"
+                      className="w-full justify-start"
+                      onClick={() => setStatusFilter("unknown")}
+                    >
+                      <Clock className="mr-2 h-4 w-4 text-gray-600" />
+                      Unbekannt
+                    </Button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+
+              {hasActiveFilters && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-9 text-muted-foreground"
+                  onClick={() => {
+                    setDateFrom("");
+                    setDateTo("");
+                    setStatusFilter("all");
+                  }}
+                >
+                  Filter zurücksetzen
+                </Button>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Unterhaltungen</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Unterhaltungen</CardTitle>
+            {filteredConversations.length > 0 && (
+              <p className="text-sm text-muted-foreground">
+                {filteredConversations.length} Ergebnis{filteredConversations.length !== 1 ? "se" : ""}
+              </p>
+            )}
+          </div>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -273,71 +451,127 @@ export default function CallsPage() {
                 Keine Unterhaltungen gefunden.
               </p>
               <p className="text-sm text-muted-foreground mt-2">
-                Starten Sie einen Test mit einem Ihrer Agents, um hier
-                Unterhaltungen zu sehen.
+                {hasActiveFilters
+                  ? "Versuchen Sie, die Filter anzupassen."
+                  : "Starten Sie einen Test mit einem Ihrer Agents, um hier Unterhaltungen zu sehen."}
               </p>
             </div>
           ) : (
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Datum</TableHead>
-                    <TableHead>Agent</TableHead>
-                    <TableHead>Dauer</TableHead>
-                    <TableHead>Nachrichten</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Aktion</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredConversations.map((conv) => (
-                    <TableRow
-                      key={conv.conversation_id}
-                      className="cursor-pointer hover:bg-muted/50"
-                      onClick={() =>
-                        router.push(
-                          `/dashboard/calls/${conv.conversation_id}`
-                        )
-                      }
-                    >
-                      <TableCell className="font-medium">
-                        {formatDate(conv.start_time_unix_secs)}
-                      </TableCell>
-                      <TableCell>
-                        {agentMap[conv.agent_id] || "Unbekannter Agent"}
-                      </TableCell>
-                      <TableCell>
-                        {formatDuration(conv.call_duration_secs)}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <MessageSquare className="h-4 w-4 text-muted-foreground" />
-                          {conv.message_count || 0}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {getStatusBadge(conv.status, conv.call_successful)}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            router.push(
-                              `/dashboard/calls/${conv.conversation_id}`
-                            );
-                          }}
-                        >
-                          Details
-                        </Button>
-                      </TableCell>
+            <>
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Datum</TableHead>
+                      <TableHead>Agent</TableHead>
+                      <TableHead>Dauer</TableHead>
+                      <TableHead>Nachrichten</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Aktion</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                  </TableHeader>
+                  <TableBody>
+                    {paginatedConversations.map((conv) => (
+                      <TableRow
+                        key={conv.conversation_id}
+                        className="cursor-pointer hover:bg-muted/50"
+                        onClick={() =>
+                          router.push(
+                            `/dashboard/calls/${conv.conversation_id}`
+                          )
+                        }
+                      >
+                        <TableCell className="font-medium">
+                          {formatDate(conv.start_time_unix_secs)}
+                        </TableCell>
+                        <TableCell>
+                          {agentMap[conv.agent_id] || "Unbekannter Agent"}
+                        </TableCell>
+                        <TableCell>
+                          {formatDuration(conv.call_duration_secs)}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                            {conv.message_count || 0}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {getStatusBadge(conv.status, conv.call_successful)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/dashboard/calls/${conv.conversation_id}`
+                              );
+                            }}
+                          >
+                            Details
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between mt-4">
+                  <p className="text-sm text-muted-foreground">
+                    Seite {currentPage} von {totalPages}
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                      Zurück
+                    </Button>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        let pageNum: number;
+                        if (totalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i;
+                        } else {
+                          pageNum = currentPage - 2 + i;
+                        }
+                        return (
+                          <Button
+                            key={pageNum}
+                            variant={currentPage === pageNum ? "default" : "outline"}
+                            size="sm"
+                            className="w-9"
+                            onClick={() => setCurrentPage(pageNum)}
+                          >
+                            {pageNum}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                    >
+                      Weiter
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </CardContent>
       </Card>
