@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { agentConfig, subscription } from "@/lib/db/schema";
+import { agentConfig, user } from "@/lib/db/schema";
 import { createAgent } from "@/lib/elevenlabs";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 
 /**
- * POST /api/agents/create - Create a new agent
+ * POST /api/agents/create - Create a new agent (ADMIN ONLY)
  * Based on: https://elevenlabs.io/docs/api-reference/create-agent
+ * 
+ * Note: Only admins can create agents. Agents are then assigned to users
+ * via the admin panel using /api/admin/assign-agent
  */
 export async function POST(request: NextRequest) {
   try {
@@ -23,40 +26,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check subscription tier & agent limits
-    const [userSub] = await db
-      .select()
-      .from(subscription)
-      .where(eq(subscription.userId, session.user.id))
+    // Check if user is admin
+    const [currentUser] = await db
+      .select({ isAdmin: user.isAdmin })
+      .from(user)
+      .where(eq(user.id, session.user.id))
       .limit(1);
 
-    if (!userSub) {
+    if (!currentUser?.isAdmin) {
       return NextResponse.json(
-        { error: "No subscription found" },
-        { status: 403 }
-      );
-    }
-
-    // Count existing agents
-    const existingAgents = await db
-      .select()
-      .from(agentConfig)
-      .where(eq(agentConfig.userId, session.user.id));
-
-    // Check limits
-    const limits = {
-      starter: 1,
-      pro: 3,
-      enterprise: -1, // unlimited
-    };
-
-    const maxAgents = limits[userSub.tier as keyof typeof limits] || 1;
-
-    if (maxAgents !== -1 && existingAgents.length >= maxAgents) {
-      return NextResponse.json(
-        {
-          error: `Agent limit reached. Your ${userSub.tier} plan allows ${maxAgents} agent(s). Upgrade to create more.`,
-        },
+        { error: "Forbidden - Only admins can create agents" },
         { status: 403 }
       );
     }

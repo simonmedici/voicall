@@ -48,10 +48,10 @@ export async function GET() {
     const subscriptions = await db.select().from(subscription);
     const agentConfigs = await db.select().from(agentConfig);
 
-    // Combine data
+    // Combine data - support multiple agents per user
     const usersWithDetails = users.map((u) => {
       const userSubscription = subscriptions.find((s) => s.userId === u.id);
-      const userAgentConfig = agentConfigs.find((a) => a.userId === u.id);
+      const userAgents = agentConfigs.filter((a) => a.userId === u.id);
 
       return {
         ...u,
@@ -61,12 +61,12 @@ export async function GET() {
               status: userSubscription.status,
             }
           : null,
-        agentConfig: userAgentConfig
-          ? {
-              elevenLabsAgentId: userAgentConfig.elevenLabsAgentId,
-              isActive: userAgentConfig.isActive,
-            }
-          : null,
+        agents: userAgents.map((a) => ({
+          id: a.id,
+          name: a.name,
+          elevenLabsAgentId: a.elevenLabsAgentId,
+          isActive: a.isActive,
+        })),
       };
     });
 

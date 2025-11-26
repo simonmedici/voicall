@@ -10,7 +10,15 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CheckCircle, Loader2, Shield, Users, Activity } from "lucide-react";
+import {
+  CheckCircle,
+  Loader2,
+  Shield,
+  Users,
+  Activity,
+  Bot,
+  UserPlus,
+} from "lucide-react";
 import {
   Table,
   TableBody,
@@ -20,6 +28,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 interface User {
   id: string;
@@ -31,54 +48,127 @@ interface User {
     tier: string;
     status: string;
   };
-  agentConfig?: {
-    elevenLabsAgentId: string | null;
+  agents?: Array<{
+    id: string;
+    name: string;
+    elevenLabsAgentId: string;
     isActive: boolean;
-  };
+  }>;
+}
+
+interface ElevenLabsAgent {
+  agent_id: string;
+  name: string;
+  created_at_unix_secs?: number;
 }
 
 export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
+  const [elevenLabsAgents, setElevenLabsAgents] = useState<ElevenLabsAgent[]>(
+    []
+  );
   const [loading, setLoading] = useState(true);
+  const [assigning, setAssigning] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const [selectedAgentId, setSelectedAgentId] = useState<string>("");
+
   useEffect(() => {
-    fetchUsers();
+    fetchData();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/admin/users");
+      const [usersRes, agentsRes] = await Promise.all([
+        fetch("/api/admin/users"),
+        fetch("/api/admin/elevenlabs-agents"),
+      ]);
 
-      if (response.status === 403) {
+      if (usersRes.status === 403) {
         setErrorMessage("Keine Admin-Berechtigung");
         return;
       }
 
-      const data = await response.json();
+      const usersData = await usersRes.json();
+      const agentsData = await agentsRes.json();
 
-      if (response.ok) {
-        setUsers(data.users);
+      if (usersRes.ok) {
+        setUsers(usersData.users);
       } else {
-        setErrorMessage(data.error || "Fehler beim Laden der Benutzer");
+        setErrorMessage(usersData.error || "Fehler beim Laden der Benutzer");
+      }
+
+      if (agentsRes.ok) {
+        setElevenLabsAgents(agentsData.agents || []);
       }
     } catch (error) {
-      console.error("Error fetching users:", error);
-      setErrorMessage("Fehler beim Laden der Benutzer");
+      console.error("Error fetching data:", error);
+      setErrorMessage("Fehler beim Laden der Daten");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleActivateAgent = async (userId: string, isActive: boolean) => {
+  const assignedAgentIds = new Set(
+    users.flatMap((u) => u.agents?.map((a) => a.elevenLabsAgentId) || [])
+  );
+
+  const availableAgents = elevenLabsAgents.filter(
+    (agent) => !assignedAgentIds.has(agent.agent_id)
+  );
+
+  const handleAssignAgent = async () => {
+    if (!selectedUserId || !selectedAgentId) {
+      setErrorMessage("Bitte wählen Sie einen Benutzer und einen Agenten aus");
+      setTimeout(() => setErrorMessage(""), 3000);
+      return;
+    }
+
+    try {
+      setAssigning(true);
+      const response = await fetch("/api/admin/assign-agent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: selectedUserId,
+          agentId: selectedAgentId,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccessMessage(data.message || "Agent erfolgreich zugewiesen");
+        setSelectedUserId("");
+        setSelectedAgentId("");
+        setTimeout(() => setSuccessMessage(""), 3000);
+        fetchData();
+      } else {
+        setErrorMessage(data.error || "Fehler beim Zuweisen");
+        setTimeout(() => setErrorMessage(""), 3000);
+      }
+    } catch (error) {
+      console.error("Error assigning agent:", error);
+      setErrorMessage("Fehler beim Zuweisen");
+      setTimeout(() => setErrorMessage(""), 3000);
+    } finally {
+      setAssigning(false);
+    }
+  };
+
+  const handleActivateAgent = async (
+    agentConfigId: string,
+    isActive: boolean
+  ) => {
     try {
       const response = await fetch("/api/admin/agent-id", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId,
+          agentConfigId,
           isActive,
         }),
       });
@@ -88,7 +178,7 @@ export default function AdminPage() {
       if (response.ok) {
         setSuccessMessage(`Agent ${isActive ? "aktiviert" : "deaktiviert"}`);
         setTimeout(() => setSuccessMessage(""), 3000);
-        fetchUsers();
+        fetchData();
       } else {
         setErrorMessage(data.error || "Fehler beim Aktualisieren");
         setTimeout(() => setErrorMessage(""), 3000);
@@ -122,9 +212,17 @@ export default function AdminPage() {
     );
   }
 
+  const totalAssignedAgents = users.reduce(
+    (acc, u) => acc + (u.agents?.length || 0),
+    0
+  );
+  const activeAgents = users.reduce(
+    (acc, u) => acc + (u.agents?.filter((a) => a.isActive).length || 0),
+    0
+  );
+
   return (
     <div className="space-y-8">
-      {/* Success/Error Messages */}
       {successMessage && (
         <Alert className="bg-green-50 border-green-200">
           <CheckCircle className="h-4 w-4 text-green-600" />
@@ -140,22 +238,20 @@ export default function AdminPage() {
         </Alert>
       )}
 
-      {/* Header */}
       <div>
         <div className="flex items-center gap-2">
           <Shield className="h-6 w-6" />
           <h1 className="text-3xl font-bold tracking-tight">Admin Panel</h1>
         </div>
         <p className="text-muted-foreground">
-          Übersicht aller Benutzer und Agents
+          Agenten den Kunden zuweisen und verwalten
         </p>
       </div>
 
-      {/* Stats */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            <CardTitle className="text-sm font-medium">Benutzer</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -166,36 +262,130 @@ export default function AdminPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Agents konfiguriert
+              ElevenLabs Agents
             </CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
+            <Bot className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {users.filter((u) => u.agentConfig?.elevenLabsAgentId).length}
-            </div>
+            <div className="text-2xl font-bold">{elevenLabsAgents.length}</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Aktive Agents</CardTitle>
+            <CardTitle className="text-sm font-medium">Zugewiesen</CardTitle>
+            <Activity className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalAssignedAgents}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Aktiv</CardTitle>
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {users.filter((u) => u.agentConfig?.isActive).length}
-            </div>
+            <div className="text-2xl font-bold">{activeAgents}</div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Users Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Alle Benutzer</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <UserPlus className="h-5 w-5" />
+            Agent zuweisen
+          </CardTitle>
           <CardDescription>
-            Übersicht aller registrierten Benutzer und ihrer Agents
+            Wählen Sie einen Kunden und einen ElevenLabs-Agenten aus, um ihn
+            zuzuweisen
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="space-y-2">
+              <Label>Kunde auswählen</Label>
+              <Select value={selectedUserId} onValueChange={setSelectedUserId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Kunde wählen..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {users
+                    .filter((u) => !u.isAdmin)
+                    .map((u) => (
+                      <SelectItem key={u.id} value={u.id}>
+                        {u.email}
+                        {u.name && ` (${u.name})`}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Agent auswählen</Label>
+              <Select
+                value={selectedAgentId}
+                onValueChange={setSelectedAgentId}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Agent wählen..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableAgents.length === 0 ? (
+                    <SelectItem value="none" disabled>
+                      Keine verfügbaren Agenten
+                    </SelectItem>
+                  ) : (
+                    availableAgents.map((agent) => (
+                      <SelectItem key={agent.agent_id} value={agent.agent_id}>
+                        {agent.name}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+              {availableAgents.length === 0 && elevenLabsAgents.length > 0 && (
+                <p className="text-xs text-muted-foreground">
+                  Alle Agenten sind bereits zugewiesen
+                </p>
+              )}
+            </div>
+
+            <div className="flex items-end">
+              <Button
+                onClick={handleAssignAgent}
+                disabled={
+                  !selectedUserId || !selectedAgentId || assigning
+                }
+                className="w-full"
+              >
+                {assigning ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Wird zugewiesen...
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Zuweisen
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Separator />
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Alle Benutzer & Agents</CardTitle>
+          <CardDescription>
+            Übersicht aller registrierten Benutzer und ihrer zugewiesenen Agents
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -205,7 +395,7 @@ export default function AdminPage() {
                 <TableHead>Email</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Subscription</TableHead>
-                <TableHead>Agent ID</TableHead>
+                <TableHead>Zugewiesene Agents</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Aktionen</TableHead>
               </TableRow>
@@ -218,62 +408,80 @@ export default function AdminPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                users.map((user) => (
-                  <TableRow key={user.id}>
+                users.map((u) => (
+                  <TableRow key={u.id}>
                     <TableCell className="font-medium">
-                      {user.email}
-                      {user.isAdmin && (
+                      {u.email}
+                      {u.isAdmin && (
                         <Badge variant="outline" className="ml-2">
                           Admin
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell>{user.name || "-"}</TableCell>
+                    <TableCell>{u.name || "-"}</TableCell>
                     <TableCell>
-                      {user.subscription ? (
+                      {u.subscription ? (
                         <Badge
                           variant={
-                            user.subscription.status === "active"
+                            u.subscription.status === "active"
                               ? "default"
                               : "secondary"
                           }
                         >
-                          {user.subscription.tier}
+                          {u.subscription.tier}
                         </Badge>
                       ) : (
                         <Badge variant="secondary">Free</Badge>
                       )}
                     </TableCell>
                     <TableCell>
-                      <code className="text-xs">
-                        {user.agentConfig?.elevenLabsAgentId || "-"}
-                      </code>
+                      {u.agents && u.agents.length > 0 ? (
+                        <div className="space-y-1">
+                          {u.agents.map((agent) => (
+                            <div key={agent.id} className="text-sm">
+                              <span className="font-medium">{agent.name}</span>
+                              <code className="ml-2 text-xs text-muted-foreground">
+                                {agent.elevenLabsAgentId.slice(0, 12)}...
+                              </code>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground">-</span>
+                      )}
                     </TableCell>
                     <TableCell>
-                      <Badge
-                        variant={
-                          user.agentConfig?.isActive ? "default" : "secondary"
-                        }
-                      >
-                        {user.agentConfig?.isActive ? "Aktiv" : "Inaktiv"}
-                      </Badge>
+                      {u.agents && u.agents.length > 0 ? (
+                        <div className="space-y-1">
+                          {u.agents.map((agent) => (
+                            <Badge
+                              key={agent.id}
+                              variant={agent.isActive ? "default" : "secondary"}
+                            >
+                              {agent.isActive ? "Aktiv" : "Inaktiv"}
+                            </Badge>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground">-</span>
+                      )}
                     </TableCell>
                     <TableCell>
-                      {user.agentConfig?.elevenLabsAgentId && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() =>
-                            handleActivateAgent(
-                              user.id,
-                              !user.agentConfig?.isActive
-                            )
-                          }
-                        >
-                          {user.agentConfig?.isActive
-                            ? "Deaktivieren"
-                            : "Aktivieren"}
-                        </Button>
+                      {u.agents && u.agents.length > 0 && (
+                        <div className="space-y-1">
+                          {u.agents.map((agent) => (
+                            <Button
+                              key={agent.id}
+                              size="sm"
+                              variant="outline"
+                              onClick={() =>
+                                handleActivateAgent(agent.id, !agent.isActive)
+                              }
+                            >
+                              {agent.isActive ? "Deaktivieren" : "Aktivieren"}
+                            </Button>
+                          ))}
+                        </div>
                       )}
                     </TableCell>
                   </TableRow>

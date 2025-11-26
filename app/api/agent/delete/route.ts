@@ -2,13 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/lib/db/index";
-import { agentConfig } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
+import { agentConfig, user } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 import { deleteAgent } from "@/lib/elevenlabs";
 
 /**
- * DELETE /api/agent/delete - Delete an agent
+ * DELETE /api/agent/delete - Delete an agent (ADMIN ONLY)
  * Removes agent from both ElevenLabs and database
+ * 
+ * Note: Only admins can delete agents. Regular users cannot delete
+ * agents assigned to them.
  */
 export async function DELETE(request: NextRequest) {
   try {
@@ -21,6 +24,20 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // Check if user is admin
+    const [currentUser] = await db
+      .select({ isAdmin: user.isAdmin })
+      .from(user)
+      .where(eq(user.id, session.user.id))
+      .limit(1);
+
+    if (!currentUser?.isAdmin) {
+      return NextResponse.json(
+        { error: "Forbidden - Only admins can delete agents" },
+        { status: 403 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const agentId = searchParams.get("agentId");
 
@@ -31,21 +48,16 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // Get agent config to verify ownership and get ElevenLabs agent ID
+    // Get agent config (admin can delete any agent)
     const [config] = await db
       .select()
       .from(agentConfig)
-      .where(
-        and(
-          eq(agentConfig.id, agentId),
-          eq(agentConfig.userId, session.user.id)
-        )
-      )
+      .where(eq(agentConfig.id, agentId))
       .limit(1);
 
     if (!config) {
       return NextResponse.json(
-        { error: "Agent not found or you don't have permission to delete it" },
+        { error: "Agent not found" },
         { status: 404 }
       );
     }
@@ -67,15 +79,10 @@ export async function DELETE(request: NextRequest) {
       }
     }
 
-    // Delete from database
+    // Delete from database (admin can delete any agent)
     await db
       .delete(agentConfig)
-      .where(
-        and(
-          eq(agentConfig.id, agentId),
-          eq(agentConfig.userId, session.user.id)
-        )
-      );
+      .where(eq(agentConfig.id, agentId));
 
     console.log("✅ Agent deleted successfully:", agentId);
 

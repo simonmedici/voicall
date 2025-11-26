@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { agentConfig } from "@/lib/db/schema";
+import { agentConfig, user } from "@/lib/db/schema";
 import { updateAgent } from "@/lib/elevenlabs";
 import { eq, and } from "drizzle-orm";
 
 /**
  * PATCH /api/agents/[id] - Update an existing agent
  * Based on: https://elevenlabs.io/docs/api-reference/update-agent
+ * 
+ * Note: Regular users can only update voiceId and firstMessage.
+ * Admins can update all fields.
  */
 export async function PATCH(
   request: NextRequest,
@@ -27,6 +30,15 @@ export async function PATCH(
 
     const { id } = await params;
 
+    // Check if user is admin
+    const [currentUser] = await db
+      .select({ isAdmin: user.isAdmin })
+      .from(user)
+      .where(eq(user.id, session.user.id))
+      .limit(1);
+
+    const isAdmin = currentUser?.isAdmin || false;
+
     // Get agent from DB
     const [agent] = await db
       .select()
@@ -43,46 +55,77 @@ export async function PATCH(
     // Parse update data
     const body = await request.json();
 
-    const {
-      name,
-      voiceId,
-      systemPrompt,
-      firstMessage,
-      language,
-      llmModel,
-      temperature,
-      maxTokens,
-    } = body;
+    // For non-admins, only allow voiceId and firstMessage updates
+    if (!isAdmin) {
+      const allowedFields = ["voiceId", "firstMessage"];
+      const requestedFields = Object.keys(body);
+      const disallowedFields = requestedFields.filter(
+        (f) => !allowedFields.includes(f)
+      );
+
+      if (disallowedFields.length > 0) {
+        return NextResponse.json(
+          {
+            error: `Nicht erlaubt: ${disallowedFields.join(", ")}. Sie können nur Stimme und Begrüssung ändern.`,
+          },
+          { status: 403 }
+        );
+      }
+    }
+
+    const { voiceId, firstMessage, name, systemPrompt, language, llmModel, temperature, maxTokens } = body;
+
+    // Build update object based on user role
+    const elevenLabsUpdate: Record<string, unknown> = {};
+    const dbUpdate: Record<string, unknown> = { updatedAt: new Date() };
+
+    // Fields allowed for all users
+    if (voiceId) {
+      elevenLabsUpdate.voiceId = voiceId;
+      dbUpdate.voiceId = voiceId;
+    }
+    if (firstMessage) {
+      elevenLabsUpdate.firstMessage = firstMessage;
+      dbUpdate.firstMessage = firstMessage;
+    }
+
+    // Fields only for admins
+    if (isAdmin) {
+      if (name) {
+        elevenLabsUpdate.name = name;
+        dbUpdate.name = name;
+      }
+      if (systemPrompt) {
+        elevenLabsUpdate.systemPrompt = systemPrompt;
+        dbUpdate.systemPrompt = systemPrompt;
+      }
+      if (language) {
+        elevenLabsUpdate.language = language;
+        dbUpdate.language = language;
+      }
+      if (llmModel) {
+        elevenLabsUpdate.llmModel = llmModel;
+        dbUpdate.llmModel = llmModel;
+      }
+      if (temperature !== undefined) {
+        elevenLabsUpdate.temperature = temperature;
+        dbUpdate.temperature = temperature;
+      }
+      if (maxTokens) {
+        elevenLabsUpdate.maxTokens = maxTokens;
+        dbUpdate.maxTokens = maxTokens;
+      }
+    }
 
     // Update in ElevenLabs
-    await updateAgent(agent.elevenLabsAgentId, {
-      name,
-      voiceId,
-      systemPrompt,
-      firstMessage,
-      language,
-      llmModel,
-      temperature,
-      maxTokens,
-    });
+    if (Object.keys(elevenLabsUpdate).length > 0) {
+      await updateAgent(agent.elevenLabsAgentId, elevenLabsUpdate);
+    }
 
     // Update in database
-    const updateData: Record<string, unknown> = {
-      updatedAt: new Date(),
-    };
-
-    if (name) updateData.name = name;
-    if (voiceId) updateData.voiceId = voiceId;
-    if (systemPrompt) updateData.systemPrompt = systemPrompt;
-    if (firstMessage) updateData.firstMessage = firstMessage;
-    if (language) updateData.language = language;
-    if (llmModel) updateData.llmModel = llmModel;
-    if (temperature !== undefined) updateData.temperature = temperature;
-    if (maxTokens) updateData.maxTokens = maxTokens;
-
     await db
       .update(agentConfig)
-      .set(updateData)
+      .set(dbUpdate)
       .where(
         and(eq(agentConfig.id, id), eq(agentConfig.userId, session.user.id))
       );

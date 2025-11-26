@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -21,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, Mic, MessageSquare } from "lucide-react";
 
 interface Voice {
   voiceId: string;
@@ -53,16 +52,11 @@ function EditAgentContent() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: "",
     voiceId: "",
-    systemPrompt: "",
     firstMessage: "",
-    language: "de",
-    llmModel: "gpt-4o",
-    temperature: 1.0,
-    maxTokens: -1,
   });
 
   useEffect(() => {
@@ -81,14 +75,8 @@ function EditAgentContent() {
         setAgent(agentData);
 
         setFormData({
-          name: agentData.name || "",
           voiceId: agentData.voiceId || "",
-          systemPrompt: agentData.systemPrompt || "",
           firstMessage: agentData.firstMessage || "",
-          language: agentData.language || "de",
-          llmModel: agentData.llmModel || "gpt-4o",
-          temperature: agentData.temperature ?? 1.0,
-          maxTokens: agentData.maxTokens ?? -1,
         });
 
         const voicesRes = await fetch("/api/voices/list");
@@ -109,6 +97,7 @@ function EditAgentContent() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setSuccess(false);
 
     if (!agent) return;
 
@@ -118,7 +107,10 @@ function EditAgentContent() {
       const response = await fetch(`/api/agents/${agent.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          voiceId: formData.voiceId,
+          firstMessage: formData.firstMessage,
+        }),
       });
 
       if (!response.ok) {
@@ -126,8 +118,10 @@ function EditAgentContent() {
         throw new Error(error.error || "Failed to update agent");
       }
 
-      console.log("✅ Agent updated");
-      router.push("/dashboard/agents");
+      setSuccess(true);
+      setTimeout(() => {
+        router.push("/dashboard/agents");
+      }, 1500);
     } catch (err) {
       console.error("Failed to update agent:", err);
       setError(
@@ -154,12 +148,17 @@ function EditAgentContent() {
         <Alert variant="destructive">
           <AlertDescription>Agent nicht gefunden</AlertDescription>
         </Alert>
-        <Button onClick={() => router.push("/dashboard/agents")} className="mt-4">
+        <Button
+          onClick={() => router.push("/dashboard/agents")}
+          className="mt-4"
+        >
           Zurück zur Übersicht
         </Button>
       </div>
     );
   }
+
+  const selectedVoice = voices.find((v) => v.voiceId === formData.voiceId);
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-3xl">
@@ -170,9 +169,9 @@ function EditAgentContent() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Agent bearbeiten</CardTitle>
+          <CardTitle>{agent.name}</CardTitle>
           <CardDescription>
-            Aktualisieren Sie die Konfiguration Ihres Agents
+            Passen Sie Stimme und Begrüssung Ihres Telefonagenten an
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -182,25 +181,22 @@ function EditAgentContent() {
             </Alert>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="name">
-                Agent Name <span className="text-destructive">*</span>
-              </Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                required
-              />
-            </div>
+          {success && (
+            <Alert className="mb-6 bg-green-50 border-green-200">
+              <AlertDescription className="text-green-800">
+                Änderungen erfolgreich gespeichert!
+              </AlertDescription>
+            </Alert>
+          )}
 
-            <div className="space-y-2">
-              <Label htmlFor="voice">
-                Stimme <span className="text-destructive">*</span>
-              </Label>
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Mic className="h-5 w-5 text-primary" />
+                <Label htmlFor="voice" className="text-lg font-medium">
+                  Stimme
+                </Label>
+              </div>
               <Select
                 value={formData.voiceId}
                 onValueChange={(value) =>
@@ -208,15 +204,19 @@ function EditAgentContent() {
                 }
                 required
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-12">
                   <SelectValue placeholder="Wählen Sie eine Stimme" />
                 </SelectTrigger>
                 <SelectContent className="max-h-[300px]">
                   {voices.map((voice) => {
-                    const language = voice.labels?.language || voice.labels?.accent || "";
-                    const useCase = voice.labels?.use_case || voice.labels?.["use case"] || "";
+                    const language =
+                      voice.labels?.language || voice.labels?.accent || "";
+                    const useCase =
+                      voice.labels?.use_case ||
+                      voice.labels?.["use case"] ||
+                      "";
                     const description = voice.labels?.description || "";
-                    
+
                     return (
                       <SelectItem key={voice.voiceId} value={voice.voiceId}>
                         <div className="flex items-center gap-2">
@@ -242,104 +242,36 @@ function EditAgentContent() {
                   })}
                 </SelectContent>
               </Select>
-              <p className="text-sm text-muted-foreground">
-                Wählen Sie eine Stimme mit passender Sprache und Stil
-              </p>
+              {selectedVoice && (
+                <p className="text-sm text-muted-foreground">
+                  Aktuell: <strong>{selectedVoice.name}</strong>
+                  {selectedVoice.labels?.language &&
+                    ` (${selectedVoice.labels.language})`}
+                </p>
+              )}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="language">
-                Sprache <span className="text-destructive">*</span>
-              </Label>
-              <Select
-                value={formData.language}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, language: value })
-                }
-                required
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="de">Deutsch</SelectItem>
-                  <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="fr">Français</SelectItem>
-                  <SelectItem value="it">Italiano</SelectItem>
-                  <SelectItem value="es">Español</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="firstMessage">
-                Erste Nachricht <span className="text-destructive">*</span>
-              </Label>
-              <Input
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5 text-primary" />
+                <Label htmlFor="firstMessage" className="text-lg font-medium">
+                  Erste Nachricht (Begrüssung)
+                </Label>
+              </div>
+              <Textarea
                 id="firstMessage"
                 value={formData.firstMessage}
                 onChange={(e) =>
                   setFormData({ ...formData, firstMessage: e.target.value })
                 }
+                placeholder="z.B. Grüezi! Praxis Dr. Müller, wie kann ich Ihnen helfen?"
+                rows={3}
+                className="text-base"
                 required
               />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="systemPrompt">
-                System Prompt <span className="text-destructive">*</span>
-              </Label>
-              <Textarea
-                id="systemPrompt"
-                value={formData.systemPrompt}
-                onChange={(e) =>
-                  setFormData({ ...formData, systemPrompt: e.target.value })
-                }
-                rows={6}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="llmModel">LLM Modell</Label>
-              <Select
-                value={formData.llmModel}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, llmModel: value })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="gpt-4o">GPT-4o</SelectItem>
-                  <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
-                  <SelectItem value="claude-3-5-sonnet">
-                    Claude 3.5 Sonnet
-                  </SelectItem>
-                  <SelectItem value="gemini-2.0-flash-exp">
-                    Gemini 2.0 Flash
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="temperature">Temperature (0-2)</Label>
-              <Input
-                id="temperature"
-                type="number"
-                step="0.1"
-                min="0"
-                max="2"
-                value={formData.temperature}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    temperature: parseFloat(e.target.value),
-                  })
-                }
-              />
+              <p className="text-sm text-muted-foreground">
+                Diese Nachricht hört der Anrufer als Erstes, wenn er anruft
+              </p>
             </div>
 
             <div className="flex items-center gap-4 pt-4">

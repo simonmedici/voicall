@@ -45,13 +45,25 @@ lib/
 ```
 
 ## Key Features
-1. **Agent Management**: Create, edit, delete, and test AI phone agents
-2. **ElevenLabs Integration**: Full API integration for conversational AI
-3. **Call History**: View transcripts and call details from webhook data
-4. **Subscription Tiers**: Starter (500 min), Pro (1500 min), Enterprise (unlimited)
-5. **Usage Tracking**: Minutes used per billing cycle with alerts at 80%
-6. **Zero PII-Retention**: No patient data stored - GDPR/DSG compliant
-7. **Swiss German Support**: AI understands all Swiss dialects
+1. **Admin-Managed Agent Workflow**: Admins create agents in ElevenLabs and assign them to customers
+2. **Customer Agent Customization**: Customers can only edit Voice and First Message (greeting)
+3. **ElevenLabs Integration**: Full API integration for conversational AI
+4. **Call History**: View transcripts and call details from webhook data
+5. **Subscription Tiers**: Starter (500 min), Pro (1500 min), Enterprise (unlimited)
+6. **Usage Tracking**: Minutes used per billing cycle with alerts at 80%
+7. **Zero PII-Retention**: No patient data stored - GDPR/DSG compliant
+8. **Swiss German Support**: AI understands all Swiss dialects
+
+## Agent Workflow
+1. **Admin creates agent** in ElevenLabs dashboard (external)
+2. **Admin assigns agent** to customer via Admin Panel (select user, select agent, assign)
+3. **Customer edits** only Voice and First Message under "Meine Agents"
+4. **Customer tests** agent via widget embed
+
+**API Security:**
+- `/api/agents/create` - Admin only
+- `/api/agent/delete` - Admin only
+- `/api/agents/[id]` PATCH - Non-admins restricted to voiceId + firstMessage only
 
 ## Unique Selling Points (USPs)
 - **Zero PII-Retention Mode**: Patient data is never stored on servers - real-time processing only
@@ -76,6 +88,9 @@ npm run db:studio    # Open Drizzle Studio
 ```
 
 ## Recent Changes
+- **Admin-Managed Agent Workflow**: Admins create agents in ElevenLabs, assign to users via Admin Panel
+- **Simplified User Experience**: Customers can only edit Voice and First Message (greeting)
+- **Backend Security**: Create/delete endpoints are admin-only, PATCH validates allowed fields
 - Dashboard UI Restructure: Admin at top (admin-only), renamed Abo to Einstellungen with gear icon, user dropdown at bottom-left
 - Voice Selection Enhanced: Shows language, use case, and description labels from ElevenLabs API
 - Removed Settings Page: Consolidated under "Meine Agents"

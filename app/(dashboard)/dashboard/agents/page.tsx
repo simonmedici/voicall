@@ -19,16 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Plus, Edit, Trash2, TestTube, Loader2 } from "lucide-react";
+import { Edit, TestTube, Loader2, Bot, Phone } from "lucide-react";
 
 interface Agent {
   id: string;
@@ -38,27 +30,14 @@ interface Agent {
   isActive: boolean;
   elevenLabsAgentId: string;
   createdAt: string;
-}
-
-interface Subscription {
-  tier: "starter" | "pro" | "enterprise";
+  firstMessage?: string;
 }
 
 export default function AgentsListPage() {
   const router = useRouter();
   const [agents, setAgents] = useState<Agent[]>([]);
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [agentToDelete, setAgentToDelete] = useState<Agent | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const agentLimits = {
-    starter: 1,
-    pro: 3,
-    enterprise: -1, // unlimited
-  };
 
   useEffect(() => {
     loadData();
@@ -68,47 +47,16 @@ export default function AgentsListPage() {
     try {
       setLoading(true);
 
-      // Load agents
       const agentsRes = await fetch("/api/agent?all=true");
       if (!agentsRes.ok) throw new Error("Failed to load agents");
       const agentsData = await agentsRes.json();
       setAgents(agentsData.agents || []);
-
-      // Load subscription
-      const subRes = await fetch("/api/subscription");
-      if (subRes.ok) {
-        const subData = await subRes.json();
-        setSubscription(subData);
-      }
     } catch (err) {
       console.error("Failed to load data:", err);
       setError("Fehler beim Laden der Daten");
     } finally {
       setLoading(false);
     }
-  }
-
-  function canCreateAgent() {
-    if (!subscription) return false;
-    const limit = agentLimits[subscription.tier];
-    return limit === -1 || agents.length < limit;
-  }
-
-  function getAgentLimitText() {
-    if (!subscription) return "";
-    const limit = agentLimits[subscription.tier];
-    if (limit === -1) return "Unlimited";
-    return `${agents.length}/${limit}`;
-  }
-
-  function handleCreateAgent() {
-    if (!canCreateAgent()) {
-      setError(
-        `Agent-Limit erreicht. Ihr ${subscription?.tier} Plan erlaubt maximal ${agentLimits[subscription?.tier || "starter"]} Agent(s).`
-      );
-      return;
-    }
-    router.push("/dashboard/agents/create");
   }
 
   function handleEditAgent(agent: Agent) {
@@ -119,42 +67,6 @@ export default function AgentsListPage() {
     router.push(
       `/dashboard/agents/test?id=${agent.elevenLabsAgentId}&dbId=${agent.id}&name=${encodeURIComponent(agent.name)}`
     );
-  }
-
-  function openDeleteDialog(agent: Agent) {
-    setAgentToDelete(agent);
-    setDeleteDialogOpen(true);
-  }
-
-  async function handleDeleteAgent() {
-    if (!agentToDelete) return;
-
-    try {
-      setIsDeleting(true);
-      const response = await fetch(
-        `/api/agent/delete?agentId=${agentToDelete.id}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to delete agent");
-      }
-
-      // Remove from list
-      setAgents(agents.filter((a) => a.id !== agentToDelete.id));
-      setDeleteDialogOpen(false);
-      setAgentToDelete(null);
-    } catch (err) {
-      console.error("Delete failed:", err);
-      setError(
-        err instanceof Error ? err.message : "Fehler beim Löschen des Agents"
-      );
-    } finally {
-      setIsDeleting(false);
-    }
   }
 
   if (loading) {
@@ -171,13 +83,9 @@ export default function AgentsListPage() {
         <div>
           <h1 className="text-3xl font-bold">Meine Agents</h1>
           <p className="text-muted-foreground mt-2">
-            Erstellen und verwalten Sie Ihre KI-Telefonagenten
+            Verwalten Sie Ihre KI-Telefonagenten
           </p>
         </div>
-        <Button onClick={handleCreateAgent} disabled={!canCreateAgent()}>
-          <Plus className="mr-2 h-4 w-4" />
-          Neuer Agent
-        </Button>
       </div>
 
       {error && (
@@ -186,43 +94,27 @@ export default function AgentsListPage() {
         </Alert>
       )}
 
-      {subscription && (
-        <Card className="mb-6">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-lg">
-                  {subscription.tier.charAt(0).toUpperCase() +
-                    subscription.tier.slice(1)}{" "}
-                  Plan
-                </CardTitle>
-                <CardDescription>Agent Limit</CardDescription>
-              </div>
-              <Badge variant="secondary" className="text-lg">
-                {getAgentLimitText()}
-              </Badge>
-            </div>
-          </CardHeader>
-        </Card>
-      )}
-
       <Card>
         <CardHeader>
-          <CardTitle>Agents ({agents.length})</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Bot className="h-5 w-5" />
+            Agents ({agents.length})
+          </CardTitle>
           <CardDescription>
-            Alle Ihre konfigurierten Telefonagenten
+            Ihre zugewiesenen Telefonagenten - Sie können Stimme und
+            Begrüssung anpassen
           </CardDescription>
         </CardHeader>
         <CardContent>
           {agents.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-muted-foreground mb-4">
-                Noch keine Agents erstellt
+              <Phone className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium mb-2">Noch keine Agents</h3>
+              <p className="text-muted-foreground max-w-md mx-auto">
+                Ihr Administrator wird Ihnen einen KI-Telefonagenten zuweisen.
+                Sobald ein Agent zugewiesen wurde, können Sie hier die Stimme
+                und die erste Begrüssung anpassen.
               </p>
-              <Button onClick={handleCreateAgent}>
-                <Plus className="mr-2 h-4 w-4" />
-                Ersten Agent erstellen
-              </Button>
             </div>
           ) : (
             <Table>
@@ -230,7 +122,6 @@ export default function AgentsListPage() {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Sprache</TableHead>
-                  <TableHead>Modell</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Erstellt</TableHead>
                   <TableHead className="text-right">Aktionen</TableHead>
@@ -245,7 +136,6 @@ export default function AgentsListPage() {
                         {agent.language.toUpperCase()}
                       </Badge>
                     </TableCell>
-                    <TableCell>{agent.llmModel}</TableCell>
                     <TableCell>
                       <Badge variant={agent.isActive ? "default" : "secondary"}>
                         {agent.isActive ? "Aktiv" : "Inaktiv"}
@@ -260,6 +150,7 @@ export default function AgentsListPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleTestAgent(agent)}
+                          title="Agent testen"
                         >
                           <TestTube className="h-4 w-4" />
                         </Button>
@@ -267,15 +158,9 @@ export default function AgentsListPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleEditAgent(agent)}
+                          title="Stimme & Begrüssung bearbeiten"
                         >
                           <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => openDeleteDialog(agent)}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
                       </div>
                     </TableCell>
@@ -286,42 +171,6 @@ export default function AgentsListPage() {
           )}
         </CardContent>
       </Card>
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Agent löschen?</DialogTitle>
-            <DialogDescription>
-              Möchten Sie den Agent &quot;{agentToDelete?.name}&quot; wirklich
-              löschen? Diese Aktion kann nicht rückgängig gemacht werden.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setDeleteDialogOpen(false)}
-              disabled={isDeleting}
-            >
-              Abbrechen
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDeleteAgent}
-              disabled={isDeleting}
-            >
-              {isDeleting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Wird gelöscht...
-                </>
-              ) : (
-                "Löschen"
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

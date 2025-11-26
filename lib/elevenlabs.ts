@@ -238,6 +238,66 @@ export async function getAgent(agentId: string) {
 }
 
 /**
+ * ElevenLabs Agent from list API
+ */
+export interface ElevenLabsAgent {
+  agent_id: string;
+  name: string;
+  created_at_unix_secs?: number;
+  conversation_config?: {
+    agent?: {
+      first_message?: string;
+      language?: string;
+    };
+    tts?: {
+      voice_id?: string;
+    };
+  };
+}
+
+/**
+ * List all agents in ElevenLabs account
+ * Documentation: https://elevenlabs.io/docs/api-reference/agents/list
+ */
+export async function listAllAgents(options?: {
+  pageSize?: number;
+  cursor?: string;
+  name?: string;
+}): Promise<{
+  agents: ElevenLabsAgent[];
+  hasMore: boolean;
+  nextCursor?: string;
+}> {
+  const params = new URLSearchParams();
+  if (options?.pageSize) params.append("page_size", options.pageSize.toString());
+  if (options?.cursor) params.append("cursor", options.cursor);
+  if (options?.name) params.append("name", options.name);
+
+  const response = await fetch(
+    `${BASE_URL}/convai/agents?${params.toString()}`,
+    {
+      headers: {
+        "xi-api-key": ELEVENLABS_API_KEY || "",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(
+      `Failed to list agents: ${error.detail || response.statusText}`
+    );
+  }
+
+  const data = await response.json();
+  return {
+    agents: data.agents || [],
+    hasMore: data.has_more || false,
+    nextCursor: data.next_cursor,
+  };
+}
+
+/**
  * List all available voices
  * Documentation: https://elevenlabs.io/docs/api-reference/get-voices
  */
