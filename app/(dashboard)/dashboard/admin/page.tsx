@@ -8,8 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle, Loader2, Shield, Users, Activity } from "lucide-react";
@@ -42,11 +40,8 @@ interface User {
 export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [selectedUserId, setSelectedUserId] = useState<string>("");
-  const [agentId, setAgentId] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -74,41 +69,6 @@ export default function AdminPage() {
       setErrorMessage("Fehler beim Laden der Benutzer");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleSaveAgentId = async () => {
-    if (!selectedUserId || !agentId.trim()) return;
-
-    try {
-      setSaving(true);
-      const response = await fetch("/api/admin/agent-id", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: selectedUserId,
-          elevenLabsAgentId: agentId,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setSuccessMessage(`Agent ID erfolgreich für User gespeichert`);
-        setTimeout(() => setSuccessMessage(""), 3000);
-        setAgentId("");
-        setSelectedUserId("");
-        fetchUsers(); // Refresh list
-      } else {
-        setErrorMessage(data.error || "Fehler beim Speichern");
-        setTimeout(() => setErrorMessage(""), 3000);
-      }
-    } catch (error) {
-      console.error("Error saving agent ID:", error);
-      setErrorMessage("Fehler beim Speichern");
-      setTimeout(() => setErrorMessage(""), 3000);
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -187,7 +147,7 @@ export default function AdminPage() {
           <h1 className="text-3xl font-bold tracking-tight">Admin Panel</h1>
         </div>
         <p className="text-muted-foreground">
-          Verwalte User und ElevenLabs Agent IDs
+          Übersicht aller Benutzer und Agents
         </p>
       </div>
 
@@ -229,64 +189,6 @@ export default function AdminPage() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Agent ID Assignment */}
-      <Card>
-        <CardHeader>
-          <CardTitle>ElevenLabs Agent ID zuweisen</CardTitle>
-          <CardDescription>
-            Weise einem User eine Agent ID von ElevenLabs zu
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <Label htmlFor="userId">User auswählen</Label>
-                <select
-                  id="userId"
-                  value={selectedUserId}
-                  onChange={(e) => setSelectedUserId(e.target.value)}
-                  className="w-full mt-2 flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  <option value="">User wählen...</option>
-                  {users.map((user) => (
-                    <option key={user.id} value={user.id}>
-                      {user.email}{" "}
-                      {user.agentConfig?.elevenLabsAgentId && "(✓ hat Agent)"}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <Label htmlFor="agentId">ElevenLabs Agent ID</Label>
-                <Input
-                  id="agentId"
-                  value={agentId}
-                  onChange={(e) => setAgentId(e.target.value)}
-                  placeholder="agent_abc123xyz..."
-                  className="mt-2"
-                />
-              </div>
-            </div>
-
-            <Button
-              onClick={handleSaveAgentId}
-              disabled={saving || !selectedUserId || !agentId.trim()}
-            >
-              {saving ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Speichert...
-                </>
-              ) : (
-                "Agent ID zuweisen"
-              )}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Users Table */}
       <Card>

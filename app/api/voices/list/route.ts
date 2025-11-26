@@ -34,6 +34,7 @@ export async function GET() {
       category: voice.category || "unknown",
       description: voice.description,
       previewUrl: voice.preview_url,
+      labels: voice.labels || {},
     }));
 
     return NextResponse.json({ voices: mappedVoices });

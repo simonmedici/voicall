@@ -32,7 +32,7 @@ export default async function SubscriptionPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Abo-Verwaltung</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Einstellungen</h1>
         <p className="text-muted-foreground">
           Verwalten Sie Ihr Abonnement und sehen Sie Ihre Nutzung
         </p>

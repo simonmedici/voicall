@@ -27,6 +27,7 @@ interface Voice {
   voiceId: string;
   name: string;
   category: string;
+  labels?: Record<string, string>;
 }
 
 export default function CreateAgentPage() {
@@ -177,14 +178,40 @@ export default function CreateAgentPage() {
                 <SelectTrigger>
                   <SelectValue placeholder="Wählen Sie eine Stimme" />
                 </SelectTrigger>
-                <SelectContent>
-                  {voices.map((voice) => (
-                    <SelectItem key={voice.voiceId} value={voice.voiceId}>
-                      {voice.name} ({voice.category})
-                    </SelectItem>
-                  ))}
+                <SelectContent className="max-h-[300px]">
+                  {voices.map((voice) => {
+                    const language = voice.labels?.language || voice.labels?.accent || "";
+                    const useCase = voice.labels?.use_case || voice.labels?.["use case"] || "";
+                    const description = voice.labels?.description || "";
+                    
+                    return (
+                      <SelectItem key={voice.voiceId} value={voice.voiceId}>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{voice.name}</span>
+                          {language && (
+                            <span className="text-xs bg-muted px-1.5 py-0.5 rounded">
+                              {language}
+                            </span>
+                          )}
+                          {useCase && (
+                            <span className="text-xs bg-muted px-1.5 py-0.5 rounded">
+                              {useCase}
+                            </span>
+                          )}
+                          {description && (
+                            <span className="text-xs text-muted-foreground">
+                              {description}
+                            </span>
+                          )}
+                        </div>
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
+              <p className="text-sm text-muted-foreground">
+                Wählen Sie eine Stimme mit passender Sprache und Stil
+              </p>
             </div>
 
             {/* Language - REQUIRED */}

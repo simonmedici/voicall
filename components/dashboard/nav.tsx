@@ -17,7 +17,6 @@ import {
   LayoutDashboard,
   Phone,
   Settings,
-  CreditCard,
   LogOut,
   Shield,
   Bot,
@@ -28,8 +27,7 @@ const navigation = [
   { name: "Übersicht", href: "/dashboard", icon: LayoutDashboard },
   { name: "Meine Agents", href: "/dashboard/agents", icon: Bot },
   { name: "Anrufe", href: "/dashboard/calls", icon: Phone },
-  { name: "Einstellungen", href: "/dashboard/settings", icon: Settings },
-  { name: "Abo", href: "/dashboard/subscription", icon: CreditCard },
+  { name: "Einstellungen", href: "/dashboard/subscription", icon: Settings },
 ];
 
 export function DashboardNav() {
@@ -56,8 +54,9 @@ export function DashboardNav() {
   };
 
   return (
-    <nav className="flex flex-col gap-4">
-      <div className="flex items-center gap-3 px-4 py-2">
+    <nav className="flex flex-col h-full">
+      {/* Logo */}
+      <div className="flex items-center gap-3 px-4 py-4">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
           V
         </div>
@@ -67,7 +66,24 @@ export function DashboardNav() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-1 px-2">
+      {/* Navigation Links */}
+      <div className="flex flex-col gap-1 px-2 flex-1">
+        {/* Admin Link - only visible to admins, placed at top */}
+        {isAdmin && (
+          <Link
+            href="/dashboard/admin"
+            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              pathname === "/dashboard/admin"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            }`}
+          >
+            <Shield className="h-4 w-4" />
+            Admin
+          </Link>
+        )}
+
+        {/* Regular Navigation */}
         {navigation.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -85,46 +101,32 @@ export function DashboardNav() {
             </Link>
           );
         })}
-
-        {/* Admin Link - only visible to admins */}
-        {isAdmin && (
-          <Link
-            href="/dashboard/admin"
-            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              pathname === "/dashboard/admin"
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-            }`}
-          >
-            <Shield className="h-4 w-4" />
-            Admin
-          </Link>
-        )}
       </div>
 
-      <div className="mt-auto px-2">
+      {/* User Menu - Fixed at bottom left */}
+      <div className="px-2 py-4 border-t">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="w-full justify-start gap-3 px-3 py-2 h-auto"
+              className="w-full justify-start gap-3 px-3 py-2 h-auto hover:bg-accent"
             >
               <Avatar className="h-8 w-8">
                 <AvatarFallback>
                   {session?.user?.name?.[0]?.toUpperCase() || "U"}
                 </AvatarFallback>
               </Avatar>
-              <div className="flex flex-col items-start text-left">
-                <span className="text-sm font-medium">
+              <div className="flex flex-col items-start text-left overflow-hidden">
+                <span className="text-sm font-medium truncate max-w-[140px]">
                   {session?.user?.name || "User"}
                 </span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-muted-foreground truncate max-w-[140px]">
                   {session?.user?.email}
                 </span>
               </div>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuContent align="start" side="top" className="w-56">
             <DropdownMenuLabel>Mein Konto</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleSignOut}>
