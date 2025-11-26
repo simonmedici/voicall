@@ -84,11 +84,14 @@ export default function CallsPage() {
     fetchConversations();
   }, []);
 
-  const formatDuration = (seconds: number | null) => {
-    if (!seconds) return "0s";
+  const formatDuration = (seconds: number | null | undefined) => {
+    if (seconds === null || seconds === undefined || seconds === 0) return "-";
     const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+    const secs = Math.round(seconds % 60);
+    if (mins > 0) {
+      return `${mins}m ${secs}s`;
+    }
+    return `${secs}s`;
   };
 
   const formatDate = (unixSecs: number) => {

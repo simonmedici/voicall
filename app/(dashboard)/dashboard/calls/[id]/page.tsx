@@ -93,21 +93,29 @@ export default function CallDetailPage({
   }, [id]);
 
   const formatDuration = (seconds: number | null | undefined) => {
-    if (!seconds) return "0s";
+    if (seconds === null || seconds === undefined || seconds === 0) return "-";
     const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+    const secs = Math.round(seconds % 60);
+    if (mins > 0) {
+      return `${mins}m ${secs}s`;
+    }
+    return `${secs}s`;
   };
 
   const formatDate = (unixSecs: number) => {
     const date = new Date(unixSecs * 1000);
-    return date.toLocaleString("de-CH", {
+    return date.toLocaleDateString("de-CH", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
+    });
+  };
+
+  const formatTime = (unixSecs: number) => {
+    const date = new Date(unixSecs * 1000);
+    return date.toLocaleTimeString("de-CH", {
       hour: "2-digit",
       minute: "2-digit",
-      second: "2-digit",
     });
   };
 
@@ -243,14 +251,19 @@ export default function CallDetailPage({
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-sm font-medium">
-              {formatDate(conversation.start_time_unix_secs)}
+            <div className="text-2xl font-bold">
+              {formatTime(conversation.start_time_unix_secs)}
             </div>
+            <p className="text-xs text-muted-foreground">
+              {formatDate(conversation.start_time_unix_secs)}
+            </p>
           </CardContent>
         </Card>
       </div>
 
-      {conversation.analysis?.transcript_summary && (
+      {/* Zusammenfassung - verwende summary aus data_collection_results (Deutsch) statt transcript_summary (Englisch) */}
+      {(conversation.analysis?.data_collection_results?.summary || 
+        conversation.analysis?.transcript_summary) && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -260,7 +273,8 @@ export default function CallDetailPage({
           </CardHeader>
           <CardContent>
             <p className="text-sm leading-relaxed">
-              {conversation.analysis.transcript_summary}
+              {String(conversation.analysis?.data_collection_results?.summary || 
+                conversation.analysis?.transcript_summary)}
             </p>
           </CardContent>
         </Card>
@@ -333,20 +347,22 @@ export default function CallDetailPage({
         )}
 
       {conversation.analysis?.data_collection_results &&
-        Object.keys(conversation.analysis.data_collection_results).length >
+        Object.keys(conversation.analysis.data_collection_results).filter(k => k !== 'summary').length >
           0 && (
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <FileText className="h-5 w-5" />
-                Gesammelte Daten (ElevenLabs)
+                Gesammelte Daten
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2">
                 {Object.entries(
                   conversation.analysis.data_collection_results
-                ).map(([key, value]) => (
+                )
+                  .filter(([key]) => key !== 'summary')
+                  .map(([key, value]) => (
                   <div key={key} className="space-y-1">
                     <p className="text-sm font-medium text-muted-foreground">
                       {key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
