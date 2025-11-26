@@ -50,6 +50,14 @@ lib/
 3. **Call History**: View transcripts and call details from webhook data
 4. **Subscription Tiers**: Starter (500 min), Pro (1500 min), Enterprise (unlimited)
 5. **Usage Tracking**: Minutes used per billing cycle with alerts at 80%
+6. **Zero PII-Retention**: No patient data stored - GDPR/DSG compliant
+7. **Swiss German Support**: AI understands all Swiss dialects
+
+## Unique Selling Points (USPs)
+- **Zero PII-Retention Mode**: Patient data is never stored on servers - real-time processing only
+- **Swiss German Understanding**: First AI assistant that understands Züritüütsch, Bärndütsch and all Swiss dialects
+- **DSG/DSGVO Compliant**: Built for Swiss healthcare data protection requirements
+- **Privacy-First Templates**: Pre-built compliant agent greetings for medical practices
 
 ## Environment Variables Required
 - `DATABASE_URL` - PostgreSQL connection string
@@ -68,10 +76,13 @@ npm run db:studio    # Open Drizzle Studio
 ```
 
 ## Recent Changes
+- Added Compliance USPs: Hero trust badges (Zero PII-Retention + Schweizerdeutsch), dedicated Compliance section on landing page
+- Added Dashboard Compliance Badge: Green status card showing active privacy protection
+- Added Privacy Notice Template: One-click DSG/DSGVO-compliant greeting for agent creation
+- Added Conversation Management: List and detail view for all ElevenLabs conversations including tests
 - Added Dashboard Statistics: Shows personalized stats (total calls, calls today, minutes used, success rate) for each user's agents
 - Fixed ElevenLabs Widget: Configured CSP headers and using @elevenlabs/convai-widget-embed package for agent testing
 - Fixed ElevenLabs integration: renamed `verifyWebhookSignature` to `verifyElevenLabsSignature`
-- Implemented `extractCallData` function for parsing conversation transcripts
 - Configured Next.js for Replit environment (port 5000, allowed origins)
 - Set up PostgreSQL database with Drizzle ORM
 
