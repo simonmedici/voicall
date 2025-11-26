@@ -62,16 +62,31 @@ export async function POST(request: NextRequest) {
       .where(eq(agentConfig.elevenLabsAgentId, agentId))
       .limit(1);
 
-    if (existingConfig.length > 0) {
-      return NextResponse.json(
-        { error: "Dieser Agent ist bereits einem Benutzer zugewiesen" },
-        { status: 400 }
-      );
-    }
-
     const conversationConfig = agentDetails.conversation_config || {};
     const agentConf = conversationConfig.agent || {};
     const ttsConf = conversationConfig.tts || {};
+
+    if (existingConfig.length > 0) {
+      if (existingConfig[0].userId === userId) {
+        return NextResponse.json(
+          { error: "Dieser Agent ist bereits diesem Benutzer zugewiesen" },
+          { status: 400 }
+        );
+      }
+      
+      await db
+        .update(agentConfig)
+        .set({
+          userId: userId,
+          updatedAt: new Date(),
+        })
+        .where(eq(agentConfig.elevenLabsAgentId, agentId));
+
+      return NextResponse.json({
+        success: true,
+        message: `Agent "${agentDetails.name}" wurde zu ${targetUser[0].email} verschoben`,
+      });
+    }
 
     await db.insert(agentConfig).values({
       id: randomUUID(),

@@ -112,13 +112,15 @@ export default function AdminPage() {
     }
   };
 
-  const assignedAgentIds = new Set(
-    users.flatMap((u) => u.agents?.map((a) => a.elevenLabsAgentId) || [])
-  );
-
-  const availableAgents = elevenLabsAgents.filter(
-    (agent) => !assignedAgentIds.has(agent.agent_id)
-  );
+  const getAgentAssignment = (agentId: string) => {
+    for (const u of users) {
+      const agent = u.agents?.find((a) => a.elevenLabsAgentId === agentId);
+      if (agent) {
+        return { user: u, agent };
+      }
+    }
+    return null;
+  };
 
   const handleAssignAgent = async () => {
     if (!selectedUserId || !selectedAgentId) {
@@ -334,24 +336,27 @@ export default function AdminPage() {
                   <SelectValue placeholder="Agent wählen..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {availableAgents.length === 0 ? (
+                  {elevenLabsAgents.length === 0 ? (
                     <SelectItem value="none" disabled>
-                      Keine verfügbaren Agenten
+                      Keine Agenten gefunden
                     </SelectItem>
                   ) : (
-                    availableAgents.map((agent) => (
-                      <SelectItem key={agent.agent_id} value={agent.agent_id}>
-                        {agent.name}
-                      </SelectItem>
-                    ))
+                    elevenLabsAgents.map((agent) => {
+                      const assignment = getAgentAssignment(agent.agent_id);
+                      return (
+                        <SelectItem key={agent.agent_id} value={agent.agent_id}>
+                          {agent.name}
+                          {assignment && (
+                            <span className="text-muted-foreground ml-2">
+                              → {assignment.user.email}
+                            </span>
+                          )}
+                        </SelectItem>
+                      );
+                    })
                   )}
                 </SelectContent>
               </Select>
-              {availableAgents.length === 0 && elevenLabsAgents.length > 0 && (
-                <p className="text-xs text-muted-foreground">
-                  Alle Agenten sind bereits zugewiesen
-                </p>
-              )}
             </div>
 
             <div className="flex items-end">
