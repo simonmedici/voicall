@@ -71,12 +71,24 @@ export async function GET(
     const transcript = conversation.transcript || [];
     const extractedData = extractCallData(transcript);
 
-    return NextResponse.json({
-      ...conversation,
+    const metadata = conversation.metadata as Record<string, unknown> | undefined;
+    const startTime = metadata?.start_time_unix_secs as number | undefined;
+    const callDuration = metadata?.call_duration_secs as number | undefined;
+
+    const response = {
+      conversation_id: conversation.conversation_id,
+      agent_id: conversation.agent_id,
+      status: conversation.status,
+      start_time_unix_secs: startTime,
+      call_duration_secs: callDuration,
       transcript,
+      metadata: conversation.metadata,
+      analysis: conversation.analysis,
       agentName,
       extractedData,
-    });
+    };
+
+    return NextResponse.json(response);
   } catch (error) {
     console.error("Error fetching conversation:", error);
     const message =

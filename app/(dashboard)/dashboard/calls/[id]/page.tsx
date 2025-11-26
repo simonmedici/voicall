@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   ArrowLeft,
-  Phone,
   Clock,
   Calendar,
   MessageSquare,
@@ -23,6 +22,13 @@ interface TranscriptMessage {
   role: "user" | "agent";
   message: string;
   time_in_call_secs?: number;
+}
+
+interface DataCollectionItem {
+  data_collection_id?: string;
+  value?: string | null;
+  json_schema?: Record<string, unknown>;
+  description?: string;
 }
 
 interface ExtractedData {
@@ -40,14 +46,14 @@ interface ConversationDetail {
   agent_id: string;
   agentName: string;
   status: string;
-  start_time_unix_secs: number;
-  call_duration_secs: number;
+  start_time_unix_secs?: number;
+  call_duration_secs?: number;
   transcript: TranscriptMessage[];
   metadata?: Record<string, unknown>;
   analysis?: {
     call_successful?: string;
     transcript_summary?: string;
-    data_collection_results?: Record<string, unknown>;
+    data_collection_results?: Record<string, DataCollectionItem | string | unknown>;
     evaluation_criteria_results?: Record<string, unknown>;
   };
   extractedData?: ExtractedData;
@@ -75,6 +81,8 @@ export default function CallDetailPage({
         const response = await fetch(`/api/conversations/${id}`);
         const data = await response.json();
 
+        console.log("Conversation data:", JSON.stringify(data, null, 2));
+
         if (!response.ok) {
           throw new Error(data.error || "Failed to fetch conversation");
         }
@@ -93,7 +101,8 @@ export default function CallDetailPage({
   }, [id]);
 
   const formatDuration = (seconds: number | null | undefined) => {
-    if (seconds === null || seconds === undefined || seconds === 0) return "-";
+    if (seconds === null || seconds === undefined) return "-";
+    if (seconds === 0) return "0s";
     const mins = Math.floor(seconds / 60);
     const secs = Math.round(seconds % 60);
     if (mins > 0) {
@@ -102,21 +111,33 @@ export default function CallDetailPage({
     return `${secs}s`;
   };
 
-  const formatDate = (unixSecs: number) => {
-    const date = new Date(unixSecs * 1000);
-    return date.toLocaleDateString("de-CH", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
+  const formatDate = (unixSecs: number | undefined) => {
+    if (!unixSecs || unixSecs === 0) return "-";
+    try {
+      const date = new Date(unixSecs * 1000);
+      if (isNaN(date.getTime())) return "-";
+      return date.toLocaleDateString("de-CH", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+    } catch {
+      return "-";
+    }
   };
 
-  const formatTime = (unixSecs: number) => {
-    const date = new Date(unixSecs * 1000);
-    return date.toLocaleTimeString("de-CH", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  const formatTime = (unixSecs: number | undefined) => {
+    if (!unixSecs || unixSecs === 0) return "-";
+    try {
+      const date = new Date(unixSecs * 1000);
+      if (isNaN(date.getTime())) return "-";
+      return date.toLocaleTimeString("de-CH", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch {
+      return "-";
+    }
   };
 
   const getStatusBadge = (
@@ -145,6 +166,29 @@ export default function CallDetailPage({
       );
     }
     return <Badge variant="secondary">{status}</Badge>;
+  };
+
+  const extractGermanSummary = (dataCollectionResults: Record<string, DataCollectionItem | string | unknown> | undefined): string | null => {
+    if (!dataCollectionResults) return null;
+    
+    const summaryKeys = ['Zusammenfassung', 'zusammenfassung', 'summary', 'Summary'];
+    
+    for (const key of summaryKeys) {
+      const item = dataCollectionResults[key];
+      if (item) {
+        if (typeof item === 'string') {
+          return item;
+        }
+        if (typeof item === 'object' && item !== null && 'value' in item) {
+          const typedItem = item as DataCollectionItem;
+          if (typedItem.value && typeof typedItem.value === 'string') {
+            return typedItem.value;
+          }
+        }
+      }
+    }
+    
+    return null;
   };
 
   if (loading) {
@@ -186,6 +230,8 @@ export default function CallDetailPage({
   }
 
   const messageCount = conversation.transcript?.length || 0;
+  const germanSummary = extractGermanSummary(conversation.analysis?.data_collection_results);
+  const displaySummary = germanSummary || conversation.analysis?.transcript_summary;
 
   return (
     <div className="space-y-6">
@@ -261,9 +307,7 @@ export default function CallDetailPage({
         </Card>
       </div>
 
-      {/* Zusammenfassung - verwende summary aus data_collection_results (Deutsch) statt transcript_summary (Englisch) */}
-      {(conversation.analysis?.data_collection_results?.summary || 
-        conversation.analysis?.transcript_summary) && (
+      {displaySummary && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -273,8 +317,7 @@ export default function CallDetailPage({
           </CardHeader>
           <CardContent>
             <p className="text-sm leading-relaxed">
-              {String(conversation.analysis?.data_collection_results?.summary || 
-                conversation.analysis?.transcript_summary)}
+              {displaySummary}
             </p>
           </CardContent>
         </Card>
@@ -346,39 +389,6 @@ export default function CallDetailPage({
           </Card>
         )}
 
-      {conversation.analysis?.data_collection_results &&
-        Object.keys(conversation.analysis.data_collection_results).filter(k => k !== 'summary').length >
-          0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5" />
-                Gesammelte Daten
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4 md:grid-cols-2">
-                {Object.entries(
-                  conversation.analysis.data_collection_results
-                )
-                  .filter(([key]) => key !== 'summary')
-                  .map(([key, value]) => (
-                  <div key={key} className="space-y-1">
-                    <p className="text-sm font-medium text-muted-foreground">
-                      {key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
-                    </p>
-                    <p className="text-sm">
-                      {typeof value === "object"
-                        ? JSON.stringify(value)
-                        : String(value)}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -407,7 +417,7 @@ export default function CallDetailPage({
                   >
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-xs font-semibold">
-                        {message.role === "agent" ? "🤖 Agent" : "👤 Nutzer"}
+                        {message.role === "agent" ? "Agent" : "Nutzer"}
                       </span>
                       {message.time_in_call_secs !== undefined && (
                         <span className="text-xs opacity-70">
