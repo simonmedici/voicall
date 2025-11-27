@@ -36,11 +36,13 @@ export function DashboardNav() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // Check if user is admin
     const checkAdmin = async () => {
       try {
-        const response = await fetch("/api/admin/users");
-        setIsAdmin(response.ok);
+        const response = await fetch("/api/admin/check");
+        if (response.ok) {
+          const data = await response.json();
+          setIsAdmin(data.isAdmin === true);
+        }
       } catch {
         setIsAdmin(false);
       }
