@@ -1,20 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { stripe } from "@/lib/stripe";
+import { getStripeClient } from "@/lib/stripe";
 import { db } from "@/lib/db/index";
 import { subscription } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
   try {
-    if (!stripe) {
-      return NextResponse.json(
-        { error: "Stripe ist nicht konfiguriert" },
-        { status: 503 }
-      );
-    }
+    const stripe = await getStripeClient();
 
-    // Get session from Better Auth
     const session = await auth.api.getSession({
       headers: req.headers,
     });
@@ -26,7 +20,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Get user's subscription
     const [userSub] = await db
       .select()
       .from(subscription)
@@ -40,7 +33,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create Stripe Customer Portal Session
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: userSub.stripeCustomerId,
       return_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/subscription`,

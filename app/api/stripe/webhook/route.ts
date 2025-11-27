@@ -1,20 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { stripe, getPlanByPriceId } from "@/lib/stripe";
+import { getStripeClient, getPlanByPriceId } from "@/lib/stripe";
 import { db } from "@/lib/db/index";
 import { subscription, user } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { sendEmail, createSubscriptionConfirmationEmail } from "@/lib/sendgrid";
 
 export async function POST(req: NextRequest) {
-  if (!stripe) {
-    return NextResponse.json(
-      { error: "Stripe is not configured" },
-      { status: 503 }
-    );
-  }
-
   const body = await req.text();
   const signature = req.headers.get("stripe-signature");
 
@@ -25,14 +18,20 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    console.error("STRIPE_WEBHOOK_SECRET is not set");
+    return NextResponse.json(
+      { error: "Webhook not configured" },
+      { status: 503 }
+    );
+  }
+
   let event: Stripe.Event;
+  const stripe = await getStripeClient();
 
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
-    );
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
     console.error("Webhook signature verification failed:", err);
     return NextResponse.json(
@@ -62,31 +61,59 @@ export async function POST(req: NextRequest) {
         );
         const minutesIncluded = planInfo?.plan.minutesIncluded ?? 500;
 
-        // Create subscription record
-        await db.insert(subscription).values({
-          id: crypto.randomUUID(),
-          userId,
-          stripeCustomerId: session.customer as string,
-          stripeSubscriptionId: stripeSubscription.id,
-          stripePriceId: stripeSubscription.items.data[0].price.id,
-          currentPeriodStart: new Date(
-            (stripeSubscription as any).current_period_start * 1000
-          ),
-          currentPeriodEnd: new Date(
-            (stripeSubscription as any).current_period_end * 1000
-          ),
-          tier,
-          status: stripeSubscription.status,
-          minutesIncluded,
-          minutesUsed: 0,
-          minutesReset: new Date(
-            (stripeSubscription as any).current_period_end * 1000
-          ),
-        });
+        const existingSub = await db
+          .select()
+          .from(subscription)
+          .where(eq(subscription.userId, userId))
+          .limit(1);
 
-        console.log("Subscription created for user:", userId);
+        if (existingSub.length > 0) {
+          await db
+            .update(subscription)
+            .set({
+              stripeCustomerId: session.customer as string,
+              stripeSubscriptionId: stripeSubscription.id,
+              stripePriceId: stripeSubscription.items.data[0].price.id,
+              currentPeriodStart: new Date(
+                (stripeSubscription as any).current_period_start * 1000
+              ),
+              currentPeriodEnd: new Date(
+                (stripeSubscription as any).current_period_end * 1000
+              ),
+              tier,
+              status: stripeSubscription.status,
+              minutesIncluded,
+              minutesUsed: 0,
+              minutesReset: new Date(
+                (stripeSubscription as any).current_period_end * 1000
+              ),
+            })
+            .where(eq(subscription.userId, userId));
+          console.log("Subscription updated for user:", userId);
+        } else {
+          await db.insert(subscription).values({
+            id: crypto.randomUUID(),
+            userId,
+            stripeCustomerId: session.customer as string,
+            stripeSubscriptionId: stripeSubscription.id,
+            stripePriceId: stripeSubscription.items.data[0].price.id,
+            currentPeriodStart: new Date(
+              (stripeSubscription as any).current_period_start * 1000
+            ),
+            currentPeriodEnd: new Date(
+              (stripeSubscription as any).current_period_end * 1000
+            ),
+            tier,
+            status: stripeSubscription.status,
+            minutesIncluded,
+            minutesUsed: 0,
+            minutesReset: new Date(
+              (stripeSubscription as any).current_period_end * 1000
+            ),
+          });
+          console.log("Subscription created for user:", userId);
+        }
 
-        // Send confirmation email
         const [userRecord] = await db
           .select()
           .from(user)
@@ -126,7 +153,6 @@ export async function POST(req: NextRequest) {
         const tier = planInfo?.tier ?? "starter";
         const minutesIncluded = planInfo?.plan.minutesIncluded ?? 500;
 
-        // Update subscription
         await db
           .update(subscription)
           .set({
@@ -154,7 +180,6 @@ export async function POST(req: NextRequest) {
       case "customer.subscription.deleted": {
         const stripeSubscription = event.data.object as Stripe.Subscription;
 
-        // Mark subscription as canceled
         await db
           .update(subscription)
           .set({
@@ -175,7 +200,6 @@ export async function POST(req: NextRequest) {
             (invoice as any).subscription as string
           )) as Stripe.Subscription;
 
-          // Reset minutes usage on successful payment (new billing period)
           await db
             .update(subscription)
             .set({
@@ -198,7 +222,6 @@ export async function POST(req: NextRequest) {
         const invoice = event.data.object as Stripe.Invoice;
 
         if ((invoice as any).subscription) {
-          // Mark subscription as past_due
           await db
             .update(subscription)
             .set({

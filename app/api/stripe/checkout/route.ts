@@ -1,20 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { stripe, PLANS, type PlanTier } from "@/lib/stripe";
+import { getStripeClient, PLANS, type PlanTier } from "@/lib/stripe";
 import { db } from "@/lib/db/index";
 import { user } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
   try {
-    if (!stripe) {
-      return NextResponse.json(
-        { error: "Stripe ist nicht konfiguriert" },
-        { status: 503 }
-      );
-    }
+    const stripe = await getStripeClient();
 
-    // Get session from Better Auth
     const session = await auth.api.getSession({
       headers: req.headers,
     });
@@ -34,7 +28,6 @@ export async function POST(req: NextRequest) {
 
     const plan = PLANS[tier as PlanTier];
 
-    // Get user data
     const [userData] = await db
       .select()
       .from(user)
@@ -48,7 +41,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create Stripe Checkout Session
     const checkoutSession = await stripe.checkout.sessions.create({
       customer_email: userData.email,
       mode: "subscription",
