@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -52,6 +52,7 @@ const plans = [
 export default function SubscribePage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const handleSubscribe = async (tier: string) => {
     setLoading(tier);
@@ -71,12 +72,34 @@ export default function SubscribePage() {
       } else {
         setError(data.error || "Fehler beim Erstellen des Checkouts");
         setLoading(null);
+        setIsRedirecting(false);
       }
     } catch {
       setError("Ein Fehler ist aufgetreten");
       setLoading(null);
+      setIsRedirecting(false);
     }
   };
+
+  useEffect(() => {
+    const savedPlan = localStorage.getItem("selectedPlan");
+    if (savedPlan && ["starter", "pro", "enterprise"].includes(savedPlan)) {
+      localStorage.removeItem("selectedPlan");
+      setIsRedirecting(true);
+      handleSubscribe(savedPlan);
+    }
+  }, []);
+
+  if (isRedirecting) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-zinc-600 dark:text-zinc-400">Weiterleitung zum Checkout...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleLogout = async () => {
     await signOut();

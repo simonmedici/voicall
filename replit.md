@@ -110,6 +110,8 @@ npm run db:studio    # Open Drizzle Studio
 ```
 
 ## Recent Changes
+- **Mandatory Payment Flow**: Users must pay via Stripe checkout before accessing dashboard - no free plan exists. Flow: Pricing → Register (with plan) → Stripe Checkout → Dashboard
+- **Dashboard Access Protection**: Dashboard layout checks for active subscription, redirects to /subscribe paywall if none (admins exempt)
 - **Stripe Integration Complete**: Full Stripe integration with Replit connector for automatic API key management, checkout sessions, webhooks, and customer portal
 - **Real-time Usage from ElevenLabs**: Dashboard and Settings pages now fetch usage data directly from ElevenLabs API when database has no call records
 - **Improved Admin Panel**: Each agent displayed in a card with Name, Status Badge, Activate/Deactivate button, and Remove button on same row

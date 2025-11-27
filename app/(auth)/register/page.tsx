@@ -76,21 +76,10 @@ export default function RegisterPage() {
         console.error("Welcome email failed:", err)
       );
 
-      // Redirect to Stripe checkout after registration
-      const checkoutRes = await fetch("/api/stripe/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tier: selectedPlan }),
-      });
-
-      const checkoutData = await checkoutRes.json();
-
-      if (checkoutData.url) {
-        window.location.href = checkoutData.url;
-      } else {
-        setError("Fehler beim Erstellen des Checkouts. Bitte versuchen Sie es erneut.");
-        setLoading(false);
-      }
+      // Store selected plan and redirect to subscribe page
+      // The subscribe page will handle the authenticated checkout
+      localStorage.setItem("selectedPlan", selectedPlan);
+      router.push("/subscribe");
     } catch {
       setError("Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
       setLoading(false);
