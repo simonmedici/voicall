@@ -6,6 +6,7 @@ import { Check, Zap } from "lucide-react";
 const plans = [
   {
     name: "Starter",
+    tier: "starter",
     price: "199",
     description: "Für kleine Praxen oder Einzelpersonen",
     popular: false,
@@ -21,6 +22,7 @@ const plans = [
   },
   {
     name: "Pro",
+    tier: "pro",
     price: "349",
     description: "Für größere Praxen mit höherem Volumen",
     popular: true,
@@ -38,6 +40,7 @@ const plans = [
   },
   {
     name: "Enterprise",
+    tier: "enterprise",
     price: "499",
     description: "Für medizinische Einrichtungen jeder Größe",
     popular: false,
@@ -116,7 +119,7 @@ export function Pricing() {
                 ))}
               </ul>
 
-              <Link href="/register" className="block mt-auto">
+              <Link href={`/register?plan=${plan.tier}`} className="block mt-auto">
                 <Button
                   className={`w-full ${
                     plan.popular
@@ -143,7 +146,7 @@ export function Pricing() {
               Wir bieten flexible Lösungen für jede Praxisgröße. Sagen Sie uns,
               was Sie brauchen – wir kümmern uns um den Rest.
             </p>
-            <Link href="/register">
+            <Link href="/register?plan=enterprise">
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-blue-900 to-purple-600 hover:from-blue-950 hover:to-purple-700"

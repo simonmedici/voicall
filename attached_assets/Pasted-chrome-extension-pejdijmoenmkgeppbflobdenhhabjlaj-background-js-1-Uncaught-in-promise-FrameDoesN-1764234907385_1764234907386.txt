@@ -1,0 +1,1012 @@
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/background.js:1 Uncaught (in promise) FrameDoesNotExistError: Frame 269 does not exist in tab 239170855
+    at DelayedMessageSender.<anonymous> (chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/background.js:1:49079)Understand this error
+background.js:1 Uncaught (in promise) FrameDoesNotExistError: Frame 269 does not exist in tab 239170855
+    at DelayedMessageSender.<anonymous> (background.js:1:49079)Understand this error
+83Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+completion_list.html?username=&colorScheme=&screenX=0&screenY=25&effectiveWindowWidth=1434.48&isDar…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=&colorScheme=&screenX=0&screenY=25&effectiveWindowWidth=1434.48&isDar…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=&colorScheme=&screenX=0&screenY=25&effectiveWindowWidth=1434.48&isDar…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici89@hotmail.com&colorScheme=&screenX=0&screenY=25&effectiv…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici89@hotmail.com&colorScheme=&screenX=0&screenY=25&effectiv…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici89@hotmail.com&colorScheme=&screenX=0&screenY=25&effectiv…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici89@hotmail.com&colorScheme=&screenX=0&screenY=25&effectiv…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici89@hotmail.com&colorScheme=&screenX=0&screenY=25&effectiv…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici89@hotmail.com&colorScheme=&screenX=0&screenY=25&effectiv…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+52d9fca65e31bae7.js:1  POST https://voicall-simonmedici.replit.app/api/auth/sign-up/email 422 (Unprocessable Content)
+Z @ 52d9fca65e31bae7.js:1
+await in Z
+y @ 52d9fca65e31bae7.js:1
+apply @ 52d9fca65e31bae7.js:1
+C @ VM422 e83c80a87034f817.js:1
+sX @ fe241863a4e7dade.js:1
+(anonymous) @ fe241863a4e7dade.js:1
+tI @ fe241863a4e7dade.js:1
+s3 @ fe241863a4e7dade.js:1
+fC @ fe241863a4e7dade.js:1
+fN @ fe241863a4e7dade.js:1Understand this error
+completion_list.html?username=simon.medici89@hotmail.com&colorScheme=&screenX=0&screenY=25&effectiv…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici89@hotmail.com&colorScheme=&screenX=0&screenY=25&effectiv…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici89@hotmail.com&colorScheme=&screenX=0&screenY=25&effectiv…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici8@hotmail.com&colorScheme=&screenX=0&screenY=25&effective…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici8@hotmail.com&colorScheme=&screenX=0&screenY=25&effective…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici8@hotmail.com&colorScheme=&screenX=0&screenY=25&effective…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hotmail.com&colorScheme=&screenX=0&screenY=25&effectiveW…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hotmail.com&colorScheme=&screenX=0&screenY=25&effectiveW…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hotmail.com&colorScheme=&screenX=0&screenY=25&effectiveW…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hotmai.com&colorScheme=&screenX=0&screenY=25&effectiveWi…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hotmai.com&colorScheme=&screenX=0&screenY=25&effectiveWi…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hotmai.com&colorScheme=&screenX=0&screenY=25&effectiveWi…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hotma.com&colorScheme=&screenX=0&screenY=25&effectiveWin…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hotma.com&colorScheme=&screenX=0&screenY=25&effectiveWin…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hotma.com&colorScheme=&screenX=0&screenY=25&effectiveWin…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hotm.com&colorScheme=&screenX=0&screenY=25&effectiveWind…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hotm.com&colorScheme=&screenX=0&screenY=25&effectiveWind…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hotm.com&colorScheme=&screenX=0&screenY=25&effectiveWind…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hot.com&colorScheme=&screenX=0&screenY=25&effectiveWindo…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hot.com&colorScheme=&screenX=0&screenY=25&effectiveWindo…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@hot.com&colorScheme=&screenX=0&screenY=25&effectiveWindo…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@ho.com&colorScheme=&screenX=0&screenY=25&effectiveWindow…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@ho.com&colorScheme=&screenX=0&screenY=25&effectiveWindow…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@ho.com&colorScheme=&screenX=0&screenY=25&effectiveWindow…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@h.com&colorScheme=&screenX=0&screenY=25&effectiveWindowW…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@h.com&colorScheme=&screenX=0&screenY=25&effectiveWindowW…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@h.com&colorScheme=&screenX=0&screenY=25&effectiveWindowW…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@.com&colorScheme=&screenX=0&screenY=25&effectiveWindowWi…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@.com&colorScheme=&screenX=0&screenY=25&effectiveWindowWi…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@.com&colorScheme=&screenX=0&screenY=25&effectiveWindowWi…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@i.com&colorScheme=&screenX=0&screenY=25&effectiveWindowW…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@i.com&colorScheme=&screenX=0&screenY=25&effectiveWindowW…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@i.com&colorScheme=&screenX=0&screenY=25&effectiveWindowW…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@ic.com&colorScheme=&screenX=0&screenY=25&effectiveWindow…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@ic.com&colorScheme=&screenX=0&screenY=25&effectiveWindow…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@ic.com&colorScheme=&screenX=0&screenY=25&effectiveWindow…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@icl.com&colorScheme=&screenX=0&screenY=25&effectiveWindo…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@icl.com&colorScheme=&screenX=0&screenY=25&effectiveWindo…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@icl.com&colorScheme=&screenX=0&screenY=25&effectiveWindo…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@iclo.com&colorScheme=&screenX=0&screenY=25&effectiveWind…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@iclo.com&colorScheme=&screenX=0&screenY=25&effectiveWind…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@iclo.com&colorScheme=&screenX=0&screenY=25&effectiveWind…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@iclou.com&colorScheme=&screenX=0&screenY=25&effectiveWin…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@iclou.com&colorScheme=&screenX=0&screenY=25&effectiveWin…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@iclou.com&colorScheme=&screenX=0&screenY=25&effectiveWin…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@icloud.com&colorScheme=&screenX=0&screenY=25&effectiveWi…:12  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/utils.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@icloud.com&colorScheme=&screenX=0&screenY=25&effectiveWi…:13  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/extensionState.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+completion_list.html?username=simon.medici@icloud.com&colorScheme=&screenX=0&screenY=25&effectiveWi…:14  GET chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/heuristicsRedefinitions.js net::ERR_FILE_NOT_FOUNDUnderstand this error
+VM422 e83c80a87034f817.js:1  POST https://voicall-simonmedici.replit.app/api/welcome-email 500 (Internal Server Error)
+C @ VM422 e83c80a87034f817.js:1
+await in C
+sX @ fe241863a4e7dade.js:1
+(anonymous) @ fe241863a4e7dade.js:1
+tI @ fe241863a4e7dade.js:1
+s3 @ fe241863a4e7dade.js:1
+fC @ fe241863a4e7dade.js:1
+fN @ fe241863a4e7dade.js:1Understand this error
+content_script.js:1 Uncaught TypeError: Cannot read properties of null (reading 'deref')
+    at MutationObserver.<anonymous> (content_script.js:1:424136)
+(anonymous) @ content_script.js:1
+childList
+tk @ fe241863a4e7dade.js:1
+cn @ fe241863a4e7dade.js:1
+(anonymous) @ fe241863a4e7dade.js:1
+iS @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+sy @ fe241863a4e7dade.js:1
+sh @ fe241863a4e7dade.js:1
+u7 @ fe241863a4e7dade.js:1
+u9 @ fe241863a4e7dade.js:1
+s$ @ fe241863a4e7dade.js:1
+sA @ fe241863a4e7dade.js:1
+sU @ fe241863a4e7dade.js:1
+(anonymous) @ fe241863a4e7dade.js:1Understand this error
+content_script.js:1 Uncaught TypeError: Cannot read properties of null (reading 'deref')
+    at MutationObserver.<anonymous> (content_script.js:1:424136)
+(anonymous) @ content_script.js:1
+childList
+i6 @ fe241863a4e7dade.js:1
+i8 @ fe241863a4e7dade.js:1
+i6 @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+ut @ fe241863a4e7dade.js:1
+ur @ fe241863a4e7dade.js:1
+sy @ fe241863a4e7dade.js:1
+sh @ fe241863a4e7dade.js:1
+u7 @ fe241863a4e7dade.js:1
+setTimeout
+u9 @ fe241863a4e7dade.js:1
+sV @ fe241863a4e7dade.js:1
+z @ fe241863a4e7dade.js:1Understand this error
+VM579 8d25f1476d4d346d.js:1  GET https://voicall-simonmedici.replit.app/api/admin/users 403 (Forbidden)
+(anonymous) @ VM579 8d25f1476d4d346d.js:1
+(anonymous) @ VM579 8d25f1476d4d346d.js:1
+ih @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+uc @ fe241863a4e7dade.js:1
+uf @ fe241863a4e7dade.js:1
+sE @ fe241863a4e7dade.js:1
+sS @ fe241863a4e7dade.js:1
+s$ @ fe241863a4e7dade.js:1
+sA @ fe241863a4e7dade.js:1
+sw @ fe241863a4e7dade.js:1
+sh @ fe241863a4e7dade.js:1
+u7 @ fe241863a4e7dade.js:1
+u9 @ fe241863a4e7dade.js:1
+sV @ fe241863a4e7dade.js:1
+z @ fe241863a4e7dade.js:1Understand this error
+2content_script.js:1 Uncaught TypeError: Cannot read properties of null (reading 'deref')
+    at MutationObserver.<anonymous> (content_script.js:1:424136)
