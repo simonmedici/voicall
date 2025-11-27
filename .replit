@@ -35,10 +35,6 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 33531
-externalPort = 3001
-
-[[ports]]
 localPort = 37349
 externalPort = 3000
 
@@ -51,3 +47,6 @@ build = ["npm", "run", "build"]
 
 [userenv.shared]
 NEXT_PUBLIC_APP_URL = "https://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev"
+STRIPE_PRICE_STARTER = "price_1SY0mVGjv5I67dbIBa0ZASiI"
+STRIPE_PRICE_PRO = "price_1SY0nWGjv5I67dbI5YQ3WA6R"
+STRIPE_PRICE_ENTERPRISE = "price_1SY0oyGjv5I67dbIZ6C4XlaW"
