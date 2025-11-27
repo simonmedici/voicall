@@ -78,7 +78,9 @@ export default function RegisterPage() {
 
       // Store selected plan and redirect to subscribe page
       // The subscribe page will handle the authenticated checkout
-      localStorage.setItem("selectedPlan", selectedPlan);
+      if (selectedPlan) {
+        localStorage.setItem("selectedPlan", selectedPlan);
+      }
       router.push("/subscribe");
     } catch {
       setError("Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
