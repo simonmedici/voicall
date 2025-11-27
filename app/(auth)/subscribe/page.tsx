@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Check, Zap, LogOut } from "lucide-react";
@@ -50,9 +50,11 @@ const plans = [
 ];
 
 export default function SubscribePage() {
+  const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState("");
-  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [showPlans, setShowPlans] = useState(false);
+  const checkoutAttempted = useRef(false);
 
   const handleSubscribe = async (tier: string) => {
     setLoading(tier);
@@ -70,27 +72,31 @@ export default function SubscribePage() {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        setError(data.error || "Fehler beim Erstellen des Checkouts");
+        setError(data.error || "Fehler beim Erstellen des Checkouts. Bitte wählen Sie einen Plan.");
         setLoading(null);
-        setIsRedirecting(false);
+        setShowPlans(true);
       }
     } catch {
-      setError("Ein Fehler ist aufgetreten");
+      setError("Ein Fehler ist aufgetreten. Bitte wählen Sie einen Plan.");
       setLoading(null);
-      setIsRedirecting(false);
+      setShowPlans(true);
     }
   };
 
   useEffect(() => {
+    if (checkoutAttempted.current) return;
+    checkoutAttempted.current = true;
+
     const savedPlan = localStorage.getItem("selectedPlan");
     if (savedPlan && ["starter", "pro", "enterprise"].includes(savedPlan)) {
       localStorage.removeItem("selectedPlan");
-      setIsRedirecting(true);
       handleSubscribe(savedPlan);
+    } else {
+      setShowPlans(true);
     }
   }, []);
 
-  if (isRedirecting) {
+  if (!showPlans) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900">
         <div className="text-center">
