@@ -1,0 +1,266 @@
+web-socket.ts:50 WebSocket connection to 'wss://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/webpack-hmr?id=yExUvA2neSJRl0mK3p35T' failed: 
+init @ web-socket.ts:50
+createWebSocket @ web-socket.ts:145
+hydrate @ app-index.tsx:305
+(anonymous) @ app-next-turbopack.ts:13
+(anonymous) @ app-bootstrap.ts:79
+loadScriptsInSequence @ app-bootstrap.ts:23
+appBootstrap @ app-bootstrap.ts:61
+module evaluation @ app-next-turbopack.ts:10
+(anonymous) @ dev-base.ts:244
+runModuleExecutionHooks @ dev-base.ts:278
+instantiateModule @ dev-base.ts:238
+getOrInstantiateRuntimeModule @ dev-base.ts:128
+registerChunk @ runtime-backend-dom.ts:57Understand this error
+web-socket.ts:50 WebSocket connection to 'wss://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/webpack-hmr?id=yExUvA2neSJRl0mK3p35T' failed: 
+init @ web-socket.ts:50Understand this error
+web-socket.ts:50 WebSocket connection to 'wss://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/webpack-hmr?id=yExUvA2neSJRl0mK3p35T' failed: 
+init @ web-socket.ts:50Understand this error
+checkout-success?session_id=cs_test_a1KmdMzuYqvHCWo77lRM8aGNP8K0ztAH9a7bdzgR7m6pLS554k86kfkP7U:1 The resource https://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/static/media/caa3a2e1cccd8315-s.p.853070df.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.Understand this warning
+checkout-success?session_id=cs_test_a1KmdMzuYqvHCWo77lRM8aGNP8K0ztAH9a7bdzgR7m6pLS554k86kfkP7U:1 The resource https://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/static/media/797e433ab948586e-s.p.dbea232f.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.Understand this warning
+web-socket.ts:50 WebSocket connection to 'wss://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/webpack-hmr?id=yExUvA2neSJRl0mK3p35T' failed: 
+init @ web-socket.ts:50Understand this error
+page.tsx:24  POST https://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/api/stripe/sync 500 (Internal Server Error)
+CheckoutSuccessContent.useEffect.syncSubscription @ page.tsx:24
+CheckoutSuccessContent.useEffect @ page.tsx:48
+react_stack_bottom_frame @ react-dom-client.development.js:28101
+runWithFiberInDEV @ react-dom-client.development.js:984
+commitHookEffectListMount @ react-dom-client.development.js:13690
+commitHookPassiveMountEffects @ react-dom-client.development.js:13777
+reconnectPassiveEffects @ react-dom-client.development.js:17122
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:17074
+commitPassiveMountOnFiber @ react-dom-client.development.js:16946
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16896
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16751
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16751
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16751
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16751
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16751
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16751
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16751
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16751
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16751
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16751
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16751
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16751
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16723
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:17008
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16676
+commitPassiveMountOnFiber @ react-dom-client.development.js:16766
+flushPassiveEffects @ react-dom-client.development.js:19857
+(anonymous) @ react-dom-client.development.js:19282
+performWorkUntilDeadline @ scheduler.development.js:45
+<CheckoutSuccessContent>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:342
+CheckoutSuccessPage @ page.tsx:117
+react_stack_bottom_frame @ react-dom-client.development.js:28016
+renderWithHooksAgain @ react-dom-client.development.js:8082
+renderWithHooks @ react-dom-client.development.js:7994
+updateFunctionComponent @ react-dom-client.development.js:10499
+beginWork @ react-dom-client.development.js:12134
+runWithFiberInDEV @ react-dom-client.development.js:984
+performUnitOfWork @ react-dom-client.development.js:18995
+workLoopConcurrentByScheduler @ react-dom-client.development.js:18989
+renderRootConcurrent @ react-dom-client.development.js:18971
+performWorkOnRoot @ react-dom-client.development.js:17832
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:20382
+performWorkUntilDeadline @ scheduler.development.js:45
+<CheckoutSuccessPage>
+exports.jsx @ react-jsx-runtime.development.js:342
+ClientPageRoot @ client-page.tsx:83
+react_stack_bottom_frame @ react-dom-client.development.js:28016
+renderWithHooksAgain @ react-dom-client.development.js:8082
+renderWithHooks @ react-dom-client.development.js:7994
+updateFunctionComponent @ react-dom-client.development.js:10499
+beginWork @ react-dom-client.development.js:12083
+runWithFiberInDEV @ react-dom-client.development.js:984
+performUnitOfWork @ react-dom-client.development.js:18995
+workLoopConcurrentByScheduler @ react-dom-client.development.js:18989
+renderRootConcurrent @ react-dom-client.development.js:18971
+performWorkOnRoot @ react-dom-client.development.js:17832
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:20382
+performWorkUntilDeadline @ scheduler.development.js:45
+"use client"
+Function.all @ VM64 <anonymous>:1
+Function.all @ VM64 <anonymous>:1
+Function.all @ VM64 <anonymous>:1
+initializeElement @ react-server-dom-turbopack-client.browser.development.js:1921
+"use server"
+ResponseInstance @ react-server-dom-turbopack-client.browser.development.js:2744
+createResponseFromOptions @ react-server-dom-turbopack-client.browser.development.js:4596
+exports.createFromReadableStream @ react-server-dom-turbopack-client.browser.development.js:5000
+module evaluation @ app-index.tsx:211
+(anonymous) @ dev-base.ts:244
+runModuleExecutionHooks @ dev-base.ts:278
+instantiateModule @ dev-base.ts:238
+getOrInstantiateModuleFromParent @ dev-base.ts:162
+commonJsRequire @ runtime-utils.ts:389
+(anonymous) @ app-next-turbopack.ts:11
+(anonymous) @ app-bootstrap.ts:79
+loadScriptsInSequence @ app-bootstrap.ts:23
+appBootstrap @ app-bootstrap.ts:61
+module evaluation @ app-next-turbopack.ts:10
+(anonymous) @ dev-base.ts:244
+runModuleExecutionHooks @ dev-base.ts:278
+instantiateModule @ dev-base.ts:238
+getOrInstantiateRuntimeModule @ dev-base.ts:128
+registerChunk @ runtime-backend-dom.ts:57
+await in registerChunk
+registerChunk @ dev-base.ts:1149
+(anonymous) @ dev-backend-dom.ts:126
+(anonymous) @ dev-backend-dom.ts:126Understand this error
+web-socket.ts:50 WebSocket connection to 'wss://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/webpack-hmr?id=yExUvA2neSJRl0mK3p35T' failed: 
+init @ web-socket.ts:50Understand this error
+web-socket.ts:50 WebSocket connection to 'wss://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/webpack-hmr?id=yExUvA2neSJRl0mK3p35T' failed: 
+init @ web-socket.ts:50Understand this error
+checkout-success?session_id=cs_test_a1KmdMzuYqvHCWo77lRM8aGNP8K0ztAH9a7bdzgR7m6pLS554k86kfkP7U:1 The resource https://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/static/media/caa3a2e1cccd8315-s.p.853070df.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.Understand this warning
+checkout-success?session_id=cs_test_a1KmdMzuYqvHCWo77lRM8aGNP8K0ztAH9a7bdzgR7m6pLS554k86kfkP7U:1 The resource https://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/static/media/797e433ab948586e-s.p.dbea232f.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.

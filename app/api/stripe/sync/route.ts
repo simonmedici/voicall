@@ -30,9 +30,7 @@ export async function POST(req: NextRequest) {
 
     const stripe = await getStripeClient();
 
-    const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ["subscription"],
-    });
+    const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (checkoutSession.payment_status !== "paid") {
       return NextResponse.json(
@@ -49,21 +47,33 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const stripeSubscription = checkoutSession.subscription;
-    if (!stripeSubscription || typeof stripeSubscription === "string") {
+    const subscriptionId = checkoutSession.subscription;
+    if (!subscriptionId || typeof subscriptionId !== "string") {
       return NextResponse.json(
-        { error: "Keine Subscription gefunden" },
+        { error: "Keine Subscription-ID gefunden" },
         { status: 400 }
       );
     }
 
+    const stripeSubscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const subData = stripeSubscription as unknown as { 
+      id: string;
+      items: { data: Array<{ price: { id: string } }> };
+      current_period_start?: number; 
+      current_period_end?: number;
+    };
+
     const tier = checkoutSession.metadata?.tier || "starter";
-    const planInfo = getPlanByPriceId(stripeSubscription.items.data[0].price.id);
+    const planInfo = getPlanByPriceId(subData.items.data[0].price.id);
     const minutesIncluded = planInfo?.plan.minutesIncluded ?? 500;
 
-    const subData = stripeSubscription as unknown as { current_period_start: number; current_period_end: number };
-    const periodStart = new Date(subData.current_period_start * 1000);
-    const periodEnd = new Date(subData.current_period_end * 1000);
+    const now = new Date();
+    const periodStart = subData.current_period_start 
+      ? new Date(subData.current_period_start * 1000)
+      : now;
+    const periodEnd = subData.current_period_end
+      ? new Date(subData.current_period_end * 1000)
+      : new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
     const existingSub = await db
       .select()
@@ -76,7 +86,7 @@ export async function POST(req: NextRequest) {
         .update(subscription)
         .set({
           stripeCustomerId: checkoutSession.customer as string,
-          stripeSubscriptionId: stripeSubscription.id,
+          stripeSubscriptionId: subData.id,
           tier,
           status: "active",
           minutesIncluded,
