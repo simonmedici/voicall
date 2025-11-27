@@ -51,8 +51,8 @@ export async function POST(req: NextRequest) {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/subscription?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/subscription?canceled=true`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout-success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/subscribe`,
       metadata: {
         userId: session.user.id,
         tier,
