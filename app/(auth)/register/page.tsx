@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { signUp } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
@@ -18,14 +18,27 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowLeft } from "lucide-react";
 
+const VALID_PLANS = ["starter", "pro", "enterprise"];
+
 export default function RegisterPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+
+  useEffect(() => {
+    const plan = searchParams.get("plan");
+    if (plan && VALID_PLANS.includes(plan)) {
+      setSelectedPlan(plan);
+    } else {
+      router.push("/#pricing");
+    }
+  }, [searchParams, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,24 +76,51 @@ export default function RegisterPage() {
         console.error("Welcome email failed:", err)
       );
 
-      // Redirect to dashboard after successful registration
-      router.push("/dashboard");
+      // Redirect to Stripe checkout after registration
+      const checkoutRes = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tier: selectedPlan }),
+      });
+
+      const checkoutData = await checkoutRes.json();
+
+      if (checkoutData.url) {
+        window.location.href = checkoutData.url;
+      } else {
+        setError("Fehler beim Erstellen des Checkouts. Bitte versuchen Sie es erneut.");
+        setLoading(false);
+      }
     } catch {
       setError("Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
       setLoading(false);
     }
   };
 
+  const planNames: Record<string, string> = {
+    starter: "Starter (CHF 199/Monat)",
+    pro: "Pro (CHF 349/Monat)",
+    enterprise: "Enterprise (CHF 499/Monat)",
+  };
+
+  if (!selectedPlan) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950 px-4">
+        <p className="text-zinc-600">Laden...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950 px-4">
       <div className="w-full max-w-md">
         {/* Zurück Button */}
         <Link
-          href="/"
+          href="/#pricing"
           className="inline-flex items-center space-x-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
-          <span>Zurück zur Startseite</span>
+          <span>Zurück zur Planauswahl</span>
         </Link>
 
         <Card className="w-full">
@@ -89,7 +129,7 @@ export default function RegisterPage() {
               Konto erstellen
             </CardTitle>
             <CardDescription>
-              Erstellen Sie Ihr Voicall-Konto und starten Sie noch heute
+              Gewählter Plan: <span className="font-semibold text-blue-600">{planNames[selectedPlan]}</span>
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
