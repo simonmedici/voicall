@@ -71,12 +71,34 @@ lib/
 - **DSG/DSGVO Compliant**: Built for Swiss healthcare data protection requirements
 - **Privacy-First Templates**: Pre-built compliant agent greetings for medical practices
 
+## Stripe Integration
+Stripe is integrated via Replit's Stripe connector which automatically manages API keys.
+
+**Configuration:**
+- API keys managed via Replit Stripe integration (no manual STRIPE_SECRET_KEY needed)
+- `STRIPE_WEBHOOK_SECRET` - Webhook signing secret for signature verification
+- `STRIPE_PRICE_STARTER` - Price ID for Starter plan (CHF 199/mo, 500 min)
+- `STRIPE_PRICE_PRO` - Price ID for Pro plan (CHF 349/mo, 1500 min)
+- `STRIPE_PRICE_ENTERPRISE` - Price ID for Enterprise plan (CHF 499/mo, unlimited)
+
+**Webhook URL:** `https://<your-domain>/api/stripe/webhook`
+**Events:** checkout.session.completed, customer.subscription.*, invoice.payment_*
+
+**Files:**
+- `lib/stripe-client.ts` - Fetches Stripe credentials from Replit connector
+- `lib/stripe.ts` - Plan configuration and helpers
+- `app/api/stripe/checkout/route.ts` - Creates checkout sessions
+- `app/api/stripe/webhook/route.ts` - Handles subscription events
+- `app/api/stripe/portal/route.ts` - Customer portal access
+
 ## Environment Variables Required
 - `DATABASE_URL` - PostgreSQL connection string
 - `ELEVENLABS_API_KEY` - ElevenLabs API key
 - `ELEVENLABS_WEBHOOK_SECRET` - Webhook verification secret
-- `STRIPE_SECRET_KEY` - Stripe secret key
-- `STRIPE_WEBHOOK_SECRET` - Stripe webhook secret
+- `STRIPE_WEBHOOK_SECRET` - Stripe webhook signing secret
+- `STRIPE_PRICE_STARTER` - Stripe Price ID for Starter plan
+- `STRIPE_PRICE_PRO` - Stripe Price ID for Pro plan
+- `STRIPE_PRICE_ENTERPRISE` - Stripe Price ID for Enterprise plan
 - `SENDGRID_API_KEY` - SendGrid API key
 - `NEXT_PUBLIC_APP_URL` - Application URL for redirects
 
@@ -88,6 +110,7 @@ npm run db:studio    # Open Drizzle Studio
 ```
 
 ## Recent Changes
+- **Stripe Integration Complete**: Full Stripe integration with Replit connector for automatic API key management, checkout sessions, webhooks, and customer portal
 - **Real-time Usage from ElevenLabs**: Dashboard and Settings pages now fetch usage data directly from ElevenLabs API when database has no call records
 - **Improved Admin Panel**: Each agent displayed in a card with Name, Status Badge, Activate/Deactivate button, and Remove button on same row
 - **Agent Unassign Feature**: Admins can now remove agents from users via trash icon button
