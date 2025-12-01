@@ -110,8 +110,9 @@ npm run db:studio    # Open Drizzle Studio
 ```
 
 ## Recent Changes
+- **Onboarding Flow with Cal.com**: After successful Stripe payment, users are redirected to `/onboarding` where they can book a personal onboarding call via Cal.com embed. Skip option available for users who already completed onboarding.
 - **Multi-Industry Landing Page**: Redesigned for E-Commerce, Physiotherapy, Dental, Medical practices, and Restaurants with rotating hero headlines, industry-specific use cases (INBOUND ONLY - no outbound calls), testimonials, and compliance sections
-- **Mandatory Payment Flow**: Users must pay via Stripe checkout before accessing dashboard - no free plan exists. Flow: Pricing → Register (with plan) → Stripe Checkout → Dashboard
+- **Mandatory Payment Flow**: Users must pay via Stripe checkout before accessing dashboard - no free plan exists. Flow: Pricing → Register (with plan) → Stripe Checkout → Onboarding → Dashboard
 - **Dashboard Access Protection**: Dashboard layout checks for active subscription, redirects to /subscribe paywall if none (admins exempt)
 - **Stripe Integration Complete**: Full Stripe integration with Replit connector for automatic API key management, checkout sessions, webhooks, and customer portal
 - **Real-time Usage from ElevenLabs**: Dashboard and Settings pages now fetch usage data directly from ElevenLabs API when database has no call records
