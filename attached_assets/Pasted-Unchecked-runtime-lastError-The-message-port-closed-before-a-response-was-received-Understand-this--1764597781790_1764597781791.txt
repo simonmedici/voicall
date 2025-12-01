@@ -1,0 +1,68 @@
+Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+background.js:1 Uncaught (in promise) FrameDoesNotExistError: Frame 1705 does not exist in tab 239170918
+    at DelayedMessageSender.<anonymous> (background.js:1:49079)Understand this error
+background.js:1 Uncaught (in promise) FrameDoesNotExistError: Frame 2166 does not exist in tab 239170974
+    at DelayedMessageSender.<anonymous> (background.js:1:49079)Understand this error
+5Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.Understand this error
+Unchecked runtime.lastError: Could not establish connection. Receiving end does not exist.Understand this error
+Unchecked runtime.lastError: Could not establish connection. Receiving end does not exist.Understand this error
+content_script.js:1 Uncaught TypeError: Cannot read properties of undefined (reading 'control')
+    at content_script.js:1:422999
+    at Array.some (<anonymous>)
+    at shouldOfferCompletionListForField (content_script.js:1:422984)
+    at elementWasFocused (content_script.js:1:423712)
+    at HTMLDocument.focusInEventHandler (content_script.js:1:423069)Understand this error
+3content_script.js:1 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'control')
+    at content_script.js:1:422999
+    at Array.some (<anonymous>)
+    at shouldOfferCompletionListForField (content_script.js:1:422984)
+    at processInputEvent (content_script.js:1:426332)Understand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+extensionState.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+utils.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+heuristicsRedefinitions.js:1  Failed to load resource: net::ERR_FILE_NOT_FOUNDUnderstand this error
+api/welcome-email:1  Failed to load resource: the server responded with a status of 500 ()Understand this error
+api/stripe/checkout:1  Failed to load resource: the server responded with a status of 503 ()Understand this error
+content_script.js:1 Uncaught TypeError: Cannot read properties of null (reading 'deref')
+    at MutationObserver.<anonymous> (content_script.js:1:424136)
