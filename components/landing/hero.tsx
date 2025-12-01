@@ -1,11 +1,57 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Phone, ArrowRight, Star, ShieldCheck, Languages } from "lucide-react";
+import { Phone, ArrowRight, Star, ShieldCheck, Languages, Stethoscope, UtensilsCrossed, ShoppingBag } from "lucide-react";
+
+const industries = [
+  {
+    name: "Arztpraxen",
+    headline: "immer ans Telefon geht",
+    icon: Stethoscope,
+  },
+  {
+    name: "Restaurants",
+    headline: "nie eine Reservierung verpasst",
+    icon: UtensilsCrossed,
+  },
+  {
+    name: "E-Commerce",
+    headline: "rund um die Uhr Support bietet",
+    icon: ShoppingBag,
+  },
+  {
+    name: "Physiotherapien",
+    headline: "jeden Terminwunsch erfüllt",
+    icon: Stethoscope,
+  },
+  {
+    name: "Zahnarztpraxen",
+    headline: "auch Notfälle sofort betreut",
+    icon: Stethoscope,
+  },
+];
 
 export function Hero() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % industries.length);
+        setIsAnimating(false);
+      }, 300);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentIndustry = industries[currentIndex];
+
   return (
     <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
       <div className="max-w-7xl mx-auto">
@@ -13,33 +59,64 @@ export function Hero() {
           {/* Badge */}
           <div className="inline-flex items-center space-x-2 bg-blue-950/10 text-blue-900 px-4 py-2 rounded-full text-sm font-medium mb-8">
             <Phone className="h-4 w-4" />
-            <span>KI-Telefonassistent für Schweizer Arztpraxen</span>
+            <span>KI-Telefonassistent für Schweizer Unternehmen</span>
           </div>
 
-          {/* Headline */}
+          {/* Headline with Animation */}
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-            Die einzige Praxis, die{" "}
-            <span className="bg-gradient-to-r from-blue-900 to-purple-600 bg-clip-text text-transparent">
-              immer ans Telefon geht
+            Das einzige Unternehmen, das{" "}
+            <span
+              className={`bg-gradient-to-r from-blue-900 to-purple-600 bg-clip-text text-transparent inline-block transition-all duration-300 ${
+                isAnimating ? "opacity-0 transform -translate-y-2" : "opacity-100 transform translate-y-0"
+              }`}
+            >
+              {currentIndustry.headline}
             </span>
           </h1>
 
           {/* Subheadline */}
-          <p className="text-xl sm:text-2xl text-gray-600 mb-10 leading-relaxed">
-            Unser KI-Telefonassistent nimmt Anrufe 24/7 entgegen, vereinbart
-            Termine automatisch und versteht Schweizerdeutsch perfekt.
+          <p className="text-xl sm:text-2xl text-gray-600 mb-8 leading-relaxed">
+            Unser KI-Telefonassistent nimmt Anrufe 24/7 entgegen, beantwortet Fragen
+            und versteht Schweizerdeutsch perfekt.
           </p>
+
+          {/* Industry Selector */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
+            {industries.map((industry, index) => {
+              const Icon = industry.icon;
+              return (
+                <button
+                  key={industry.name}
+                  onClick={() => {
+                    setIsAnimating(true);
+                    setTimeout(() => {
+                      setCurrentIndex(index);
+                      setIsAnimating(false);
+                    }, 300);
+                  }}
+                  className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    currentIndex === index
+                      ? "bg-blue-900 text-white shadow-lg"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span>{industry.name}</span>
+                </button>
+              );
+            })}
+          </div>
 
           {/* Trust Badges - USPs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
             <div className="inline-flex items-center space-x-2 bg-green-50 border border-green-200 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
               <ShieldCheck className="h-5 w-5 text-green-600" />
-              <span>Zero PII-Retention - Keine Datenspeicherung</span>
+              <span>DSGVO/DSG-konform</span>
             </div>
             <div className="inline-flex items-center space-x-2 bg-red-50 border border-red-200 text-red-800 px-4 py-2 rounded-full text-sm font-medium">
               <span className="text-lg">🇨🇭</span>
               <Languages className="h-5 w-5 text-red-600" />
-              <span>Versteht Schweizerdeutsch perfekt</span>
+              <span>Versteht Schweizerdeutsch</span>
             </div>
           </div>
 
@@ -50,16 +127,16 @@ export function Hero() {
                 size="lg"
                 className="bg-gradient-to-r from-blue-900 to-purple-600 hover:from-blue-950 hover:to-purple-700 text-lg px-8 py-6"
               >
-                Jetzt kostenlos testen
+                Jetzt starten
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
             <a
-              href="#features"
+              href="#industries"
               onClick={(e) => {
                 e.preventDefault();
                 document
-                  .getElementById("features")
+                  .getElementById("industries")
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
             >
@@ -68,7 +145,7 @@ export function Hero() {
                 variant="outline"
                 className="text-lg px-8 py-6 border-2"
               >
-                Mehr erfahren
+                Für meine Branche
               </Button>
             </a>
           </div>
@@ -85,7 +162,7 @@ export function Hero() {
             </div>
             <p className="text-gray-600">
               <span className="font-semibold text-gray-900">500+</span>{" "}
-              Schweizer Arztpraxen vertrauen Voicall
+              Schweizer Unternehmen vertrauen Voicall
             </p>
           </div>
         </div>
@@ -95,7 +172,7 @@ export function Hero() {
           <div className="relative rounded-2xl border-8 border-gray-200 shadow-2xl overflow-hidden">
             <Image
               src="/images/dashboard-demo.png"
-              alt="Voicall Dashboard - KI-Telefonassistent für Arztpraxen"
+              alt="Voicall Dashboard - KI-Telefonassistent"
               width={1920}
               height={1080}
               className="w-full h-auto"
