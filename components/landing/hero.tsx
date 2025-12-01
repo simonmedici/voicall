@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -36,21 +36,49 @@ const industries = [
 
 export function Hero() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % industries.length);
-        setIsAnimating(false);
-      }, 300);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
+  const [displayedText, setDisplayedText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const currentIndustry = industries[currentIndex];
+  const fullText = currentIndustry.headline;
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    if (isTyping && !isDeleting) {
+      if (displayedText.length < fullText.length) {
+        timeout = setTimeout(() => {
+          setDisplayedText(fullText.slice(0, displayedText.length + 1));
+        }, 50);
+      } else {
+        timeout = setTimeout(() => {
+          setIsDeleting(true);
+          setIsTyping(false);
+        }, 2500);
+      }
+    } else if (isDeleting) {
+      if (displayedText.length > 0) {
+        timeout = setTimeout(() => {
+          setDisplayedText(displayedText.slice(0, -1));
+        }, 30);
+      } else {
+        setIsDeleting(false);
+        setCurrentIndex((prev) => (prev + 1) % industries.length);
+        setIsTyping(true);
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayedText, isTyping, isDeleting, fullText]);
+
+  const handleIndustryClick = useCallback((index: number) => {
+    if (index === currentIndex) return;
+    setDisplayedText("");
+    setCurrentIndex(index);
+    setIsTyping(true);
+    setIsDeleting(false);
+  }, [currentIndex]);
 
   return (
     <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
@@ -62,15 +90,12 @@ export function Hero() {
             <span>KI-Telefonassistent für Schweizer Unternehmen</span>
           </div>
 
-          {/* Headline with Animation */}
+          {/* Headline with Typewriter Effect */}
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
             Das einzige Unternehmen, das{" "}
-            <span
-              className={`bg-gradient-to-r from-blue-900 to-purple-600 bg-clip-text text-transparent inline-block transition-all duration-300 ${
-                isAnimating ? "opacity-0 transform -translate-y-2" : "opacity-100 transform translate-y-0"
-              }`}
-            >
-              {currentIndustry.headline}
+            <span className="bg-gradient-to-r from-blue-900 to-purple-600 bg-clip-text text-transparent">
+              {displayedText}
+              <span className="animate-pulse text-purple-600">|</span>
             </span>
           </h1>
 
@@ -87,13 +112,7 @@ export function Hero() {
               return (
                 <button
                   key={industry.name}
-                  onClick={() => {
-                    setIsAnimating(true);
-                    setTimeout(() => {
-                      setCurrentIndex(index);
-                      setIsAnimating(false);
-                    }, 300);
-                  }}
+                  onClick={() => handleIndustryClick(index)}
                   className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                     currentIndex === index
                       ? "bg-blue-900 text-white shadow-lg"
@@ -159,32 +178,6 @@ export function Hero() {
                   className="h-5 w-5 fill-yellow-400 text-yellow-400"
                 />
               ))}
-            </div>
-            <p className="text-gray-600">
-              <span className="font-semibold text-gray-900">500+</span>{" "}
-              Schweizer Unternehmen vertrauen Voicall
-            </p>
-          </div>
-        </div>
-
-        {/* Dashboard Demo Image */}
-        <div className="mt-16 max-w-5xl mx-auto">
-          <div className="relative rounded-2xl border-8 border-gray-200 shadow-2xl overflow-hidden">
-            <Image
-              src="/images/dashboard-demo.png"
-              alt="Voicall Dashboard - KI-Telefonassistent"
-              width={1920}
-              height={1080}
-              className="w-full h-auto"
-              priority
-            />
-            <div className="absolute top-4 left-4">
-              <div className="inline-flex items-center space-x-2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg">
-                <div className="h-2.5 w-2.5 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-gray-700 text-sm font-medium">
-                  Live Demo
-                </span>
-              </div>
             </div>
           </div>
         </div>
