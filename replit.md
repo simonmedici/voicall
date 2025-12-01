@@ -110,6 +110,7 @@ npm run db:studio    # Open Drizzle Studio
 ```
 
 ## Recent Changes
+- **Multi-Industry Landing Page**: Redesigned for E-Commerce, Physiotherapy, Dental, Medical practices, and Restaurants with rotating hero headlines, industry-specific use cases (INBOUND ONLY - no outbound calls), testimonials, and compliance sections
 - **Mandatory Payment Flow**: Users must pay via Stripe checkout before accessing dashboard - no free plan exists. Flow: Pricing → Register (with plan) → Stripe Checkout → Dashboard
 - **Dashboard Access Protection**: Dashboard layout checks for active subscription, redirects to /subscribe paywall if none (admins exempt)
 - **Stripe Integration Complete**: Full Stripe integration with Replit connector for automatic API key management, checkout sessions, webhooks, and customer portal
