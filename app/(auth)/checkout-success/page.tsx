@@ -32,7 +32,7 @@ function CheckoutSuccessContent() {
         if (res.ok && data.success) {
           setStatus("success");
           setTimeout(() => {
-            router.push("/dashboard");
+            router.push("/onboarding");
           }, 2000);
         } else {
           setStatus("error");
@@ -70,7 +70,7 @@ function CheckoutSuccessContent() {
               Zahlung erfolgreich!
             </h1>
             <p className="text-zinc-600 dark:text-zinc-400">
-              Ihr Abonnement ist jetzt aktiv. Sie werden zum Dashboard weitergeleitet...
+              Ihr Abonnement ist jetzt aktiv. Sie werden zum Onboarding weitergeleitet...
             </p>
           </>
         )}

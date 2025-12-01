@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
               "img-src 'self' data: blob: https:",
               "font-src 'self' data:",
               "media-src 'self' blob:",
-              "frame-src 'self'",
+              "frame-src 'self' https://cal.com https://*.cal.com",
             ].join("; "),
           },
         ],
