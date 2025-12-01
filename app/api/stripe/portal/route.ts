@@ -33,27 +33,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const portalSession = await stripe.billingPortal.sessions.create({
+    const portalSessionParams: any = {
       customer: userSub.stripeCustomerId,
       return_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/subscription`,
-      configuration: {
-        features: {
-          subscription_update: {
-            enabled: true,
-            default_return_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/subscription`,
-          },
-          subscription_cancel: {
-            enabled: true,
-          },
-          payment_method_update: {
-            enabled: true,
-          },
-          invoice_history: {
-            enabled: true,
-          },
-        },
-      },
-    });
+    };
+
+    // Add configuration ID if it's set
+    if (process.env.STRIPE_PORTAL_CONFIG_ID) {
+      portalSessionParams.configuration = process.env.STRIPE_PORTAL_CONFIG_ID;
+    }
+
+    const portalSession = await stripe.billingPortal.sessions.create(portalSessionParams);
 
     return NextResponse.json({ url: portalSession.url });
   } catch (error) {
