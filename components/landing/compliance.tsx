@@ -42,26 +42,36 @@ const complianceFeatures = [
   },
 ];
 
-const industryCompliance = [
+const onboardingSteps = [
   {
-    industry: "Arztpraxen & Physio",
-    icon: "🏥",
-    points: ["Zero PII-Retention", "Patientengeheimnis gewahrt", "Notfall-Triage Protokolle"],
+    step: 1,
+    title: "Plan wählen",
+    description: "Wählen Sie den passenden Plan für Ihr Unternehmen",
+    details: ["Starter, Pro oder Enterprise", "Flexible Minutenpakete", "Jederzeit skalierbar"],
   },
   {
-    industry: "Zahnarztpraxen",
-    icon: "🦷",
-    points: ["Schmerznotfall-Routing", "Versicherungsdaten geschützt", "Terminbestätigungen"],
+    step: 2,
+    title: "Onboarding-Termin",
+    description: "Persönliche Beratung mit unserem Experten-Team",
+    details: ["Analyse Ihrer Anforderungen", "Branchenspezifische Anpassungen", "Integrations-Planung", "Zeitplan & Meilensteine"],
   },
   {
-    industry: "Restaurants",
-    icon: "🍽️",
-    points: ["Allergienotizen sicher", "Reservierungsdaten temporär", "HACCP-konform"],
+    step: 3,
+    title: "KI-Agent Erstellung",
+    description: "Wir entwickeln Ihren individuellen Assistenten",
+    details: ["Massgeschneiderte Gesprächsführung", "Branchenspezifisches Training", "Schweizerdeutsch-Optimierung"],
   },
   {
-    industry: "E-Commerce",
-    icon: "🛒",
-    points: ["Keine Zahlungsdaten gespeichert", "Bestellinfos temporär", "Kundendaten geschützt"],
+    step: 4,
+    title: "Testphase",
+    description: "Sie testen Ihren KI-Agenten ausgiebig",
+    details: ["Unbegrenzte Testanrufe", "Feintuning nach Feedback", "Optimierung der Antworten"],
+  },
+  {
+    step: 5,
+    title: "Go-Live",
+    description: "Ihr KI-Assistent geht in den Produktivbetrieb",
+    details: ["Nahtlose Aktivierung", "24/7 Monitoring", "Laufender Support"],
   },
 ];
 
@@ -122,26 +132,45 @@ export function Compliance() {
           })}
         </div>
 
-        {/* Industry-specific Compliance */}
+        {/* Onboarding Process */}
         <div className="bg-white rounded-3xl border-2 border-gray-200 p-8 md:p-12">
-          <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">
-            Branchenspezifische Sicherheit
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {industryCompliance.map((item, index) => (
-              <div key={index} className="text-center p-6 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-colors">
-                <div className="text-4xl mb-4">{item.icon}</div>
-                <h4 className="font-semibold text-gray-900 mb-3">{item.industry}</h4>
-                <ul className="space-y-2">
-                  {item.points.map((point, i) => (
-                    <li key={i} className="text-sm text-gray-600 flex items-center justify-center gap-2">
-                      <ShieldCheck className="h-4 w-4 text-green-500" />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center space-x-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <span>In 5 Schritten zu Ihrem KI-Assistenten</span>
+            </div>
+            <h3 className="text-3xl font-bold text-gray-900">
+              So funktioniert die Umsetzung
+            </h3>
+          </div>
+          
+          <div className="relative">
+            {/* Connection Line */}
+            <div className="hidden lg:block absolute top-16 left-[10%] right-[10%] h-1 bg-gradient-to-r from-blue-200 via-purple-200 to-green-200 rounded-full" />
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+              {onboardingSteps.map((item, index) => (
+                <div key={index} className="relative text-center">
+                  {/* Step Number */}
+                  <div className="relative z-10 mx-auto w-14 h-14 rounded-full bg-gradient-to-br from-blue-900 to-purple-600 flex items-center justify-center text-white text-xl font-bold mb-4 shadow-lg">
+                    {item.step}
+                  </div>
+                  
+                  {/* Content Card */}
+                  <div className="p-4 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-colors h-full">
+                    <h4 className="font-bold text-gray-900 mb-2 text-lg">{item.title}</h4>
+                    <p className="text-sm text-gray-600 mb-3">{item.description}</p>
+                    <ul className="space-y-1.5">
+                      {item.details.map((detail, i) => (
+                        <li key={i} className="text-xs text-gray-500 flex items-center gap-1.5">
+                          <div className="h-1.5 w-1.5 rounded-full bg-blue-500 shrink-0" />
+                          {detail}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
