@@ -54,6 +54,7 @@ build = ["npm", "run", "build"]
 [userenv]
 
 [userenv.shared]
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY = "pk_test_51SWvnAGjv5I67dbIg5bzzBqGWhRniIANPANtaI8OFkGobzHzjV2AA2f6bjYo635idTddRGZNI4oeZIXyu5hye28x00tWXz4yOQ"
 
 [userenv.development]
 NEXT_PUBLIC_APP_URL = "https://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev"
