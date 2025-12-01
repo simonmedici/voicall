@@ -7,8 +7,6 @@ import { eq } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
   try {
-    const stripe = await getStripeClient();
-
     const session = await auth.api.getSession({
       headers: req.headers,
     });
@@ -28,6 +26,14 @@ export async function POST(req: NextRequest) {
 
     const plan = PLANS[tier as PlanTier];
 
+    if (!plan.priceId || plan.priceId === "price_starter" || plan.priceId === "price_pro" || plan.priceId === "price_enterprise") {
+      console.error("Stripe Price IDs not configured:", { tier, priceId: plan.priceId });
+      return NextResponse.json(
+        { error: "Stripe ist nicht korrekt konfiguriert. Bitte kontaktieren Sie den Support." },
+        { status: 500 }
+      );
+    }
+
     const [userData] = await db
       .select()
       .from(user)
@@ -41,6 +47,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    let stripe;
+    try {
+      stripe = await getStripeClient();
+    } catch (stripeError) {
+      console.error("Stripe client initialization error:", stripeError);
+      return NextResponse.json(
+        { error: "Zahlungssystem vorübergehend nicht verfügbar. Bitte versuchen Sie es später erneut." },
+        { status: 503 }
+      );
+    }
+
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+    if (!appUrl) {
+      console.error("NEXT_PUBLIC_APP_URL not configured");
+      return NextResponse.json(
+        { error: "App-URL nicht konfiguriert" },
+        { status: 500 }
+      );
+    }
+
     const checkoutSession = await stripe.checkout.sessions.create({
       customer_email: userData.email,
       mode: "subscription",
@@ -51,8 +77,8 @@ export async function POST(req: NextRequest) {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/subscribe`,
+      success_url: `${appUrl}/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${appUrl}/subscribe`,
       metadata: {
         userId: session.user.id,
         tier,
@@ -68,8 +94,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ url: checkoutSession.url });
   } catch (error) {
     console.error("Checkout error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { error: "Fehler beim Erstellen der Checkout-Sitzung" },
+      { error: "Fehler beim Erstellen der Checkout-Sitzung", details: errorMessage },
       { status: 500 }
     );
   }

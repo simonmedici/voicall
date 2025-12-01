@@ -46,6 +46,10 @@ externalPort = 3000
 localPort = 45697
 externalPort = 3001
 
+[[ports]]
+localPort = 45851
+externalPort = 3003
+
 [deployment]
 deploymentTarget = "autoscale"
 run = ["sh", "-c", "npm run start"]
@@ -54,12 +58,15 @@ build = ["npm", "run", "build"]
 [userenv]
 
 [userenv.shared]
+
+[userenv.development]
+NEXT_PUBLIC_APP_URL = "https://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev"
 STRIPE_PRICE_STARTER = "price_1SY1anEEmLaMalAXL8J8GvZE"
 STRIPE_PRICE_PRO = "price_1SY1anEEmLaMalAXloB65H8J"
 STRIPE_PRICE_ENTERPRISE = "price_1SY1aoEEmLaMalAXEjpXry7c"
 
-[userenv.development]
-NEXT_PUBLIC_APP_URL = "https://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev"
-
 [userenv.production]
 NEXT_PUBLIC_APP_URL = "https://voicall-simonmedici.replit.app"
+STRIPE_PRICE_STARTER = "price_1SY1anEEmLaMalAXL8J8GvZE"
+STRIPE_PRICE_PRO = "price_1SY1anEEmLaMalAXloB65H8J"
+STRIPE_PRICE_ENTERPRISE = "price_1SY1aoEEmLaMalAXEjpXry7c"
