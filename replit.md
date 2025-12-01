@@ -110,6 +110,10 @@ npm run db:studio    # Open Drizzle Studio
 ```
 
 ## Recent Changes
+- **New Pricing Structure (Dec 2024)**: Updated plans - Starter CHF 199 (200 min), Pro CHF 399 (1000 min), Enterprise CHF 549 (unlimited). Setup fee of CHF 500-2500 depending on integration complexity.
+- **Hero Trust Badge**: Replaced 5-star rating with professional trust badge (DSGVO/DSG Garantie + Swiss Made Quality)
+- **Onboarding Process Redesign**: Purple-themed 5-step visualization with improved bullet point alignment
+- **Typewriter Effect**: Industry headlines now animate with typing effect
 - **Onboarding Flow with Cal.com**: After successful Stripe payment, users are redirected to `/onboarding` where they can book a personal onboarding call via Cal.com embed. Skip option available for users who already completed onboarding.
 - **Multi-Industry Landing Page**: Redesigned for E-Commerce, Physiotherapy, Dental, Medical practices, and Restaurants with rotating hero headlines, industry-specific use cases (INBOUND ONLY - no outbound calls), testimonials, and compliance sections
 - **Mandatory Payment Flow**: Users must pay via Stripe checkout before accessing dashboard - no free plan exists. Flow: Pricing → Register (with plan) → Stripe Checkout → Onboarding → Dashboard
