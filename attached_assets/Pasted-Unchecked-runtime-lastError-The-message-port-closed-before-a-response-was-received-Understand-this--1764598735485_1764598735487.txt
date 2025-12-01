@@ -1,0 +1,25 @@
+Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/background.js:1 Uncaught (in promise) FrameDoesNotExistError: Frame 1705 does not exist in tab 239170918
+    at DelayedMessageSender.<anonymous> (chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/background.js:1:49079)Understand this error
+chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/background.js:1 Uncaught (in promise) FrameDoesNotExistError: Frame 2166 does not exist in tab 239170974
+    at DelayedMessageSender.<anonymous> (chrome-extension://pejdijmoenmkgeppbflobdenhhabjlaj/background.js:1:49079)Understand this error
+5Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.Understand this error
+Unchecked runtime.lastError: Could not establish connection. Receiving end does not exist.Understand this error
+Unchecked runtime.lastError: Could not establish connection. Receiving end does not exist.Understand this error
+web-socket.ts:50 WebSocket connection to 'wss://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/webpack-hmr?id=slz4QGEpUxaA4IYb8Rrer' failed: 
+init @ web-socket.ts:50
+createWebSocket @ web-socket.ts:145
+hydrate @ app-index.tsx:305
+(anonymous) @ app-next-turbopack.ts:13
+(anonymous) @ app-bootstrap.ts:79
+loadScriptsInSequence @ app-bootstrap.ts:23
+appBootstrap @ app-bootstrap.ts:61
+module evaluation @ app-next-turbopack.ts:10
+(anonymous) @ dev-base.ts:244
+runModuleExecutionHooks @ dev-base.ts:278
+instantiateModule @ dev-base.ts:238
+getOrInstantiateRuntimeModule @ dev-base.ts:128
+registerChunk @ runtime-backend-dom.ts:57Understand this error
+subscribe:1 The resource https://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/static/media/caa3a2e1cccd8315-s.p.853070df.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.Understand this warning
+subscribe:1 The resource https://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/static/media/797e433ab948586e-s.p.dbea232f.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.Understand this warning
+web-socket.ts:50 WebSocket connection to 'wss://17a9ae5a-abee-4fe8-86d6-4a9056cbd438-00-3hktak2g3706y.riker.replit.dev/_next/webpack-hmr?id=slz4QGEpUxaA4IYb8Rrer' failed: 

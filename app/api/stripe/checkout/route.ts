@@ -73,7 +73,19 @@ export async function POST(req: NextRequest) {
       payment_method_types: ["card"],
       line_items: [
         {
-          price: plan.priceId,
+          price_data: {
+            currency: "chf",
+            unit_amount: plan.price * 100,
+            product_data: {
+              name: `${plan.name} Plan - Voicall`,
+              description: plan.minutesIncluded === -1 
+                ? "Unbegrenzte Minuten" 
+                : `${plan.minutesIncluded} Minuten pro Monat`,
+            },
+            recurring: {
+              interval: "month",
+            },
+          },
           quantity: 1,
         },
       ],
