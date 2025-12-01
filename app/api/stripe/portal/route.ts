@@ -36,6 +36,23 @@ export async function POST(req: NextRequest) {
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: userSub.stripeCustomerId,
       return_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/subscription`,
+      configuration: {
+        features: {
+          subscription_update: {
+            enabled: true,
+            default_return_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/subscription`,
+          },
+          subscription_cancel: {
+            enabled: true,
+          },
+          payment_method_update: {
+            enabled: true,
+          },
+          invoice_history: {
+            enabled: true,
+          },
+        },
+      },
     });
 
     return NextResponse.json({ url: portalSession.url });

@@ -105,8 +105,8 @@ export function DashboardNav() {
         })}
       </div>
 
-      {/* User Menu - Fixed at bottom left */}
-      <div className="px-2 py-4 border-t">
+      {/* User Menu - Sticky at bottom */}
+      <div className="sticky bottom-0 px-2 py-4 border-t bg-card">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
