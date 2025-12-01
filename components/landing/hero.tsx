@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Phone, ArrowRight, Star, ShieldCheck, Languages, Stethoscope, UtensilsCrossed, ShoppingBag } from "lucide-react";
+import { Phone, ArrowRight, ShieldCheck, Languages, Stethoscope, UtensilsCrossed, ShoppingBag } from "lucide-react";
 
 const industries = [
   {
@@ -169,15 +169,26 @@ export function Hero() {
             </a>
           </div>
 
-          {/* Social Proof */}
-          <div className="flex flex-col items-center space-y-4">
-            <div className="flex items-center space-x-2">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="h-5 w-5 fill-yellow-400 text-yellow-400"
-                />
-              ))}
+          {/* Trust Badge */}
+          <div className="inline-flex flex-col sm:flex-row items-center gap-4 bg-white border-2 border-green-200 rounded-2xl px-8 py-6 shadow-lg">
+            <div className="flex items-center gap-3">
+              <div className="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center">
+                <ShieldCheck className="h-6 w-6 text-green-600" />
+              </div>
+              <div className="text-left">
+                <p className="font-semibold text-gray-900">DSGVO/DSG Garantie</p>
+                <p className="text-sm text-gray-600">Für alle Branchen zertifiziert</p>
+              </div>
+            </div>
+            <div className="hidden sm:block w-px h-12 bg-gray-200"></div>
+            <div className="flex items-center gap-3">
+              <div className="h-12 w-12 bg-red-100 rounded-full flex items-center justify-center">
+                <span className="text-2xl">🇨🇭</span>
+              </div>
+              <div className="text-left">
+                <p className="font-semibold text-gray-900">Swiss Made Quality</p>
+                <p className="text-sm text-gray-600">Entwickelt für Schweizer Unternehmen</p>
+              </div>
             </div>
           </div>
         </div>

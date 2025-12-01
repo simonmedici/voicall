@@ -133,9 +133,9 @@ export function Compliance() {
         </div>
 
         {/* Onboarding Process */}
-        <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-3xl border border-gray-200 p-8 md:p-12">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center space-x-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
+        <div className="bg-white rounded-3xl border border-gray-200 p-8 md:p-12 shadow-sm">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center space-x-2 bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
               <span>In 5 Schritten zu Ihrem KI-Assistenten</span>
             </div>
             <h3 className="text-3xl font-bold text-gray-900">
@@ -143,29 +143,29 @@ export function Compliance() {
             </h3>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             {onboardingSteps.map((item, index) => (
               <div 
                 key={index} 
-                className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 flex flex-col"
+                className="bg-gray-50 rounded-2xl p-6 hover:bg-gray-100 transition-all duration-300 flex flex-col h-full"
               >
-                {/* Step Number integrated in card */}
+                {/* Step Number and Title */}
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white text-lg font-bold shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white text-lg font-bold shrink-0">
                     {item.step}
                   </div>
-                  <h4 className="font-bold text-gray-900">{item.title}</h4>
+                  <h4 className="font-bold text-gray-900 leading-tight">{item.title}</h4>
                 </div>
                 
                 {/* Description */}
-                <p className="text-sm text-gray-600 mb-4">{item.description}</p>
+                <p className="text-sm text-gray-600 mb-4 leading-relaxed">{item.description}</p>
                 
                 {/* Details */}
-                <ul className="space-y-2 mt-auto">
+                <ul className="space-y-2.5 mt-auto">
                   {item.details.map((detail, i) => (
                     <li key={i} className="text-sm text-gray-500 flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-blue-500 shrink-0 mt-1.5" />
-                      <span>{detail}</span>
+                      <span className="text-purple-500 mt-0.5">•</span>
+                      <span className="leading-snug">{detail}</span>
                     </li>
                   ))}
                 </ul>
