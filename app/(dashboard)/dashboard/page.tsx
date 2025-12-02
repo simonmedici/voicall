@@ -394,7 +394,7 @@ async function DashboardContent() {
         </Card>
       </div>
 
-      <Card className="border-green-200 bg-gradient-to-r from-green-50 to-emerald-50">
+      <Card className="border-green-200 from-green-50 to-emerald-50 bg-gradient-to-r">
         <CardContent className="pt-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">

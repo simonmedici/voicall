@@ -193,8 +193,15 @@ export default function AdminPage() {
     }
   };
 
-  const handleUnassignAgent = async (agentConfigId: string, agentName: string) => {
-    if (!confirm(`Möchten Sie den Agent "${agentName}" wirklich vom Benutzer entfernen?`)) {
+  const handleUnassignAgent = async (
+    agentConfigId: string,
+    agentName: string
+  ) => {
+    if (
+      !confirm(
+        `Möchten Sie den Agent "${agentName}" wirklich vom Benutzer entfernen?`
+      )
+    ) {
       return;
     }
 
@@ -392,9 +399,7 @@ export default function AdminPage() {
             <div className="flex items-end">
               <Button
                 onClick={handleAssignAgent}
-                disabled={
-                  !selectedUserId || !selectedAgentId || assigning
-                }
+                disabled={!selectedUserId || !selectedAgentId || assigning}
                 className="w-full"
               >
                 {assigning ? (
@@ -424,25 +429,27 @@ export default function AdminPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Email</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Subscription</TableHead>
-                <TableHead colSpan={3}>Zugewiesene Agents</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.length === 0 ? (
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center">
-                    Keine Benutzer gefunden
-                  </TableCell>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Subscription</TableHead>
+                  <TableHead>Zugewiesene Agents</TableHead>
                 </TableRow>
-              ) : (
-                users.map((u) => (
-                  <TableRow key={u.id}>
+              </TableHeader>
+              <TableBody>
+                {users.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center py-8">
+                      <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                      <p className="text-muted-foreground">Keine Benutzer gefunden</p>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  users.map((u) => (
+                  <TableRow key={u.id} className="hover:bg-muted/50">
                     <TableCell className="font-medium">
                       {u.email}
                       {u.isAdmin && (
@@ -467,7 +474,7 @@ export default function AdminPage() {
                         <Badge variant="secondary">Free</Badge>
                       )}
                     </TableCell>
-                    <TableCell colSpan={3}>
+                    <TableCell>
                       {u.agents && u.agents.length > 0 ? (
                         <div className="space-y-2">
                           {u.agents.map((agent) => (
@@ -476,7 +483,7 @@ export default function AdminPage() {
                               className="flex items-center justify-between gap-4 p-2 rounded-lg bg-muted/50"
                             >
                               <div className="flex items-center gap-3 min-w-0">
-                                <Bot className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                                <Bot className="h-4 w-4 shrink-0 text-muted-foreground" />
                                 <div className="min-w-0">
                                   <span className="font-medium block truncate">
                                     {agent.name}
@@ -486,27 +493,40 @@ export default function AdminPage() {
                                   </code>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-2 flex-shrink-0">
+                              <div className="flex items-center gap-2 shrink-0">
                                 <Badge
-                                  variant={agent.isActive ? "default" : "secondary"}
-                                  className={agent.isActive ? "bg-green-600" : ""}
+                                  variant={
+                                    agent.isActive ? "default" : "secondary"
+                                  }
+                                  className={
+                                    agent.isActive ? "bg-green-600" : ""
+                                  }
                                 >
                                   {agent.isActive ? "Aktiv" : "Inaktiv"}
                                 </Badge>
                                 <Button
                                   size="sm"
-                                  variant={agent.isActive ? "outline" : "default"}
+                                  variant={
+                                    agent.isActive ? "outline" : "default"
+                                  }
                                   onClick={() =>
-                                    handleActivateAgent(agent.id, !agent.isActive)
+                                    handleActivateAgent(
+                                      agent.id,
+                                      !agent.isActive
+                                    )
                                   }
                                 >
-                                  {agent.isActive ? "Deaktivieren" : "Aktivieren"}
+                                  {agent.isActive
+                                    ? "Deaktivieren"
+                                    : "Aktivieren"}
                                 </Button>
                                 <Button
                                   size="sm"
                                   variant="ghost"
                                   className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                                  onClick={() => handleUnassignAgent(agent.id, agent.name)}
+                                  onClick={() =>
+                                    handleUnassignAgent(agent.id, agent.name)
+                                  }
                                   title="Agent entfernen"
                                 >
                                   <Trash2 className="h-4 w-4" />
@@ -516,7 +536,9 @@ export default function AdminPage() {
                           ))}
                         </div>
                       ) : (
-                        <span className="text-muted-foreground">Keine Agents zugewiesen</span>
+                        <span className="text-muted-foreground">
+                          Keine Agents zugewiesen
+                        </span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -524,6 +546,7 @@ export default function AdminPage() {
               )}
             </TableBody>
           </Table>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -117,57 +117,70 @@ export default function AgentsListPage() {
               </p>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Sprache</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Erstellt</TableHead>
-                  <TableHead className="text-right">Aktionen</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {agents.map((agent) => (
-                  <TableRow key={agent.id}>
-                    <TableCell className="font-medium">{agent.name}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">
-                        {agent.language.toUpperCase()}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={agent.isActive ? "default" : "secondary"}>
-                        {agent.isActive ? "Aktiv" : "Inaktiv"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(agent.createdAt).toLocaleDateString("de-DE")}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center justify-end gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleTestAgent(agent)}
-                          title="Agent testen"
-                        >
-                          <TestTube className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEditAgent(agent)}
-                          title="Stimme & Begrüssung bearbeiten"
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Sprache</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Erstellt</TableHead>
+                    <TableHead className="text-right">Aktionen</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {agents.map((agent) => (
+                    <TableRow key={agent.id} className="hover:bg-muted/50">
+                      <TableCell className="font-medium">{agent.name}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline">
+                          {agent.language.toUpperCase()}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          className={
+                            agent.isActive
+                              ? "bg-green-100 text-green-800 hover:bg-green-100"
+                              : ""
+                          }
+                          variant={agent.isActive ? "default" : "secondary"}
+                        >
+                          {agent.isActive ? "Aktiv" : "Inaktiv"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {new Date(agent.createdAt).toLocaleDateString("de-CH", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleTestAgent(agent)}
+                            title="Agent testen"
+                          >
+                            <TestTube className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEditAgent(agent)}
+                            title="Stimme & Begrüssung bearbeiten"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
