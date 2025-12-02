@@ -159,7 +159,8 @@ async function getDashboardStats(userId: string) {
   // Create map of agentId -> cutoff date for filtering (assignedAt or createdAt as fallback)
   const agentCutoffMap: Record<string, Date> = {};
   userAgents.forEach((agent) => {
-    agentCutoffMap[agent.elevenLabsAgentId] = agent.assignedAt || agent.createdAt;
+    agentCutoffMap[agent.elevenLabsAgentId] =
+      agent.assignedAt || agent.createdAt;
   });
 
   if (agentIds.length === 0) {
@@ -436,7 +437,9 @@ async function DashboardContent() {
           {stats.recentCalls.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <Phone className="h-12 w-12 text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">Noch keine Anrufe vorhanden.</p>
+              <p className="text-muted-foreground">
+                Noch keine Anrufe vorhanden.
+              </p>
             </div>
           ) : (
             <div className="rounded-md border">
@@ -487,7 +490,10 @@ async function DashboardContent() {
                           href={`/dashboard/calls/${callItem.conversationId}`}
                           className="block w-full"
                         >
-                          {getStatusBadge(callItem.status, callItem.callSuccessful)}
+                          {getStatusBadge(
+                            callItem.status,
+                            callItem.callSuccessful
+                          )}
                         </Link>
                       </TableCell>
                     </TableRow>

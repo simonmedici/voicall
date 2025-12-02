@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { getStripeClient, getPlanByPriceId } from "@/lib/stripe";
+import { getStripeClient, getPlanByPriceId, PLANS } from "@/lib/stripe";
 import { db } from "@/lib/db/index";
 import { subscription, user } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -180,6 +180,61 @@ export async function POST(req: NextRequest) {
       case "customer.subscription.deleted": {
         const stripeSubscription = event.data.object as Stripe.Subscription;
 
+        // Find subscription in database
+        const [sub] = await db
+          .select()
+          .from(subscription)
+          .where(eq(subscription.stripeSubscriptionId, stripeSubscription.id))
+          .limit(1);
+
+        // If there are overage minutes, create a final invoice
+        if (sub && sub.overageMinutes && sub.overageMinutes > 0) {
+          const plan = PLANS[sub.tier as keyof typeof PLANS] || PLANS.starter;
+          const overageRate = plan.overageRate || 0.25;
+          const overageAmount = Math.round(
+            sub.overageMinutes * overageRate * 100
+          ); // in cents
+
+          console.log(
+            `Creating final overage invoice for ${sub.overageMinutes} minutes = CHF ${overageAmount / 100}`
+          );
+
+          try {
+            // Create invoice item for overage
+            await stripe.invoiceItems.create({
+              customer: sub.stripeCustomerId!,
+              amount: overageAmount,
+              currency: "chf",
+              description: `Zusatzminuten: ${sub.overageMinutes.toFixed(1)} Minuten @ CHF ${overageRate.toFixed(2)}/Min`,
+            });
+
+            // Create and finalize the invoice immediately
+            const finalInvoice = await stripe.invoices.create({
+              customer: sub.stripeCustomerId!,
+              auto_advance: true, // Automatically finalize and attempt payment
+              collection_method: "charge_automatically",
+              description: "Finale Abrechnung - Zusatzminuten",
+            });
+
+            await stripe.invoices.finalizeInvoice(finalInvoice.id);
+
+            console.log("Final overage invoice created:", finalInvoice.id);
+
+            // Reset overage tracking
+            await db
+              .update(subscription)
+              .set({
+                overageMinutes: 0,
+                lastOverageBilledAt: new Date(),
+              })
+              .where(
+                eq(subscription.stripeSubscriptionId, stripeSubscription.id)
+              );
+          } catch (invoiceError) {
+            console.error("Failed to create overage invoice:", invoiceError);
+          }
+        }
+
         await db
           .update(subscription)
           .set({
@@ -189,6 +244,64 @@ export async function POST(req: NextRequest) {
           .where(eq(subscription.stripeSubscriptionId, stripeSubscription.id));
 
         console.log("Subscription canceled:", stripeSubscription.id);
+        break;
+      }
+
+      case "invoice.created": {
+        // Add overage charges to the invoice before it's finalized
+        const invoice = event.data.object as Stripe.Invoice;
+
+        // Only process subscription invoices (not one-time payments)
+        if ((invoice as any).subscription && invoice.status === "draft") {
+          const [sub] = await db
+            .select()
+            .from(subscription)
+            .where(
+              eq(
+                subscription.stripeSubscriptionId,
+                (invoice as any).subscription as string
+              )
+            )
+            .limit(1);
+
+          // If there are overage minutes, add them to this invoice
+          if (sub && sub.overageMinutes && sub.overageMinutes > 0) {
+            const plan = PLANS[sub.tier as keyof typeof PLANS] || PLANS.starter;
+            const overageRate = plan.overageRate || 0.25;
+            const overageAmount = Math.round(
+              sub.overageMinutes * overageRate * 100
+            ); // in cents
+
+            console.log(
+              `Adding overage to invoice ${invoice.id}: ${sub.overageMinutes} minutes = CHF ${overageAmount / 100}`
+            );
+
+            try {
+              // Add invoice item for overage to this invoice
+              await stripe.invoiceItems.create({
+                customer: invoice.customer as string,
+                invoice: invoice.id,
+                amount: overageAmount,
+                currency: "chf",
+                description: `Zusatzminuten (letzte Periode): ${sub.overageMinutes.toFixed(1)} Minuten @ CHF ${overageRate.toFixed(2)}/Min`,
+              });
+
+              // Reset overage tracking for next period
+              await db
+                .update(subscription)
+                .set({
+                  overageMinutes: 0,
+                  overageEmailSent: false, // Reset for next period
+                  lastOverageBilledAt: new Date(),
+                })
+                .where(eq(subscription.id, sub.id));
+
+              console.log("Overage added to invoice:", invoice.id);
+            } catch (overageError) {
+              console.error("Failed to add overage to invoice:", overageError);
+            }
+          }
+        }
         break;
       }
 
@@ -204,6 +317,8 @@ export async function POST(req: NextRequest) {
             .update(subscription)
             .set({
               minutesUsed: 0,
+              overageMinutes: 0, // Reset overage for new period
+              overageEmailSent: false, // Reset email flag for new period
               minutesReset: new Date(
                 (stripeSubscription as any).current_period_end * 1000
               ),

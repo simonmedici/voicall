@@ -52,18 +52,23 @@ async function getElevenLabsUsage(
 
   for (const agent of agents) {
     try {
-      const result = await listConversations(agent.elevenLabsAgentId, { pageSize: 100 });
-      
+      const result = await listConversations(agent.elevenLabsAgentId, {
+        pageSize: 100,
+      });
+
       // Filter: Only include conversations AFTER agent was assigned/created
       const cutoffDate = agent.assignedAt || agent.createdAt;
       const filteredConversations = result.conversations.filter((conv) => {
         const convStartTime = new Date(conv.start_time_unix_secs * 1000);
         return convStartTime >= cutoffDate;
       });
-      
+
       allConversations = [...allConversations, ...filteredConversations];
     } catch (error) {
-      console.error(`Failed to fetch conversations for agent ${agent.elevenLabsAgentId}:`, error);
+      console.error(
+        `Failed to fetch conversations for agent ${agent.elevenLabsAgentId}:`,
+        error
+      );
     }
   }
 
@@ -109,7 +114,8 @@ export default async function SubscriptionPage() {
   // Create map of agentId -> cutoff date for filtering
   const agentCutoffMap: Record<string, Date> = {};
   userAgents.forEach((agent) => {
-    agentCutoffMap[agent.elevenLabsAgentId] = agent.assignedAt || agent.createdAt;
+    agentCutoffMap[agent.elevenLabsAgentId] =
+      agent.assignedAt || agent.createdAt;
   });
 
   let totalMinutesUsed = 0;
@@ -127,10 +133,7 @@ export default async function SubscriptionPage() {
       })
       .from(call)
       .where(
-        and(
-          inArray(call.agentId, agentIds),
-          gte(call.createdAt, periodStart)
-        )
+        and(inArray(call.agentId, agentIds), gte(call.createdAt, periodStart))
       );
 
     // Filter calls: only those AFTER the agent's cutoff date (assignedAt or createdAt)
@@ -187,9 +190,7 @@ export default async function SubscriptionPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div
-                className={`w-3 h-3 rounded-full ${planConfig.color}`}
-              />
+              <div className={`w-3 h-3 rounded-full ${planConfig.color}`} />
               <div>
                 <CardTitle className="flex items-center gap-2">
                   {planConfig.name} Plan
@@ -205,7 +206,11 @@ export default async function SubscriptionPage() {
               variant={status === "active" ? "default" : "secondary"}
               className={status === "active" ? "bg-green-600" : ""}
             >
-              {status === "active" ? "Aktiv" : status === "trialing" ? "Testphase" : "Inaktiv"}
+              {status === "active"
+                ? "Aktiv"
+                : status === "trialing"
+                  ? "Testphase"
+                  : "Inaktiv"}
             </Badge>
           </div>
         </CardHeader>
@@ -219,7 +224,8 @@ export default async function SubscriptionPage() {
                   {totalMinutesUsed}
                   {!isUnlimited && (
                     <span className="text-sm font-normal text-muted-foreground">
-                      {" "}/ {minutesIncluded}
+                      {" "}
+                      / {minutesIncluded}
                     </span>
                   )}
                 </p>
@@ -246,7 +252,9 @@ export default async function SubscriptionPage() {
           {!isUnlimited && (
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">Nutzung diesen Monat</span>
+                <span className="text-sm font-medium">
+                  Nutzung diesen Monat
+                </span>
                 <span
                   className={`text-sm font-medium ${
                     isOverLimit
@@ -273,7 +281,8 @@ export default async function SubscriptionPage() {
               </div>
               {isNearLimit && !isOverLimit && (
                 <p className="text-sm text-amber-600 mt-2">
-                  Sie haben 80% Ihres Kontingents verbraucht. Erwägen Sie ein Upgrade.
+                  Sie haben 80% Ihres Kontingents verbraucht. Erwägen Sie ein
+                  Upgrade.
                 </p>
               )}
               {isOverLimit && (
@@ -330,15 +339,15 @@ export default async function SubscriptionPage() {
       <Card>
         <CardHeader>
           <CardTitle>Verfügbare Pläne</CardTitle>
-          <CardDescription>
-            Vergleichen Sie unsere Pläne
-          </CardDescription>
+          <CardDescription>Vergleichen Sie unsere Pläne</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
             <div
               className={`p-4 rounded-lg border-2 ${
-                tier === "starter" ? "border-blue-500 bg-blue-50" : "border-border"
+                tier === "starter"
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-border"
               }`}
             >
               <div className="flex items-center gap-2 mb-2">
@@ -358,7 +367,9 @@ export default async function SubscriptionPage() {
 
             <div
               className={`p-4 rounded-lg border-2 ${
-                tier === "pro" ? "border-purple-500 bg-purple-50" : "border-border"
+                tier === "pro"
+                  ? "border-purple-500 bg-purple-50"
+                  : "border-border"
               }`}
             >
               <div className="flex items-center gap-2 mb-2">

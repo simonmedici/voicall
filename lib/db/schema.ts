@@ -117,6 +117,11 @@ export const subscription = pgTable(
     minutesUsed: integer("minutes_used").notNull().default(0),
     minutesReset: timestamp("minutes_reset"), // Next billing cycle reset date
 
+    // Overage Tracking
+    overageMinutes: real("overage_minutes").notNull().default(0), // Minutes used beyond limit
+    overageEmailSent: boolean("overage_email_sent").notNull().default(false), // 100% warning email sent
+    lastOverageBilledAt: timestamp("last_overage_billed_at"), // Last time overage was charged
+
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
