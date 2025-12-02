@@ -71,9 +71,7 @@ function FAQItem({
         <div
           className={cn(
             "shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300",
-            isOpen
-              ? "bg-blue-900 text-white"
-              : "bg-gray-100 text-gray-500"
+            isOpen ? "bg-blue-900 text-white" : "bg-gray-100 text-gray-500"
           )}
         >
           {isOpen ? (
@@ -89,9 +87,7 @@ function FAQItem({
           isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         )}
       >
-        <div className="py-4 text-gray-600 leading-relaxed">
-          {answer}
-        </div>
+        <div className="py-4 text-gray-600 leading-relaxed">{answer}</div>
       </div>
     </div>
   );
