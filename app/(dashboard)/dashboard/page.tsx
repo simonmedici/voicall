@@ -518,7 +518,7 @@ async function DashboardContent() {
               <div>
                 <p className="font-medium">Voice Agent konfigurieren</p>
                 <p className="text-sm text-muted-foreground">
-                  Passen Sie Ihre Begrüßungsnachricht und Stimme an
+                  Passen Sie Ihre Begrüssungsnachricht und Stimme an
                 </p>
               </div>
             </div>
