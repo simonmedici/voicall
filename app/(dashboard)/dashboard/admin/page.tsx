@@ -444,108 +444,110 @@ export default function AdminPage() {
                   <TableRow>
                     <TableCell colSpan={4} className="text-center py-8">
                       <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                      <p className="text-muted-foreground">Keine Benutzer gefunden</p>
+                      <p className="text-muted-foreground">
+                        Keine Benutzer gefunden
+                      </p>
                     </TableCell>
                   </TableRow>
                 ) : (
                   users.map((u) => (
-                  <TableRow key={u.id} className="hover:bg-muted/50">
-                    <TableCell className="font-medium">
-                      {u.email}
-                      {u.isAdmin && (
-                        <Badge variant="outline" className="ml-2">
-                          Admin
-                        </Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>{u.name || "-"}</TableCell>
-                    <TableCell>
-                      {u.subscription ? (
-                        <Badge
-                          variant={
-                            u.subscription.status === "active"
-                              ? "default"
-                              : "secondary"
-                          }
-                        >
-                          {u.subscription.tier}
-                        </Badge>
-                      ) : (
-                        <Badge variant="secondary">Free</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {u.agents && u.agents.length > 0 ? (
-                        <div className="space-y-2">
-                          {u.agents.map((agent) => (
-                            <div
-                              key={agent.id}
-                              className="flex items-center justify-between gap-4 p-2 rounded-lg bg-muted/50"
-                            >
-                              <div className="flex items-center gap-3 min-w-0">
-                                <Bot className="h-4 w-4 shrink-0 text-muted-foreground" />
-                                <div className="min-w-0">
-                                  <span className="font-medium block truncate">
-                                    {agent.name}
-                                  </span>
-                                  <code className="text-xs text-muted-foreground">
-                                    {agent.elevenLabsAgentId.slice(0, 16)}...
-                                  </code>
+                    <TableRow key={u.id} className="hover:bg-muted/50">
+                      <TableCell className="font-medium">
+                        {u.email}
+                        {u.isAdmin && (
+                          <Badge variant="outline" className="ml-2">
+                            Admin
+                          </Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>{u.name || "-"}</TableCell>
+                      <TableCell>
+                        {u.subscription ? (
+                          <Badge
+                            variant={
+                              u.subscription.status === "active"
+                                ? "default"
+                                : "secondary"
+                            }
+                          >
+                            {u.subscription.tier}
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary">Free</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {u.agents && u.agents.length > 0 ? (
+                          <div className="space-y-2">
+                            {u.agents.map((agent) => (
+                              <div
+                                key={agent.id}
+                                className="flex items-center justify-between gap-4 p-2 rounded-lg bg-muted/50"
+                              >
+                                <div className="flex items-center gap-3 min-w-0">
+                                  <Bot className="h-4 w-4 shrink-0 text-muted-foreground" />
+                                  <div className="min-w-0">
+                                    <span className="font-medium block truncate">
+                                      {agent.name}
+                                    </span>
+                                    <code className="text-xs text-muted-foreground">
+                                      {agent.elevenLabsAgentId.slice(0, 16)}...
+                                    </code>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2 shrink-0">
+                                  <Badge
+                                    variant={
+                                      agent.isActive ? "default" : "secondary"
+                                    }
+                                    className={
+                                      agent.isActive ? "bg-green-600" : ""
+                                    }
+                                  >
+                                    {agent.isActive ? "Aktiv" : "Inaktiv"}
+                                  </Badge>
+                                  <Button
+                                    size="sm"
+                                    variant={
+                                      agent.isActive ? "outline" : "default"
+                                    }
+                                    onClick={() =>
+                                      handleActivateAgent(
+                                        agent.id,
+                                        !agent.isActive
+                                      )
+                                    }
+                                  >
+                                    {agent.isActive
+                                      ? "Deaktivieren"
+                                      : "Aktivieren"}
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                                    onClick={() =>
+                                      handleUnassignAgent(agent.id, agent.name)
+                                    }
+                                    title="Agent entfernen"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-2 shrink-0">
-                                <Badge
-                                  variant={
-                                    agent.isActive ? "default" : "secondary"
-                                  }
-                                  className={
-                                    agent.isActive ? "bg-green-600" : ""
-                                  }
-                                >
-                                  {agent.isActive ? "Aktiv" : "Inaktiv"}
-                                </Badge>
-                                <Button
-                                  size="sm"
-                                  variant={
-                                    agent.isActive ? "outline" : "default"
-                                  }
-                                  onClick={() =>
-                                    handleActivateAgent(
-                                      agent.id,
-                                      !agent.isActive
-                                    )
-                                  }
-                                >
-                                  {agent.isActive
-                                    ? "Deaktivieren"
-                                    : "Aktivieren"}
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                                  onClick={() =>
-                                    handleUnassignAgent(agent.id, agent.name)
-                                  }
-                                  title="Agent entfernen"
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <span className="text-muted-foreground">
-                          Keine Agents zugewiesen
-                        </span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-muted-foreground">
+                            Keine Agents zugewiesen
+                          </span>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>

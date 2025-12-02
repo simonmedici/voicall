@@ -101,8 +101,8 @@ export default function AgentsListPage() {
             Agents ({agents.length})
           </CardTitle>
           <CardDescription>
-            Ihre zugewiesenen Telefonagenten - Sie können Stimme und
-            Begrüssung anpassen
+            Ihre zugewiesenen Telefonagenten - Sie können Stimme und Begrüssung
+            anpassen
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -131,7 +131,9 @@ export default function AgentsListPage() {
                 <TableBody>
                   {agents.map((agent) => (
                     <TableRow key={agent.id} className="hover:bg-muted/50">
-                      <TableCell className="font-medium">{agent.name}</TableCell>
+                      <TableCell className="font-medium">
+                        {agent.name}
+                      </TableCell>
                       <TableCell>
                         <Badge variant="outline">
                           {agent.language.toUpperCase()}
