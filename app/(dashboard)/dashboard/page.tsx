@@ -1,26 +1,59 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Phone, Clock, CheckCircle, TrendingUp, Loader2, ShieldCheck, Languages } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Phone,
+  Clock,
+  CheckCircle,
+  TrendingUp,
+  Loader2,
+  ShieldCheck,
+  Languages,
+} from "lucide-react";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { call, agentConfig, subscription } from "@/lib/db/schema";
-import { eq, and, gte, sql, inArray } from "drizzle-orm";
-import { formatDistanceToNow } from "date-fns";
+import { eq, sql, inArray } from "drizzle-orm";
+import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { listConversations } from "@/lib/elevenlabs";
 import { Badge } from "@/components/ui/badge";
 
-const PLAN_CONFIG: Record<string, { name: string; minutes: number; color: string }> = {
+const PLAN_CONFIG: Record<
+  string,
+  { name: string; minutes: number; color: string }
+> = {
   free: { name: "Free", minutes: 0, color: "bg-gray-500" },
-  starter: { name: "Starter", minutes: 500, color: "bg-blue-500" },
-  pro: { name: "Pro", minutes: 1500, color: "bg-purple-500" },
+  starter: { name: "Starter", minutes: 200, color: "bg-blue-500" },
+  pro: { name: "Pro", minutes: 1000, color: "bg-purple-500" },
   enterprise: { name: "Enterprise", minutes: -1, color: "bg-amber-500" },
 };
 
-async function getElevenLabsUsage(agentIds: string[]) {
-  if (agentIds.length === 0) {
-    return { totalCalls: 0, callsToday: 0, minutesUsedThisMonth: 0, successRate: 0, recentCalls: [] };
+async function getElevenLabsUsage(
+  agents: Array<{
+    elevenLabsAgentId: string;
+    name: string;
+    assignedAt: Date | null;
+    createdAt: Date;
+  }>
+) {
+  if (agents.length === 0) {
+    return {
+      totalCalls: 0,
+      callsToday: 0,
+      minutesUsedThisMonth: 0,
+      successRate: 0,
+      recentCalls: [],
+    };
   }
 
   const today = new Date();
@@ -38,17 +71,31 @@ async function getElevenLabsUsage(agentIds: string[]) {
     call_successful: string;
   }> = [];
 
-  for (const agentId of agentIds) {
+  for (const agent of agents) {
     try {
-      const result = await listConversations(agentId, { pageSize: 100 });
-      allConversations = [...allConversations, ...result.conversations];
+      const result = await listConversations(agent.elevenLabsAgentId, {
+        pageSize: 100,
+      });
+
+      // Filter: Only include conversations AFTER agent was assigned to this user
+      // Use assignedAt if available, otherwise use createdAt as fallback
+      const cutoffDate = agent.assignedAt || agent.createdAt;
+      const filteredConversations = result.conversations.filter((conv) => {
+        const convStartTime = new Date(conv.start_time_unix_secs * 1000);
+        return convStartTime >= cutoffDate;
+      });
+
+      allConversations = [...allConversations, ...filteredConversations];
     } catch (error) {
-      console.error(`Failed to fetch conversations for agent ${agentId}:`, error);
+      console.error(
+        `Failed to fetch conversations for agent ${agent.elevenLabsAgentId}:`,
+        error
+      );
     }
   }
 
   const totalCalls = allConversations.length;
-  
+
   const callsToday = allConversations.filter(
     (c) => c.start_time_unix_secs >= todayUnix
   ).length;
@@ -57,15 +104,19 @@ async function getElevenLabsUsage(agentIds: string[]) {
     (c) => c.start_time_unix_secs >= firstDayOfMonthUnix
   );
 
-  const minutesUsedThisMonth = Math.round(
-    callsThisMonth.reduce((acc, c) => acc + (c.call_duration_secs || 0), 0) / 60 * 10
-  ) / 10;
+  const minutesUsedThisMonth =
+    Math.round(
+      (callsThisMonth.reduce((acc, c) => acc + (c.call_duration_secs || 0), 0) /
+        60) *
+        10
+    ) / 10;
 
   const successfulCalls = allConversations.filter(
     (c) => c.call_successful === "success"
   ).length;
 
-  const successRate = totalCalls > 0 ? Math.round((successfulCalls / totalCalls) * 100) : 0;
+  const successRate =
+    totalCalls > 0 ? Math.round((successfulCalls / totalCalls) * 100) : 0;
 
   const recentCalls = allConversations
     .sort((a, b) => b.start_time_unix_secs - a.start_time_unix_secs)
@@ -91,7 +142,12 @@ async function getElevenLabsUsage(agentIds: string[]) {
 
 async function getDashboardStats(userId: string) {
   const userAgents = await db
-    .select({ elevenLabsAgentId: agentConfig.elevenLabsAgentId, name: agentConfig.name })
+    .select({
+      elevenLabsAgentId: agentConfig.elevenLabsAgentId,
+      name: agentConfig.name,
+      assignedAt: agentConfig.assignedAt,
+      createdAt: agentConfig.createdAt,
+    })
     .from(agentConfig)
     .where(eq(agentConfig.userId, userId));
 
@@ -99,6 +155,12 @@ async function getDashboardStats(userId: string) {
   const agentNameMap = Object.fromEntries(
     userAgents.map((a) => [a.elevenLabsAgentId, a.name])
   );
+
+  // Create map of agentId -> cutoff date for filtering (assignedAt or createdAt as fallback)
+  const agentCutoffMap: Record<string, Date> = {};
+  userAgents.forEach((agent) => {
+    agentCutoffMap[agent.elevenLabsAgentId] = agent.assignedAt || agent.createdAt;
+  });
 
   if (agentIds.length === 0) {
     return {
@@ -123,44 +185,15 @@ async function getDashboardStats(userId: string) {
   const dbHasCalls = (totalCallsResult?.count || 0) > 0;
 
   if (!dbHasCalls) {
-    const elevenLabsStats = await getElevenLabsUsage(agentIds);
+    const elevenLabsStats = await getElevenLabsUsage(userAgents);
     return {
       ...elevenLabsStats,
       agentNameMap,
     };
   }
 
-  const [callsTodayResult] = await db
-    .select({ count: sql<number>`count(*)::int` })
-    .from(call)
-    .where(
-      and(
-        inArray(call.agentId, agentIds),
-        gte(call.createdAt, today)
-      )
-    );
-
-  const [minutesResult] = await db
-    .select({ 
-      total: sql<number>`COALESCE(SUM(minutes_charged), 0)::real` 
-    })
-    .from(call)
-    .where(
-      and(
-        inArray(call.agentId, agentIds),
-        gte(call.createdAt, firstDayOfMonth)
-      )
-    );
-
-  const [successResult] = await db
-    .select({
-      total: sql<number>`count(*)::int`,
-      successful: sql<number>`SUM(CASE WHEN call_successful = true THEN 1 ELSE 0 END)::int`,
-    })
-    .from(call)
-    .where(inArray(call.agentId, agentIds));
-
-  const recentCalls = await db
+  // Get all calls for user's agents
+  const allCalls = await db
     .select({
       id: call.id,
       conversationId: call.conversationId,
@@ -169,19 +202,37 @@ async function getDashboardStats(userId: string) {
       durationSecs: call.durationSecs,
       callSuccessful: call.callSuccessful,
       createdAt: call.createdAt,
+      minutesCharged: call.minutesCharged,
     })
     .from(call)
     .where(inArray(call.agentId, agentIds))
-    .orderBy(sql`${call.createdAt} DESC`)
-    .limit(5);
+    .orderBy(sql`${call.createdAt} DESC`);
 
-  const totalCalls = totalCallsResult?.count || 0;
-  const callsToday = callsTodayResult?.count || 0;
-  const minutesUsedThisMonth = Math.round((minutesResult?.total || 0) * 10) / 10;
-  
-  const successRate = successResult?.total > 0
-    ? Math.round((successResult.successful / successResult.total) * 100)
-    : 0;
+  // Filter calls: only those AFTER the agent's cutoff date (assignedAt or createdAt)
+  const filteredCalls = allCalls.filter((c) => {
+    const cutoffDate = agentCutoffMap[c.agentId];
+    if (!cutoffDate) return true; // Should not happen, but safety fallback
+    return c.createdAt >= cutoffDate;
+  });
+
+  const totalCalls = filteredCalls.length;
+
+  const callsToday = filteredCalls.filter((c) => c.createdAt >= today).length;
+
+  const callsThisMonth = filteredCalls.filter(
+    (c) => c.createdAt >= firstDayOfMonth
+  );
+
+  const minutesUsedThisMonth =
+    Math.round(
+      callsThisMonth.reduce((acc, c) => acc + (c.minutesCharged || 0), 0) * 10
+    ) / 10;
+
+  const successfulCalls = filteredCalls.filter((c) => c.callSuccessful).length;
+  const successRate =
+    totalCalls > 0 ? Math.round((successfulCalls / totalCalls) * 100) : 0;
+
+  const recentCalls = filteredCalls.slice(0, 5);
 
   return {
     totalCalls,
@@ -204,46 +255,49 @@ async function getUserSubscription(userId: string) {
 }
 
 function formatDuration(seconds: number | null): string {
-  if (!seconds) return "0:00";
+  if (seconds === null || seconds === undefined || seconds === 0) return "-";
   const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
+  const secs = Math.round(seconds % 60);
+  if (mins > 0) {
+    return `${mins}m ${secs}s`;
+  }
+  return `${secs}s`;
+}
+
+function formatDate(date: Date): string {
+  return format(date, "dd.MM.yyyy HH:mm", { locale: de });
 }
 
 function getStatusBadge(status: string, successful: boolean) {
   if (status === "done" && successful) {
     return (
-      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+      <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
         Erfolgreich
-      </span>
+      </Badge>
     );
   }
   if (status === "done") {
     return (
-      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+      <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
         Abgeschlossen
-      </span>
+      </Badge>
     );
   }
   if (status === "in-progress") {
     return (
-      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+      <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">
         Läuft
-      </span>
+      </Badge>
     );
   }
   if (status === "failed") {
     return (
-      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+      <Badge className="bg-red-100 text-red-800 hover:bg-red-100">
         Fehlgeschlagen
-      </span>
+      </Badge>
     );
   }
-  return (
-    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-      {status}
-    </span>
-  );
+  return <Badge variant="secondary">{status}</Badge>;
 }
 
 async function DashboardContent() {
@@ -318,7 +372,8 @@ async function DashboardContent() {
               {stats.minutesUsedThisMonth}
               {!isUnlimited && (
                 <span className="text-sm font-normal text-muted-foreground">
-                  {" "}/ {minutesIncluded}
+                  {" "}
+                  / {minutesIncluded}
                 </span>
               )}
             </div>
@@ -346,19 +401,27 @@ async function DashboardContent() {
                 <ShieldCheck className="h-6 w-6 text-green-600" />
               </div>
               <div>
-                <h3 className="font-semibold text-green-900">Datenschutz-Status: Aktiv</h3>
-                <p className="text-sm text-green-700">Zero PII-Retention - Keine Patientendaten werden gespeichert</p>
+                <h3 className="font-semibold text-green-900">
+                  Datenschutz-Status: Aktiv
+                </h3>
+                <p className="text-sm text-green-700">
+                  Zero PII-Retention - Keine Patientendaten werden gespeichert
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 bg-white/80 px-3 py-1.5 rounded-full border border-green-200">
                 <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-green-800">Zero-Retention aktiv</span>
+                <span className="text-sm font-medium text-green-800">
+                  Zero-Retention aktiv
+                </span>
               </div>
               <div className="flex items-center gap-2 bg-white/80 px-3 py-1.5 rounded-full border border-red-200">
                 <span className="text-sm">🇨🇭</span>
                 <Languages className="h-4 w-4 text-red-600" />
-                <span className="text-sm font-medium text-red-800">Schweizerdeutsch</span>
+                <span className="text-sm font-medium text-red-800">
+                  Schweizerdeutsch
+                </span>
               </div>
             </div>
           </div>
@@ -371,45 +434,66 @@ async function DashboardContent() {
         </CardHeader>
         <CardContent>
           {stats.recentCalls.length === 0 ? (
-            <div className="flex items-center justify-center py-8 text-muted-foreground">
-              <p>Noch keine Anrufe vorhanden.</p>
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <Phone className="h-12 w-12 text-muted-foreground mb-4" />
+              <p className="text-muted-foreground">Noch keine Anrufe vorhanden.</p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {stats.recentCalls.map((callItem) => (
-                <div
-                  key={callItem.id}
-                  className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                      <Phone className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="font-medium">
-                        {stats.agentNameMap[callItem.agentId] || "Unbekannter Agent"}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {callItem.createdAt
-                          ? formatDistanceToNow(new Date(callItem.createdAt), {
-                              addSuffix: true,
-                              locale: de,
-                            })
-                          : "Unbekannt"}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-right">
-                      <p className="font-medium">
-                        {formatDuration(callItem.durationSecs)}
-                      </p>
-                      <p className="text-sm text-muted-foreground">Dauer</p>
-                    </div>
-                    {getStatusBadge(callItem.status, callItem.callSuccessful)}
-                  </div>
-                </div>
-              ))}
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Datum</TableHead>
+                    <TableHead>Agent</TableHead>
+                    <TableHead>Dauer</TableHead>
+                    <TableHead>Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {stats.recentCalls.map((callItem) => (
+                    <TableRow
+                      key={callItem.id}
+                      className="cursor-pointer hover:bg-muted/50"
+                    >
+                      <TableCell className="font-medium">
+                        <Link
+                          href={`/dashboard/calls/${callItem.conversationId}`}
+                          className="block w-full"
+                        >
+                          {callItem.createdAt
+                            ? formatDate(new Date(callItem.createdAt))
+                            : "-"}
+                        </Link>
+                      </TableCell>
+                      <TableCell>
+                        <Link
+                          href={`/dashboard/calls/${callItem.conversationId}`}
+                          className="block w-full"
+                        >
+                          {stats.agentNameMap[callItem.agentId] ||
+                            "Unbekannter Agent"}
+                        </Link>
+                      </TableCell>
+                      <TableCell>
+                        <Link
+                          href={`/dashboard/calls/${callItem.conversationId}`}
+                          className="block w-full"
+                        >
+                          {formatDuration(callItem.durationSecs)}
+                        </Link>
+                      </TableCell>
+                      <TableCell>
+                        <Link
+                          href={`/dashboard/calls/${callItem.conversationId}`}
+                          className="block w-full"
+                        >
+                          {getStatusBadge(callItem.status, callItem.callSuccessful)}
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           )}
         </CardContent>
