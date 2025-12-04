@@ -113,9 +113,14 @@ export const subscription = pgTable(
     status: text("status").notNull().default("active"), // active, canceled, past_due, trialing
 
     // Usage Tracking (Minutes)
-    minutesIncluded: integer("minutes_included").notNull().default(500), // Starter 500, Pro 1500, Enterprise -1 (unlimited)
+    minutesIncluded: integer("minutes_included").notNull().default(200), // Starter 200, Pro 1000, Enterprise -1 (unlimited)
     minutesUsed: integer("minutes_used").notNull().default(0),
     minutesReset: timestamp("minutes_reset"), // Next billing cycle reset date
+
+    // Overage Tracking
+    overageMinutes: real("overage_minutes").notNull().default(0), // Minutes used beyond limit
+    overageEmailSent: boolean("overage_email_sent").notNull().default(false), // 100% warning email sent
+    lastOverageBilledAt: timestamp("last_overage_billed_at"), // Last time overage was charged
 
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
@@ -156,6 +161,9 @@ export const agentConfig = pgTable(
 
     // Status
     isActive: boolean("is_active").notNull().default(true),
+
+    // Assignment Tracking
+    assignedAt: timestamp("assigned_at"), // When agent was assigned to this user
 
     // Timestamps
     createdAt: timestamp("created_at").notNull().defaultNow(),

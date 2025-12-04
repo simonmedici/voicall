@@ -18,10 +18,13 @@ export async function GET() {
 
     const userId = session.user.id;
 
+    // Get user's agents WITH assignedAt and createdAt timestamps
     const userAgents = await db
       .select({
         elevenLabsAgentId: agentConfig.elevenLabsAgentId,
         name: agentConfig.name,
+        assignedAt: agentConfig.assignedAt,
+        createdAt: agentConfig.createdAt,
       })
       .from(agentConfig)
       .where(eq(agentConfig.userId, userId));
@@ -45,7 +48,16 @@ export async function GET() {
         const result = await listConversations(agent.elevenLabsAgentId, {
           pageSize: 100,
         });
-        allConversations.push(...result.conversations);
+
+        // Filter: Only include conversations AFTER agent was assigned to this user
+        // Use assignedAt if available, otherwise use createdAt as fallback
+        const cutoffDate = agent.assignedAt || agent.createdAt;
+        const filteredConversations = result.conversations.filter((conv) => {
+          const convStartTime = new Date(conv.start_time_unix_secs * 1000);
+          return convStartTime >= cutoffDate;
+        });
+
+        allConversations.push(...filteredConversations);
       } catch (error) {
         console.error(
           `Failed to fetch conversations for agent ${agent.elevenLabsAgentId}:`,

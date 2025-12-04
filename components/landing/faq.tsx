@@ -1,11 +1,8 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { useState } from "react";
+import { Plus, Minus } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const faqs = [
   {
@@ -51,50 +48,91 @@ const faqs = [
   },
 ];
 
-export function FAQ() {
+function FAQItem({
+  question,
+  answer,
+  isOpen,
+  onToggle,
+}: {
+  question: string;
+  answer: string;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
   return (
-    <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="max-w-4xl mx-auto">
+    <div className="transition-all duration-200">
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center justify-between py-5 text-left border-b border-gray-100 hover:bg-gray-50/50"
+      >
+        <span className="text-base font-medium text-gray-900 pr-4">
+          {question}
+        </span>
+        <div
+          className={cn(
+            "shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300",
+            isOpen ? "bg-blue-900 text-white" : "bg-gray-100 text-gray-500"
+          )}
+        >
+          {isOpen ? (
+            <Minus className="w-4 h-4" />
+          ) : (
+            <Plus className="w-4 h-4" />
+          )}
+        </div>
+      </button>
+      <div
+        className={cn(
+          "overflow-hidden transition-all duration-300 ease-in-out",
+          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        )}
+      >
+        <div className="py-4 text-gray-600 leading-relaxed">{answer}</div>
+      </div>
+    </div>
+  );
+}
+
+export function FAQ() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const handleToggle = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  return (
+    <section id="faq" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <div className="max-w-3xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-            Häufig gestellte{" "}
-            <span className="bg-gradient-to-r from-blue-900 to-purple-600 bg-clip-text text-transparent">
-              Fragen
-            </span>
+        <div className="text-center mb-12">
+          <span className="inline-block px-4 py-1.5 mb-4 text-sm font-medium text-blue-900 bg-blue-100 rounded-full">
+            FAQ
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
+            Häufig gestellte Fragen
           </h2>
-          <p className="text-xl text-gray-600">
-            Hier finden Sie Antworten auf die am häufigsten gestellten Fragen zu
-            Voicall. Wenn Sie weitere Fragen haben, kontaktieren Sie uns gerne
-            direkt.
-          </p>
         </div>
 
-        {/* FAQ Accordion */}
-        <Accordion type="single" collapsible className="space-y-4">
+        {/* FAQ Items */}
+        <div className="space-y-3">
           {faqs.map((faq, index) => (
-            <AccordionItem
+            <FAQItem
               key={index}
-              value={`item-${index}`}
-              className="border-2 rounded-md px-6 data-[state=open]:border-blue-900/30 data-[state=open]:bg-blue-950/5"
-            >
-              <AccordionTrigger className="text-left text-lg font-semibold hover:text-blue-900 hover:no-underline py-6">
-                {faq.question}
-              </AccordionTrigger>
-              <AccordionContent className="text-gray-600 leading-relaxed pb-6">
-                {faq.answer}
-              </AccordionContent>
-            </AccordionItem>
+              question={faq.question}
+              answer={faq.answer}
+              isOpen={openIndex === index}
+              onToggle={() => handleToggle(index)}
+            />
           ))}
-        </Accordion>
+        </div>
 
         {/* Contact CTA */}
-        <div className="mt-12 text-center p-8 bg-gradient-to-r from-blue-950/5 to-purple-50 rounded-md border-2 border-blue-900/20">
-          <p className="text-gray-700 text-lg">
+        <div className="mt-12 text-center">
+          <p className="text-gray-600">
             Weitere Fragen?{" "}
             <a
               href="mailto:contact@voicall.ch"
-              className="text-blue-900 hover:text-blue-950 font-semibold hover:underline"
+              className="text-blue-900 hover:text-blue-950 font-medium hover:underline"
             >
               Kontaktieren Sie uns direkt
             </a>

@@ -3,7 +3,9 @@ import sgMail from "@sendgrid/mail";
 const sendgridApiKey = process.env.SENDGRID_API_KEY;
 
 if (!sendgridApiKey) {
-  console.warn("⚠️ SENDGRID_API_KEY is not set - Email features will be disabled");
+  console.warn(
+    "⚠️ SENDGRID_API_KEY is not set - Email features will be disabled"
+  );
 } else {
   sgMail.setApiKey(sendgridApiKey);
 }
@@ -284,13 +286,80 @@ export function createUsageWarningEmail(
   };
 }
 
+export function createLimitReachedEmail(
+  userEmail: string,
+  usageData: {
+    minutesUsed: number;
+    minutesIncluded: number;
+    overageRate: number;
+  }
+): EmailTemplate {
+  return {
+    to: userEmail,
+    subject: "🔔 Minutenlimit erreicht - Zusatzminuten werden berechnet",
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: #fef2f2; border: 2px solid #dc2626; padding: 30px; border-radius: 8px;">
+            <h2 style="color: #991b1b; margin-top: 0;">🔔 Minutenlimit erreicht</h2>
+            
+            <p style="color: #7f1d1d; font-size: 16px;">
+              Sie haben Ihr monatliches Minutenkontingent von <strong>${usageData.minutesIncluded} Minuten</strong> vollständig aufgebraucht.
+            </p>
+            
+            <div style="background: white; padding: 20px; border-radius: 6px; margin: 20px 0;">
+              <div style="margin-bottom: 10px;">
+                <span style="color: #6b7280; font-size: 14px;">Aktueller Verbrauch</span>
+                <span style="float: right; font-weight: 600; color: #dc2626;">${usageData.minutesUsed} / ${usageData.minutesIncluded} Min</span>
+              </div>
+              <div style="background: #e5e7eb; height: 20px; border-radius: 10px; overflow: hidden;">
+                <div style="background: #dc2626; height: 100%; width: 100%;"></div>
+              </div>
+            </div>
+            
+            <div style="background: #fee2e2; border-left: 4px solid #dc2626; padding: 15px; margin: 20px 0; border-radius: 4px;">
+              <p style="margin: 0; color: #991b1b; font-size: 14px;">
+                <strong>Wichtig: Zusatzminuten werden berechnet</strong><br><br>
+                Ab sofort werden alle weiteren Minuten mit <strong>CHF ${usageData.overageRate.toFixed(2)}/Minute</strong> berechnet.<br><br>
+                Die Zusatzkosten werden am Ende Ihrer Abrechnungsperiode oder bei Kündigung automatisch abgerechnet.
+              </p>
+            </div>
+            
+            <div style="background: #dcfce7; border-left: 4px solid #059669; padding: 15px; margin: 20px 0; border-radius: 4px;">
+              <p style="margin: 0; color: #166534; font-size: 14px;">
+                <strong>💡 Tipp: Upgraden Sie auf Pro</strong><br>
+                Mit dem Pro-Plan erhalten Sie 1000 Minuten für CHF 399/Monat - das sind nur CHF 0.40 pro Minute statt CHF ${usageData.overageRate.toFixed(2)} Zusatzkosten.
+              </p>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/subscription" 
+                 style="background: #dc2626; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 600;">
+                Jetzt upgraden
+              </a>
+            </div>
+            
+            <p style="color: #7f1d1d; font-size: 14px; text-align: center; margin-top: 20px;">
+              Ihren aktuellen Verbrauch können Sie jederzeit im Dashboard einsehen.
+            </p>
+          </div>
+        </body>
+      </html>
+    `,
+    text: `🔔 Minutenlimit erreicht\n\nSie haben Ihr monatliches Minutenkontingent von ${usageData.minutesIncluded} Minuten vollständig aufgebraucht.\n\nAktueller Verbrauch: ${usageData.minutesUsed} / ${usageData.minutesIncluded} Min\n\nWichtig: Zusatzminuten werden berechnet\nAb sofort werden alle weiteren Minuten mit CHF ${usageData.overageRate.toFixed(2)}/Minute berechnet.\nDie Zusatzkosten werden am Ende Ihrer Abrechnungsperiode oder bei Kündigung automatisch abgerechnet.\n\nTipp: Upgraden Sie auf Pro für 1000 Minuten zu CHF 399/Monat.\n\nJetzt upgraden: ${process.env.NEXT_PUBLIC_APP_URL}/dashboard/subscription`,
+  };
+}
+
 // ============================================
 // SEND EMAIL FUNCTION
 // ============================================
 
 export async function sendEmail(template: EmailTemplate): Promise<boolean> {
   if (!sendgridApiKey) {
-    console.warn(`⚠️ Skipping email to ${template.to} - SENDGRID_API_KEY not set`);
+    console.warn(
+      `⚠️ Skipping email to ${template.to} - SENDGRID_API_KEY not set`
+    );
     return false;
   }
 

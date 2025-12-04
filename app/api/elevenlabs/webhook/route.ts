@@ -8,7 +8,9 @@ import {
   sendEmail,
   createNewCallAlertEmail,
   createUsageWarningEmail,
+  createLimitReachedEmail,
 } from "@/lib/sendgrid";
+import { PLANS } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
   try {
@@ -167,10 +169,46 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        // Check if limit exceeded
+        // Check if limit reached (100%) - send email only once
+        if (
+          minutesIncluded > 0 && // Not unlimited
+          newMinutesUsed >= minutesIncluded &&
+          !userSubscription.overageEmailSent
+        ) {
+          console.log(`User ${userId} reached minute limit (100%)`);
+
+          // Get overage rate for user's plan
+          const plan =
+            PLANS[userSubscription.tier as keyof typeof PLANS] || PLANS.starter;
+          const overageRate = plan.overageRate || 0.25;
+
+          // Send 100% limit reached email
+          if (userRecord?.email) {
+            await sendEmail(
+              createLimitReachedEmail(userRecord.email, {
+                minutesUsed: newMinutesUsed,
+                minutesIncluded,
+                overageRate,
+              })
+            );
+          }
+
+          // Mark email as sent
+          await db
+            .update(subscription)
+            .set({ overageEmailSent: true })
+            .where(eq(subscription.userId, userId));
+        }
+
+        // Track overage minutes
         if (minutesIncluded > 0 && newMinutesUsed > minutesIncluded) {
-          console.log(`User ${userId} exceeded minute limit`);
-          // Agent should be deactivated - handled by agent config system
+          const overageMinutes = newMinutesUsed - minutesIncluded;
+          console.log(`User ${userId} has ${overageMinutes} overage minutes`);
+
+          await db
+            .update(subscription)
+            .set({ overageMinutes })
+            .where(eq(subscription.userId, userId));
         }
       }
     }

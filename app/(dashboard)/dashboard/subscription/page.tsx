@@ -21,13 +21,19 @@ const PLAN_CONFIG: Record<
   { name: string; minutes: number; color: string }
 > = {
   free: { name: "Free", minutes: 0, color: "bg-gray-500" },
-  starter: { name: "Starter", minutes: 500, color: "bg-blue-500" },
-  pro: { name: "Pro", minutes: 1500, color: "bg-purple-500" },
+  starter: { name: "Starter", minutes: 200, color: "bg-blue-500" },
+  pro: { name: "Pro", minutes: 1000, color: "bg-purple-500" },
   enterprise: { name: "Enterprise", minutes: -1, color: "bg-amber-500" },
 };
 
-async function getElevenLabsUsage(agentIds: string[]) {
-  if (agentIds.length === 0) {
+async function getElevenLabsUsage(
+  agents: Array<{
+    elevenLabsAgentId: string;
+    assignedAt: Date | null;
+    createdAt: Date;
+  }>
+) {
+  if (agents.length === 0) {
     return { totalMinutesUsed: 0, totalCalls: 0 };
   }
 
@@ -44,12 +50,25 @@ async function getElevenLabsUsage(agentIds: string[]) {
     call_successful: string;
   }> = [];
 
-  for (const agentId of agentIds) {
+  for (const agent of agents) {
     try {
-      const result = await listConversations(agentId, { pageSize: 100 });
-      allConversations = [...allConversations, ...result.conversations];
+      const result = await listConversations(agent.elevenLabsAgentId, {
+        pageSize: 100,
+      });
+
+      // Filter: Only include conversations AFTER agent was assigned/created
+      const cutoffDate = agent.assignedAt || agent.createdAt;
+      const filteredConversations = result.conversations.filter((conv) => {
+        const convStartTime = new Date(conv.start_time_unix_secs * 1000);
+        return convStartTime >= cutoffDate;
+      });
+
+      allConversations = [...allConversations, ...filteredConversations];
     } catch (error) {
-      console.error(`Failed to fetch conversations for agent ${agentId}:`, error);
+      console.error(
+        `Failed to fetch conversations for agent ${agent.elevenLabsAgentId}:`,
+        error
+      );
     }
   }
 
@@ -82,11 +101,22 @@ export default async function SubscriptionPage() {
     .limit(1);
 
   const userAgents = await db
-    .select({ elevenLabsAgentId: agentConfig.elevenLabsAgentId })
+    .select({
+      elevenLabsAgentId: agentConfig.elevenLabsAgentId,
+      assignedAt: agentConfig.assignedAt,
+      createdAt: agentConfig.createdAt,
+    })
     .from(agentConfig)
     .where(eq(agentConfig.userId, session.user.id));
 
   const agentIds = userAgents.map((a) => a.elevenLabsAgentId);
+
+  // Create map of agentId -> cutoff date for filtering
+  const agentCutoffMap: Record<string, Date> = {};
+  userAgents.forEach((agent) => {
+    agentCutoffMap[agent.elevenLabsAgentId] =
+      agent.assignedAt || agent.createdAt;
+  });
 
   let totalMinutesUsed = 0;
   let totalCalls = 0;
@@ -94,26 +124,34 @@ export default async function SubscriptionPage() {
   if (agentIds.length > 0) {
     const periodStart = userSubscription?.currentPeriodStart || new Date(0);
 
-    const [dbUsageResult] = await db
+    // Get all calls for user's agents
+    const allDbCalls = await db
       .select({
-        totalMinutes: sql<number>`COALESCE(SUM(${call.minutesCharged}), 0)`,
-        totalCalls: sql<number>`COUNT(*)`,
+        agentId: call.agentId,
+        minutesCharged: call.minutesCharged,
+        createdAt: call.createdAt,
       })
       .from(call)
       .where(
-        and(
-          inArray(call.agentId, agentIds),
-          gte(call.createdAt, periodStart)
-        )
+        and(inArray(call.agentId, agentIds), gte(call.createdAt, periodStart))
       );
 
-    const dbHasCalls = (dbUsageResult?.totalCalls || 0) > 0;
+    // Filter calls: only those AFTER the agent's cutoff date (assignedAt or createdAt)
+    const filteredDbCalls = allDbCalls.filter((c) => {
+      const cutoffDate = agentCutoffMap[c.agentId];
+      if (!cutoffDate) return true;
+      return c.createdAt >= cutoffDate;
+    });
+
+    const dbHasCalls = filteredDbCalls.length > 0;
 
     if (dbHasCalls) {
-      totalMinutesUsed = Math.round(Number(dbUsageResult?.totalMinutes) || 0);
-      totalCalls = Number(dbUsageResult?.totalCalls) || 0;
+      totalMinutesUsed = Math.round(
+        filteredDbCalls.reduce((acc, c) => acc + (c.minutesCharged || 0), 0)
+      );
+      totalCalls = filteredDbCalls.length;
     } else {
-      const elevenLabsUsage = await getElevenLabsUsage(agentIds);
+      const elevenLabsUsage = await getElevenLabsUsage(userAgents);
       totalMinutesUsed = elevenLabsUsage.totalMinutesUsed;
       totalCalls = elevenLabsUsage.totalCalls;
     }
@@ -152,9 +190,7 @@ export default async function SubscriptionPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div
-                className={`w-3 h-3 rounded-full ${planConfig.color}`}
-              />
+              <div className={`w-3 h-3 rounded-full ${planConfig.color}`} />
               <div>
                 <CardTitle className="flex items-center gap-2">
                   {planConfig.name} Plan
@@ -170,7 +206,11 @@ export default async function SubscriptionPage() {
               variant={status === "active" ? "default" : "secondary"}
               className={status === "active" ? "bg-green-600" : ""}
             >
-              {status === "active" ? "Aktiv" : status === "trialing" ? "Testphase" : "Inaktiv"}
+              {status === "active"
+                ? "Aktiv"
+                : status === "trialing"
+                  ? "Testphase"
+                  : "Inaktiv"}
             </Badge>
           </div>
         </CardHeader>
@@ -184,7 +224,8 @@ export default async function SubscriptionPage() {
                   {totalMinutesUsed}
                   {!isUnlimited && (
                     <span className="text-sm font-normal text-muted-foreground">
-                      {" "}/ {minutesIncluded}
+                      {" "}
+                      / {minutesIncluded}
                     </span>
                   )}
                 </p>
@@ -211,7 +252,9 @@ export default async function SubscriptionPage() {
           {!isUnlimited && (
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">Nutzung diesen Monat</span>
+                <span className="text-sm font-medium">
+                  Nutzung diesen Monat
+                </span>
                 <span
                   className={`text-sm font-medium ${
                     isOverLimit
@@ -238,7 +281,8 @@ export default async function SubscriptionPage() {
               </div>
               {isNearLimit && !isOverLimit && (
                 <p className="text-sm text-amber-600 mt-2">
-                  Sie haben 80% Ihres Kontingents verbraucht. Erwägen Sie ein Upgrade.
+                  Sie haben 80% Ihres Kontingents verbraucht. Erwägen Sie ein
+                  Upgrade.
                 </p>
               )}
               {isOverLimit && (
@@ -295,15 +339,15 @@ export default async function SubscriptionPage() {
       <Card>
         <CardHeader>
           <CardTitle>Verfügbare Pläne</CardTitle>
-          <CardDescription>
-            Vergleichen Sie unsere Pläne
-          </CardDescription>
+          <CardDescription>Vergleichen Sie unsere Pläne</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
             <div
               className={`p-4 rounded-lg border-2 ${
-                tier === "starter" ? "border-blue-500 bg-blue-50" : "border-border"
+                tier === "starter"
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-border"
               }`}
             >
               <div className="flex items-center gap-2 mb-2">
@@ -323,7 +367,9 @@ export default async function SubscriptionPage() {
 
             <div
               className={`p-4 rounded-lg border-2 ${
-                tier === "pro" ? "border-purple-500 bg-purple-50" : "border-border"
+                tier === "pro"
+                  ? "border-purple-500 bg-purple-50"
+                  : "border-border"
               }`}
             >
               <div className="flex items-center gap-2 mb-2">

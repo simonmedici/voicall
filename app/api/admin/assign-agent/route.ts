@@ -56,7 +56,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("📝 Assign agent request:", { userId, agentId, agentName: agentDetails.name });
+    console.log("📝 Assign agent request:", {
+      userId,
+      agentId,
+      agentName: agentDetails.name,
+    });
 
     const existingConfig = await db
       .select()
@@ -64,11 +68,16 @@ export async function POST(request: NextRequest) {
       .where(eq(agentConfig.elevenLabsAgentId, agentId))
       .limit(1);
 
-    console.log("📝 Existing config:", existingConfig.length > 0 ? { 
-      existingUserId: existingConfig[0].userId, 
-      requestedUserId: userId,
-      isSameUser: existingConfig[0].userId === userId 
-    } : "None");
+    console.log(
+      "📝 Existing config:",
+      existingConfig.length > 0
+        ? {
+            existingUserId: existingConfig[0].userId,
+            requestedUserId: userId,
+            isSameUser: existingConfig[0].userId === userId,
+          }
+        : "None"
+    );
 
     const conversationConfig = agentDetails.conversation_config || {};
     const agentConf = conversationConfig.agent || {};
@@ -82,11 +91,12 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
-      
+
       await db
         .update(agentConfig)
         .set({
           userId: userId,
+          assignedAt: new Date(), // Track when agent was assigned to this user
           updatedAt: new Date(),
         })
         .where(eq(agentConfig.elevenLabsAgentId, agentId));
@@ -110,6 +120,7 @@ export async function POST(request: NextRequest) {
       temperature: agentConf.prompt?.temperature ?? 1.0,
       maxTokens: agentConf.prompt?.max_tokens ?? -1,
       isActive: true,
+      assignedAt: new Date(), // Track when agent was assigned
     });
 
     return NextResponse.json({

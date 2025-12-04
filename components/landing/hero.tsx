@@ -4,7 +4,15 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Phone, ArrowRight, ShieldCheck, Languages, Stethoscope, UtensilsCrossed, ShoppingBag } from "lucide-react";
+import {
+  Phone,
+  ArrowRight,
+  ShieldCheck,
+  Languages,
+  Stethoscope,
+  UtensilsCrossed,
+  ShoppingBag,
+} from "lucide-react";
 
 const industries = [
   {
@@ -72,13 +80,16 @@ export function Hero() {
     return () => clearTimeout(timeout);
   }, [displayedText, isTyping, isDeleting, fullText]);
 
-  const handleIndustryClick = useCallback((index: number) => {
-    if (index === currentIndex) return;
-    setDisplayedText("");
-    setCurrentIndex(index);
-    setIsTyping(true);
-    setIsDeleting(false);
-  }, [currentIndex]);
+  const handleIndustryClick = useCallback(
+    (index: number) => {
+      if (index === currentIndex) return;
+      setDisplayedText("");
+      setCurrentIndex(index);
+      setIsTyping(true);
+      setIsDeleting(false);
+    },
+    [currentIndex]
+  );
 
   return (
     <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
@@ -90,19 +101,21 @@ export function Hero() {
             <span>KI-Telefonassistent für Schweizer Unternehmen</span>
           </div>
 
-          {/* Headline with Typewriter Effect */}
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-            Das einzige Unternehmen, das{" "}
-            <span className="bg-gradient-to-r from-blue-900 to-purple-600 bg-clip-text text-transparent">
-              {displayedText}
-              <span className="animate-pulse text-purple-600">|</span>
-            </span>
-          </h1>
+          {/* Headline with Typewriter Effect - fixed height for 2 lines */}
+          <div className="min-h-[280px] sm:min-h-[320px] lg:min-h-[350px] flex items-start justify-center mb-6">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight">
+              Das einzige Unternehmen, das{" "}
+              <span className="bg-gradient-to-r from-blue-900 to-purple-600 bg-clip-text text-transparent">
+                {displayedText}
+                <span className="animate-pulse text-purple-600">|</span>
+              </span>
+            </h1>
+          </div>
 
           {/* Subheadline */}
           <p className="text-xl sm:text-2xl text-gray-600 mb-8 leading-relaxed">
-            Unser KI-Telefonassistent nimmt Anrufe 24/7 entgegen, beantwortet Fragen
-            und versteht Schweizerdeutsch perfekt.
+            Unser KI-Telefonassistent nimmt Anrufe 24/7 entgegen, beantwortet
+            Fragen und versteht Schweizerdeutsch perfekt.
           </p>
 
           {/* Industry Selector */}
@@ -176,8 +189,12 @@ export function Hero() {
                 <ShieldCheck className="h-6 w-6 text-green-600" />
               </div>
               <div className="text-left">
-                <p className="font-semibold text-gray-900">DSGVO/DSG Garantie</p>
-                <p className="text-sm text-gray-600">Für alle Branchen zertifiziert</p>
+                <p className="font-semibold text-gray-900">
+                  DSGVO/DSG Garantie
+                </p>
+                <p className="text-sm text-gray-600">
+                  Für alle Branchen zertifiziert
+                </p>
               </div>
             </div>
             <div className="hidden sm:block w-px h-12 bg-gray-200"></div>
@@ -186,8 +203,12 @@ export function Hero() {
                 <span className="text-2xl">🇨🇭</span>
               </div>
               <div className="text-left">
-                <p className="font-semibold text-gray-900">Swiss Made Quality</p>
-                <p className="text-sm text-gray-600">Entwickelt für Schweizer Unternehmen</p>
+                <p className="font-semibold text-gray-900">
+                  Swiss Made Quality
+                </p>
+                <p className="text-sm text-gray-600">
+                  Entwickelt für Schweizer Unternehmen
+                </p>
               </div>
             </div>
           </div>
